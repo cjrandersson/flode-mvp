@@ -1,0 +1,170 @@
+Inspection report: iamthepcjungulator.mxf
+================================================
+Size: 7,643,848 bytes (7.29 MiB)
+Header bytes: 6d 78 40 63 00 00 00 10 00 00 00 00 00 74 83 40
+Header ASCII: b'mx@c\x00\x00\x00\x10\x00\x00\x00\x00\x00t\x83@\x02\x00\x00\x00pmax\x00qv2\x00\xa0r#'
+Detected: Max/MSP binary collective/resource file, not JSON .maxpat
+
+Human-readable strings strongly indicate this is a Max/MSP patch/collective containing UI, audio, MIDI, VST and sequencing components.
+
+.mxe references (66):
+  - split.mxe
+  - pow.mxe
+  - prepend.mxe
+  - defer.mxe
+  - tosymbol.mxe
+  - times~.mxe
+  - opendialog.mxe
+  - TogEdge.mxe
+  - folder.mxe
+  - filepath.mxe
+  - relativepath.mxe
+  - counter.mxe
+  - speedlim.mxe
+  - Uzi.mxe
+  - borax.mxe
+  - urn.mxe
+  - sprintf.mxe
+  - forward.mxe
+  - tempo.mxe
+  - rminus.mxe
+  - zl.mxe
+  - thresh.mxe
+  - pak.mxe
+  - coll.mxe
+  - ftom.mxe
+  - opensoundcontrol.mxe
+  - spray.mxe
+  - panel.mxe
+  - ubutton.mxe
+  - umenu.mxe
+  - dropfile.mxe
+  - waveform~.mxe
+  - hint.mxe
+  - hslider.mxe
+  - incdec.mxe
+  - uslider.mxe
+  - led.mxe
+  - meter~.mxe
+  - buffer~.mxe
+  - info~.mxe
+  - record~.mxe
+  - adc~.mxe
+  - selector~.mxe
+  - receive~.mxe
+  - sfinfo~.mxe
+  - sig~.mxe
+  - groove~.mxe
+  - gate~.mxe
+  - send~.mxe
+  - adstatus.mxe
+  - togedge.mxe
+  - uzi.mxe
+  - Borax.mxe
+  - rslider.mxe
+  - sfrecord~.mxe
+  - adoutput~.mxe
+  - vst~.mxe
+  - tapin~.mxe
+  - tapout~.mxe
+  - plus~.mxe
+  - reson~.mxe
+  - line~.mxe
+  - textedit.mxe
+  - dac~.mxe
+  - pictslider.mxe
+  - radiogroup.mxe
+
+.pat references (4):
+  - MidiSetup Input.pat
+  - MidiSetup Output.pat
+  - MidiSetup Buttons.pat
+  - DSP Status.pat
+
+.pct references (7):
+  - DPPPPxwfknob.pct
+  - Qywfmodes.pct
+  - SliderDefaultBkgnd.pct
+  - SliderDefaultKnob.pct
+  - wfmodes.pct
+  - wfknob.pct
+  - LED button.pct
+
+.txt references (10):
+  - jitter-config.txt
+  - (i am the mighty jungulator.txt
+  - $init*audio-objectlist.txt
+  - (init*audio-objectmappings.txt
+  - $init*jitter-objectlist.txt
+  - $init*max-fileformats.txt
+  - $init*max-fontmappings.txt
+  - init*max-objectlist.txt
+  - $init*max-objectmappings.txt
+  - init*runoptions.txt
+
+.vst references (9):
+  - podf.vst
+  - podi.vst
+  - podh.vst
+  - podg.vst
+  - pode.vst
+  - podd.vst
+  - podc.vst
+  - podb.vst
+  - poda.vst
+
+.aif references (4):
+  - mighty mix 80.0000 bpm.aif
+  - bpm.aif
+  - Untitled.aif
+  - snd.aif
+
+.wav references (3):
+  - Untitled.wav
+  - snd.wav
+  - 2d.wav
+
+.dll references (17):
+  - ASINTPPC.dll
+  - MaxAPI.dll
+  - KERNEL32.dll
+  - MSVCR71.dll
+  - GDI32.dll
+  - MSIMG32.dll
+  - USER32.dll
+  - MaxAudio.dll
+  - COMCTL32.dll
+  - user32.dll
+  - WS2_32.dll
+  - pj-offer.dll
+  - OPENGL32.dll
+  - GLU32.dll
+  - ADVAPI32.dll
+  - SHELL32.dll
+  - jitlib.dll
+
+.mov references (3):
+  - jit.qt.mov
+  - d.mov
+  - untitled.mov
+
+Recognized Max/MSP objects/terms found:
+  loadbang, message, pcontrol, noteout, toggle, inlet, outlet, scaler
+  send~, gate, pack, midievent, notein, vst~, adc~, dac~
+  route, ftom, coll, umenu, read, append, preset, adstatus
+  dropfile, prepend, sprintf, receive, counter, random, timer, incdec
+  hslider, pipe, thresh, metro, unpack, makenote, selector~, buffer~
+  groove~, tapin~, tapout~, line~, reson~, record~, waveform~, sfrecord~
+  opensoundcontrol, borax, uzi, zl, spray, forward, tempo, folder
+  filepath, relativepath
+
+Selected identity strings and offsets:
+  - jungulator: 0x47285, 0x472ff, 0x12d67b, 0x748363
+  - copyright: 0x472a4, 0x66f80f, 0x672a8d
+  - www.iamthemightyjungulator.com: 0x472ff
+  - matthew: 0x472b1
+  - patrick: 0x472bc
+  - olden: 0x472c7
+  - march: 0x472e2, 0x66ec47
+
+Important limitation: this extraction is based on readable byte strings only. It does not recover full patcher coordinates, object IDs or patch cords in a reliable .maxpat-compatible way.

@@ -1,0 +1,10 @@
+Cleaned flöde~ UI patch
+
+Changes:
+- Removed visible bottom provenance/comment text from Presentation Mode.
+- Removed hidden vst~ poda.vst → podh.vst placeholder objects.
+- This should stop the Max Console errors saying it cannot find plug-ins poda, podb, podc, etc.
+- Kept a hidden build-notes subpatch outside Presentation Mode.
+
+Next:
+- If you want real VST pod functionality, send the plugin names you actually have installed, or replace the POD placeholders in Max manually.
