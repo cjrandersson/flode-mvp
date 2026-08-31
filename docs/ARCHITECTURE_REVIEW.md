@@ -1,4 +1,5 @@
-# FLODE Architecture Review
+# FLODE Architecture Review (peer-review by Copilot)
+Date: 2026-08-31
 
 ## Executive Summary
 
