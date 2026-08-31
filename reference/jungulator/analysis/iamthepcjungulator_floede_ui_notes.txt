@@ -1,0 +1,29 @@
+iamthepcjungulator — flöde~ UI redesign notes
+
+Created from:
+- iamthepcjungulator_reconstructed_skeleton.maxpat
+
+Important:
+- This is a UI redesign of the reconstructed skeleton, not a lossless original .mxf decompile.
+- No separate “Projektet / flöde~” reference file was found in the accessible file library, so the UI direction was applied as a best-effort interpretation:
+  dark modular interface, visible signal lanes, performance controls, waveform/memory section, sequencer, 8 pod grid, master/input strips.
+
+What changed:
+- Presentation mode opens by default.
+- Replaced legacy .pct-style controls with Max 8-friendly live.dial/live.text/panel/waveform~ UI objects.
+- Added named sections:
+  01 / INPUT
+  02 / FLOW ENGINE
+  03 / MEMORY
+  04 / SEQUENCER
+  05 / PODS
+  MASTER
+- Preserved/included inferred core objects:
+  adc~, dac~, tapin~, tapout~, reson~, buffer~, record~, groove~, metro, random, counter, coll, vst~ placeholders, MIDI placeholders.
+- Added hidden notes subpatch with extraction/provenance notes.
+
+Recommended next step in Max:
+1. Open the .maxpat.
+2. Enter Presentation Mode.
+3. Confirm whether this visually matches the “Projektet / flöde~” direction.
+4. If needed, send a screenshot/reference from that project and I can make the second pass much closer.

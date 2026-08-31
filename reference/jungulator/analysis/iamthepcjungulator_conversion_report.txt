@@ -1,0 +1,255 @@
+iamthepcjungulator.mxf conversion attempt
+
+Result: no lossless .mxf -> .maxpat decompilation was possible in this environment. The .mxf is an old binary Max collective/resource bundle.
+
+File size: 7643848 bytes
+pmax/qv2 patcher-like sections found: 5 at offsets [20, 7426798, 7466843, 7507187, 7530622]
+#P markers found: 2181
+
+Top detected Max/MSP objects:
+  sprintf: 61
+  int: 52
+  buffer~: 41
+  if: 30
+  float: 27
+  waveform~: 25
+  message: 22
+  vst~: 19
+  adstatus: 18
+  clear: 17
+  umenu: 10
+  coll: 10
+  toggle: 8
+  send: 8
+  pictslider: 8
+  change: 7
+  folder: 7
+  panel: 7
+  window: 5
+  loadbang: 5
+  inlet: 5
+  switch: 5
+  tapin~: 5
+  sfinfo~: 5
+  adc~: 5
+  counter: 4
+  receive~: 4
+  line~: 4
+  tapout~: 4
+  split: 4
+  groove~: 4
+  record~: 4
+  dac~: 4
+  -~: 4
+  newex: 3
+  midievent: 3
+  uslider: 3
+  delay: 3
+  hslider: 3
+  urn: 3
+  pow: 3
+  led: 3
+  meter~: 3
+  reson~: 3
+  scale: 3
+  sig~: 3
+  selector~: 3
+  info~: 3
+  button: 3
+  prepend: 3
+  *~: 3
+  gate~: 3
+  +~: 3
+  pcontrol: 2
+  noteout: 2
+  outlet: 2
+  send~: 2
+  gate: 2
+  pack: 2
+  notein: 2
+  random: 2
+  receive: 2
+  pipe: 2
+  metro: 2
+  unpack: 2
+  makenote: 2
+  midiin: 2
+  uzi: 2
+  ctlin: 2
+  opendialog: 2
+  comment: 2
+  zl: 2
+  ftom: 2
+  table: 2
+  snapshot~: 2
+  trigger: 2
+  thispatcher: 2
+  setfont: 1
+  scaler: 1
+  matrix~: 1
+
+Key assets/resources found:
+  DPPPPxwfknob.pct
+  Qywfmodes.pct
+  bpm.aif
+  podf.vst
+  podi.vst
+  podh.vst
+  podg.vst
+  pode.vst
+  podd.vst
+  podc.vst
+  podb.vst
+  poda.vst
+  c:\knox\max-externs\ext_win_release\panel.pdb
+  ASINTPPC.dll
+  MaxAPI.dll
+  KERNEL32.dll
+  MSVCR71.dll
+  panel.dxx
+  c:\knox\max-externs\ext_win_release\ubutton.pdb
+  GDI32.dll
+  MSIMG32.dll
+  USER32.dll
+  ubutton.dxx
+  c:\knox\max-externs\ext_win_release\umenu.pdb
+  umenu.dxx
+  c:\knox\max-externs\ext_win_release\dropfile.pdb
+  dropfile.dxx
+  c:\knox\msp-externs\ext_win_release\waveform~.pdb
+  MaxAudio.dll
+  waveform~.dxx
+  c:\knox\max-externs\ext_win_release\hint.pdb
+  COMCTL32.dll
+  hint.dxx
+  c:\knox\max-externs\ext_win_release\hslider.pdb
+  hslider.dxx
+  c:\knox\max-externs\ext_win_release\incdec.pdb
+  incdec.dxx
+  c:\knox\max-externs\ext_win_release\uslider.pdb
+  uslider.dxx
+  c:\knox\max-externs\ext_win_release\led.pdb
+  led.dxx
+  c:\knox\msp-externs\ext_win_release\meter~.pdb
+  meter~.dxx
+  c:\knox\max-externs\ext_win_release\split.pdb
+  split.mxe
+  c:\knox\max-externs\ext_win_release\pow.pdb
+  pow.mxe
+  Untitled.wav
+  Untitled.aif
+  c:\knox\msp-externs\ext_win_release\buffer~.pdb
+  buffer~.dxx
+  c:\knox\msp-externs\ext_win_release\info~.pdb
+  info~.dxx
+  c:\knox\msp-externs\ext_win_release\record~.pdb
+  record~.dxx
+  c:\knox\max-externs\ext_win_release\prepend.pdb
+  prepend.mxe
+  c:\knox\max-externs\ext_win_release\defer.pdb
+  defer.mxe
+  c:\knox\max-externs\ext_win_release\tosymbol.pdb
+  tosymbol.mxe
+  c:\knox\msp-externs\ext_win_release\times~.pdb
+  times~.mxe
+  c:\knox\msp-externs\ext_win_release\adc~.pdb
+  adc~.dxx
+  c:\knox\msp-externs\ext_win_release\selector~.pdb
+  selector~.dxx
+  c:\knox\msp-externs\ext_win_release\receive~.pdb
+  receive~.dxx
+  c:\knox\max-externs\ext_win_release\opendialog.pdb
+  opendialog.mxe
+  c:\knox\msp-externs\ext_win_release\sfinfo~.pdb
+  sfinfo~.dxx
+  c:\knox\msp-externs\ext_win_release\sig~.pdb
+  sig~.dxx
+  c:\knox\msp-externs\ext_win_release\groove~.pdb
+  groove~.dxx
+  c:\knox\msp-externs\ext_win_release\gate~.pdb
+  gate~.dxx
+  c:\knox\msp-externs\ext_win_release\send~.pdb
+  send~.dxx
+  c:\knox\msp-externs\ext_win_release\adstatus.pdb
+  adstatus.dxx
+  c:\knox\max-externs\ext_win_release\TogEdge.pdb
+  TogEdge.mxe
+  c:\knox\max-externs\ext_win_release\folder.pdb
+  folder.mxe
+  c:\knox\max-externs\ext_win_release\filepath.pdb
+  filepath.mxe
+  c:\knox\max-externs\ext_win_release\relativepath.pdb
+  relativepath.mxe
+  c:\knox\max-externs\ext_win_release\counter.pdb
+  counter.mxe
+  c:\knox\max-externs\ext_win_release\speedlim.pdb
+  speedlim.mxe
+  c:\knox\max-externs\ext_win_release\Uzi.pdb
+  Uzi.mxe
+  c:\knox\max-externs\ext_win_release\borax.pdb
+  borax.mxe
+  c:\knox\max-externs\ext_win_release\urn.pdb
+  urn.mxe
+  c:\knox\max-externs\ext_win_release\sprintf.pdb
+  sprintf.mxe
+  c:\knox\max-externs\ext_win_release\forward.pdb
+  forward.mxe
+  c:\knox\max-externs\ext_win_release\rslider.pdb
+  rslider.dxx
+  c:\knox\max-externs\ext_win_release\tempo.pdb
+  tempo.mxe
+  snd.aif
+  snd.wav
+  c:\knox\msp-externs\ext_win_release\sfrecord~.pdb
+  sfrecord~.dxx
+  c:\knox\msp-externs\ext_win_release\adoutput~.pdb
+  adoutput~.dxx
+  c:\knox\msp-externs\ext_win_release\vst~.pdb
+  vst~.dxx
+  c:\knox\max-externs\ext_win_release\rminus.pdb
+  rminus.mxe
+  c:\knox\msp-externs\ext_win_release\tapin~.pdb
+  tapin~.dxx
+  c:\knox\msp-externs\ext_win_release\tapout~.pdb
+  tapout~.dxx
+  c:\knox\msp-externs\ext_win_release\plus~.pdb
+  plus~.dxx
+  c:\knox\msp-externs\ext_win_release\reson~.pdb
+  reson~.dxx
+  c:\knox\msp-externs\ext_win_release\line~.pdb
+  line~.dxx
+  c:\knox\max-externs\ext_win_release\textedit.pdb
+  textedit.dxx
+  c:\knox\max-externs\ext_win_release\zl.pdb
+  zl.mxe
+  c:\knox\max-externs\ext_win_release\thresh.pdb
+  thresh.mxe
+  c:\knox\max-externs\ext_win_release\pak.pdb
+  pak.mxe
+  c:\knox\max-externs\ext_win_release\coll.pdb
+  coll.mxe
+  c:\knox\max-externs\ext_win_release\ftom.pdb
+  ftom.mxe
+  c:\knox\msp-externs\ext_win_release\dac~.pdb
+  dac~.dxx
+  SliderDefaultBkgnd.pct
+  SliderDefaultKnob.pct
+  c:\knox\max-externs\ext_win_release\pictslider.pdb
+  pictslider.dxx
+  user32.dll
+  WS2_32.dll
+  opensoundcontrol.mxe
+  pj-offer.dll
+  c:\knox\jitlib\win_release\jitlib.pdb
+  OPENGL32.dll
+  GLU32.dll
+  ADVAPI32.dll
+  SHELL32.dll
+  jitlib.dll
+  2d.wav
+  .mxe
+  .wav
+
+Runtime console errors from uploaded log: missing wfknob.pct, wfmodes.pct, generated u*.pct images; missing VST plugin “fl”; waveform~ color messages frgb/brgb/rgb2-rgb7 are unknown in current Max.
+
+Generated file: iamthepcjungulator_reconstructed_skeleton.maxpat — a valid Max patch skeleton for rebuilding, not the original patch cords/UI.
