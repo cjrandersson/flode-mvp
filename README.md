@@ -1,3 +1,5 @@
+<img width="1115" height="680" alt="image" src="https://github.com/user-attachments/assets/3948386f-8366-4539-8d8c-84193204560c" />
+
 # flöde~ MVP
 
 flöde~ is a six-pod sampler, generative sequencer, audio mangler and looper built around a shared master clock/BPM. The project evolves the character and workflow of the original I Am The Mighty Jungulator into a cleaner, more robust Max/MSP / Max for Live / standalone instrument.
