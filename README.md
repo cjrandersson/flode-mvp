@@ -20,7 +20,7 @@ flöde~ is a six-pod sampler, generative sequencer, audio mangler and looper bui
 The interface must feel like an audio instrument, not a web dashboard. Waveforms and primary gestures are large. Playback/random/volume use sliders. Rotary knobs are reserved mainly for pan and sound-shaping/FX. Matte charcoal/grey surfaces, restrained amber accents, neutral typography, minimal rounding, stable interaction states.
 
 ## Repository structure
-- `docs/` build plan and UI specification
+- `docs/` build plan and UI specification, basic architecture of Max/MSP + javascript, peer-review of technical architecture by Copilot (see ARCHITECTURE_REVIEW.md)
 - `patches/` Max/MSP builds
 - `prototype/showcase-v4/` current p5.js visual prototype
 - `design/figma-export/` current Figma AI export reference
