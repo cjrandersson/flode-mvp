@@ -276,3 +276,65 @@ This contains the recovery inventory, confidence levels, repair policy and next 
 6. Only then decide what must be repaired or reconstructed for flöde~.
 
 Status: **RECOVERY IN PROGRESS**
+
+---
+
+# 2026-09-19 — Source artifacts mirrored to `max-msp` + deeper forensic scan
+
+## Goal
+
+Make the surviving Jungulator artifacts directly available to the Max specialist branch without modifying the originals, and deepen the first-pass analysis before any repair attempt.
+
+## Work performed
+
+The source files uploaded on `main/patches/` were mirrored byte-for-byte onto `max-msp` using their existing Git blob objects. No conversion, re-save or content rewrite was performed.
+
+Commit:
+
+`841bc38aa03a1c8c465ad0003217577ca9219422`
+
+This means the Max specialist can now inspect the source material directly while remaining inside the agreed working branch.
+
+## New findings
+
+A deeper serialized-content scan of `jungulator_metro.maxpat` changed our understanding of that file:
+
+- it contains **dozens of `metro` objects** rather than merely one global BPM clock;
+- it contains **dozens of `random` objects**;
+- observed values include `metro 5`, `metro 10`, `random 40`, `random 100`, `random 7` and `random 8`;
+- `sfrecord~ 2` is also present;
+- the repeated structures strongly suggest nested/embedded legacy patchers and potentially per-module timing/random logic.
+
+This is important because those repeated clock/random structures may encode part of the Jungulator's characteristic rhythmic mangling behaviour.
+
+An initial text scan did not find obvious `buffer~`, `groove~`, `play~`, `sfplay~` or `index~` objects in the metro export. Therefore the complete sample-playback engine has **not** yet been proven recovered.
+
+The modern `jungulator_notOriginal` reconstruction does contain `groove~ snd 2`, `metro 125`, `random 128` and `coll jungulator_patterns`, but those are reconstruction evidence only and cannot be treated as proof of the original implementation.
+
+## `.mxf` assessment
+
+`iamthepcjungulator.mxf` is approximately 7.64 MB and binary. Current Cycling '74 documentation recognizes `.mxf` as a Max Collective format, which can contain patchers and dependencies. It remains our strongest candidate for missing original pod/DSP material.
+
+No destructive conversion was attempted.
+
+## Files changed
+
+- `docs/JUNGULATOR_RECOVERY_ANALYSIS.md` expanded with the deeper forensic findings, explicit repair policy and controlled `.mxf` recovery path.
+- `docs/DEVELOPMENT_LOG.md` updated with this session.
+
+## Decision
+
+Do **not** clean up or rewrite the legacy `.maxpat` exports simply because geometry, hidden objects or old patching idioms look strange. Those may be behavioural evidence.
+
+Only mechanically provable corruption will be fixed, and repaired variants will go under `patches/recovered/`.
+
+## Next action
+
+1. Open the readable legacy patchers in Max and capture Console errors.
+2. Map the repeated `metro`/`random` structures object-by-object.
+3. Inventory send/receive names, nested subpatchers and dependencies.
+4. Open a copy of the `.mxf` in Max without overwriting the original.
+5. Export any recoverable embedded patchers separately.
+6. Compare recovered code against the text exports before designing the new flöde~ engine.
+
+Status: **FORENSIC RECOVERY ACTIVE**
