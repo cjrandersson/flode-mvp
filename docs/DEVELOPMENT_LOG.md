@@ -40,301 +40,256 @@ At creation/checkpoint, `max-msp` and `dev` were identical at commit:
 
 `2c29986a9f5e2a0a0c97f54d33cf626d170de563`
 
-No Max-agent implementation had yet diverged from `dev`.
-
 ---
 
 # 2026-09-18 — Max/MSP specialist workflow established
 
-## Context
+## Collaboration model
 
-During development it became important to protect the characteristic behaviour inherited from **I Am The Mighty Jungulator**. There was concern that flöde~ was gradually becoming architecturally closer to a conventional modern sampler and moving away from the Max/MSP mechanisms and musical unpredictability that motivated the project.
-
-A specialist Ableton / Max/MSP agent is therefore being introduced as an additional technical collaborator.
-
-The collaboration model is intentionally split:
-
-- **Robin** — product owner, creative direction, interaction/UI feel, musical judgement and final product decisions.
-- **Primary ChatGPT collaborator** — project continuity, architecture oversight, product/UX integration, documentation, review and coordination between contributors.
-- **Max/MSP specialist agent** — deep Max/MSP implementation, DSP, timing, patch architecture, playback and generative engine analysis.
+- **Robin** — product owner, creative direction, UI/UX, interaction feel, musical judgement and final product decisions.
+- **Primary ChatGPT collaborator** — project continuity, architecture oversight, technical direction, documentation, review and coordination.
+- **Max/MSP specialist agent** — deep Max/MSP implementation, DSP, timing, patch architecture, playback and generative-engine analysis.
 
 The purpose is not to let separate agents independently redesign flöde~, but to combine specialist knowledge under one shared architecture and project history.
 
-## Repository review
-
-The `max-msp` branch was inspected before specialist work began.
-
-Current top-level structure includes:
-
-```text
-README.md
-design/
-docs/
-patches/
-prototype/
-```
-
-Relevant documentation already present includes:
-
-- `docs/ARCHITECTURE_REVIEW.md`
-- `docs/BUILD_01_CORE_ENGINE.md`
-- `docs/BUILD_PLAN.md`
-- `docs/UI_SPEC.md`
-- `docs/Technical architecture review for Codex.md`
-- `docs/FLODE_Architecture_Review_v2.pdf`
-- `docs/FLODE_GRUNDARKITEKTUR_MAX_MSP_JAVA-Notes_från_Copilot.pdf`
-
-At this checkpoint the repository contains substantially more architecture/design documentation than actual Max patch implementation. `patches/` currently contains only its README in this branch.
-
-This makes examination of the original Jungulator patch especially important before a new engine architecture is committed.
-
----
-
-## Original Jungulator reference
-
-Robin will upload the available original `.maxpat` from **I Am The Mighty Jungulator** to:
-
-```text
-/reference/jungulator/
-```
-
-Status: **SUPERSEDED BY 2026-09-19 RECOVERY SESSION**
-
-The surviving files were instead added under `main/patches/`, which is now treated as the source/reference location for forensic analysis.
-
-This material should be treated as historical/technical reference rather than automatically rewritten or cleaned up.
-
-Before implementation, the specialist should investigate how the original patch achieves its characteristic behaviour, including where applicable:
-
-- timing and clock relationships
-- sample playback mechanism
-- randomisation
-- `rnd` / `rnd2` behaviour
-- probability/event generation
-- loop/start/end manipulation
-- playback-rate changes
-- rhythm preservation or quantisation
-- interaction between randomness and master timing
-- event ordering
-- any unusual Max idioms that contribute to the musical result
-
-The objective is to identify the **behavioural DNA** worth preserving, not necessarily to copy the old patch object-for-object.
-
----
-
-## Max/MSP specialist — first assignment
-
-**Do not begin implementation yet.**
-
-The specialist's first task is repository and architecture analysis.
-
-### Required reading
-
-1. Root `README.md`
-2. Existing documentation under `/docs`
-3. Relevant prototype/design material where needed to understand the instrument
-4. Surviving Jungulator source artifacts under `/patches/`
-5. `docs/JUNGULATOR_RECOVERY_ANALYSIS.md`
-
-### Analysis deliverable
-
-Report:
-
-1. What currently exists in the repository.
-2. What is missing for a functioning Max/MSP MVP.
-3. Which existing architecture decisions are technically sound.
-4. Which existing decisions should be reconsidered, and why.
-5. A proposed real Max/MSP patch architecture.
-6. Which behaviours/mechanisms in the original Jungulator should be preserved.
-7. Which parts can safely be modernised or replaced.
-8. Risks that could cause flöde~ to lose the original Jungulator character.
-9. A proposed first implementation milestone after review.
-
-No large architectural implementation should begin until this analysis has been reviewed.
-
----
-
-## Architectural priorities for specialist work
-
-In current priority order:
+## Architectural priorities
 
 1. Max/MSP-native signal and event architecture.
 2. Shared master clock/BPM and musically reliable timing.
 3. Jungulator-derived randomisation, probability and jitter behaviour.
 4. Six independent pods A–F.
 5. Core sample playback: load, start/end, speed, loop, volume and pan.
-6. Controlled generative behaviour that can become chaotic without losing musical relationship to the master timing.
+6. Controlled generative behaviour that can become chaotic without losing musical relationship to master timing.
 7. Clear separation between DSP/playback engine, generative/event logic, transport/synchronisation and UI.
 8. Transient detection/slicing as an additional layer rather than a replacement for the Jungulator-derived engine.
 
-Previously discussed transient analysis options include `bonk~` and `sigmund~`; the final implementation should be evaluated technically rather than chosen solely because it appeared in an earlier concept.
+---
+
+# 2026-09-19 — Jungulator source recovery
+
+## Source material
+
+Surviving Jungulator material is stored under `/patches/`, including legacy Max exports, the `.mxf` collective and the original Windows standalone/runtime environment.
+
+The original standalone is treated as immutable reference material. Recovery is forensic and additive. Missing behaviour will not be invented merely to make old patches appear complete.
+
+A deeper scan of `jungulator_metro.maxpat` found many `metro` and `random` objects, including values such as `metro 5`, `metro 10`, `random 40`, `random 100`, `random 7` and `random 8`, plus `sfrecord~ 2`. This suggests nested/embedded legacy timing and randomisation structures and may encode part of the characteristic Jungulator behaviour.
+
+The complete original sample-playback/mangling implementation has not yet been proven recovered. The working original standalone therefore remains a critical behavioural reference even if perfect source recovery is impossible.
+
+See `docs/JUNGULATOR_RECOVERY_ANALYSIS.md` for detailed forensic notes.
 
 ---
 
-## Working rules for `max-msp`
+# 2026-09-19 — LOCKED PRODUCT / BEHAVIOUR DECISIONS
 
-The Max specialist should:
+The decisions below are considered current product requirements for the playable flöde~ alpha. They should not be silently redesigned by implementation agents. Changes require explicit product discussion with Robin.
 
-- work only on `max-msp` unless explicitly instructed otherwise;
-- not commit directly to `dev` or `main`;
-- prefer small, understandable commits;
-- document important architecture decisions;
-- avoid large rewrites before the Jungulator analysis is complete;
-- preserve reference files rather than modifying them destructively;
-- flag uncertain musical/UX decisions for Robin rather than silently choosing them;
-- distinguish technical improvements from changes to the instrument's intended behaviour.
+## 1. Immediate milestone: playable Alpha 0.1
 
-Reviewed work can later move:
+The current priority is **not** architectural completeness or feature completeness.
+
+The milestone is:
+
+> **flöde~ Alpha 0.1 — “Can we make music with it?”**
+
+Minor bugs and incomplete secondary features are acceptable. The alpha must be runnable and musically useful.
+
+P0 functionality:
+
+- six functioning POD engines;
+- sample loading/playback;
+- shared BPM / master transport;
+- Jungulator-derived mangling behaviour;
+- controllable relationship between stability and instability;
+- one-shot playback and basic sequencing;
+- reliable audio output;
+- sufficient state handling to use the instrument musically.
+
+Advanced transient systems, elaborate preset infrastructure, complete MEMORY/CHAOS systems, visual polish, complex routing and other secondary features must not delay the playable alpha.
+
+## 2. Jungulator's human character is a core requirement
+
+The characteristic quality to preserve is **not generic randomness**.
+
+Working design principle:
+
+> **Rhythmically constrained, but locally unstable.**
+
+The global musical pulse should remain intelligible while events inside that pulse are allowed to become imperfect, unstable, late/early, short/long, repitched, repeated, reversed or otherwise locally disturbed.
+
+The desired character includes moments that sound human, imperfect, slightly wrong or even temporarily “false”, followed by a return to musical coherence.
+
+Potential contributing mechanisms to investigate rather than assume include:
+
+- multiple asynchronous or semi-independent timing processes;
+- timing jitter / microtiming;
+- playback-rate changes where time and pitch remain coupled;
+- segment-length variation;
+- retrigger/repetition behaviour;
+- imperfect slice/start positions;
+- occasional inclusion or truncation of material around a transient;
+- event-ordering quirks;
+- correlated rather than purely independent randomness;
+- instability that persists briefly before resolving back toward the shared pulse.
+
+Do **not** automatically “fix” old timing irregularities, pitch instability, imperfect slices or scheduler behaviour until we know whether they contribute musically.
+
+The original standalone application is the behavioural oracle for A/B testing.
+
+Drum material should be a primary test source because timing, transient and playback-rate behaviour is especially audible there.
+
+## 3. Improve technical artefacts without sterilising musical artefacts
+
+flöde~ may improve on the original Jungulator where the improvement removes unwanted technical failure without removing its character.
+
+Specifically, sample jumps/start points should support a very short de-click envelope or crossfade to reduce unwanted clicks and pops.
+
+However, clicks and hard edges can sometimes be musically useful, especially when processed by effects. Therefore the engine should preserve the possibility of a raw/hard-edge behaviour rather than enforcing heavy smoothing everywhere.
+
+Conceptual range:
 
 ```text
-max-msp → dev → main
+EDGE: RAW <----------> SMOOTH
 ```
 
----
+The implementation should use the minimum smoothing necessary to prevent unwanted discontinuity clicks while preserving transient attack and rhythmic aggression.
 
-## Documentation protocol from this point forward
+Design rule:
 
-This file is intended to remain a chronological project journal.
+> **Correct technical artefacts without correcting musical instability.**
 
-For meaningful development sessions, append an entry containing as appropriate:
+## 4. Two complementary POD behaviours
+
+Each POD should be capable of serving two related musical roles.
+
+### LOOP / JUNG behaviour
+
+Longer audio is treated as a landscape through which the Jungulator engine can move.
+
+The engine may manipulate position, segment, rate, repetition, direction, timing and related parameters while remaining connected to master timing.
+
+### ONE-SHOT / SEQ behaviour
+
+A short sample such as kick, snare, hi-hat, percussion or stab is treated as an event.
+
+The sequencer determines **when** it is triggered. Jungulator-derived logic may then determine **how** that particular trigger is played.
+
+This explicitly addresses a weakness of the original Jungulator: isolated one-shot samples were less useful than longer material because there was little temporal material for the mangler to explore.
+
+Sequencing transforms one-shots into a major strength of flöde~.
+
+Example:
 
 ```text
-DATE / SESSION
-Goal
-Context
-Work performed
-Files changed
-Architecture decisions
-Reasoning
-Tests / observations
-Open questions
-Next action
-Status
+Kick:    X---X---X---X---
+Hi-hat:  --X---X---X---X-
 ```
 
-Major technical decisions should additionally be documented in dedicated architecture documents when the detail would make this log unwieldy.
+The underlying beat can remain stable while Jungulator behaviour introduces probability, rate/pitch variation, microtiming, retriggering, reverse or other controlled disturbances.
 
-The log should record failed experiments and rejected approaches when they teach us something important. The history of *why we did not do something* is often as useful as the final implementation.
+## 5. Basic per-POD sequencer is P0
 
----
+One-shot sequencing is part of Alpha 0.1 rather than a later decorative feature.
 
-# 2026-09-19 — Jungulator source recovery begins
-
-## Goal
-
-Inspect the newly uploaded Jungulator-related source artifacts, determine which material is original/legacy versus reconstructed, assess recoverability, and avoid destroying evidence while preparing for deeper Max/MSP analysis.
-
-## Source material found on `main`
+Initial engine model should remain deliberately small. Baseline state may include:
 
 ```text
-patches/jungulator_notOriginal/iamthepcjungulator_notOriginal.maxpat
-patches/jungulator_metro/jungulator_metro.maxproj
-patches/jungulator_metro/patchers/jungulator_metro.maxpat
-patches/jungulator_audiooptions/patchers/jungulator_audiooptions.maxpat
-patches/iamthepcjungulator.mxf
+pod_id
+pattern
+step
+active
+velocity
+probability
+pattern_length
 ```
 
-## Findings
+The first implementation can focus on a 16-step pattern with trigger on/off, velocity, probability and configurable pattern length.
 
-- `iamthepcjungulator_notOriginal.maxpat` is valid readable Max patch JSON, but the patch identifies itself as a modern UI shell and a `non-lossless reconstruction`. It therefore cannot be treated as authoritative original Jungulator DSP code.
-- `jungulator_metro.maxpat` contains older-style Max patching and concrete control/event logic. It is a high-value source for BPM/metro/global-control reconstruction.
-- `jungulator_metro.maxproj` contains one local top-level patcher and no declared project search paths. This is useful because it limits what the project metadata itself claims to contain, but it does not prove that the patch has no runtime dependencies through Max send/receive names or externals.
-- `jungulator_audiooptions.maxpat` contains concrete `adstatus`-based audio/scheduler configuration logic, including overdrive, takeover and I/O vector-size handling. It is useful historical architecture evidence even where those settings may not map directly to a future Max for Live device.
-- `iamthepcjungulator.mxf` is binary and cannot be decoded by the text-only GitHub connector. It is potentially the most valuable remaining source because it may contain original collective payload not present in the text exports.
+Possible later extensions, not required to block Alpha 0.1:
 
-## Safety decision
+- microtiming;
+- ratchets/retriggers;
+- per-step playback rate;
+- per-step direction;
+- per-step Jung amount;
+- alternate rhythmic resolutions;
+- polymetric/polyrhythmic pattern lengths.
 
-No original source file on `main` was modified.
+Different PODs should ultimately be able to use different pattern lengths while sharing the global master clock.
 
-Recovery will be forensic and additive. Mechanically safe repairs, if discovered, will be written separately under `max-msp`, preferably beneath `patches/recovered/`, with provenance notes.
+A future per-step Jung amount is particularly interesting because it allows a stable pattern to selectively destabilise individual events rather than globally mangling every trigger.
 
-Missing musical/DSP behaviour will **not** be invented merely to make a patch look complete.
+## 6. Sequencer UI is detachable, state is not
 
-## Documentation added
+Each POD's sequencer may be opened as a separate window that can be moved away from the main flöde~ interface, including onto another monitor.
 
-Created:
+This is intended to prevent the primary instrument interface from becoming visually jammed or stressful.
 
-`docs/JUNGULATOR_RECOVERY_ANALYSIS.md`
+Critical architecture rule:
 
-This contains the recovery inventory, confidence levels, repair policy and next steps.
+> **The detachable sequencer is another view of the POD, not another sequencer engine.**
 
-## Open questions
+Sequencer state belongs to the POD/engine layer. Closing its window must not stop or reset the sequence.
 
-- Does the `.mxf` contain the original per-pod mangling patchers or embedded dependencies?
-- Are all six pod algorithms present anywhere in the available exports?
-- Which send/receive names and hidden patcher relationships connect metro, audio settings and pod logic?
-- Which externals or abstractions were bundled with the original collective?
-- Can the `.mxf` be opened or extracted in a compatible Max environment without modifying it?
+The view reads and writes shared POD state.
 
-## Next action
+Desired interaction model:
 
-1. Preserve/checksum the `.mxf` before experimentation.
-2. Test the text `.maxpat` files in Max and capture console errors/missing objects.
-3. Build an object/dependency map of the legacy metro and audio-options patches.
-4. Inspect/extract the `.mxf` with a binary-aware Max environment.
-5. Compare recovered material against existing exports.
-6. Only then decide what must be repaired or reconstructed for flöde~.
+- normally, one sequencer window can follow the currently selected POD;
+- a sequencer view can be **pinned/detached** to a specific POD;
+- multiple pinned POD sequencer windows may be placed on different screens;
+- closing a view has no effect on playback/state;
+- UI layout must remain decoupled from DSP/timing/state implementation.
 
-Status: **RECOVERY IN PROGRESS**
+This provides both a simple mode and a multi-monitor/power-user mode without duplicating musical state.
 
----
+## 7. UI ownership and implementation boundary
 
-# 2026-09-19 — Source artifacts mirrored to `max-msp` + deeper forensic scan
+Robin owns:
 
-## Goal
+- UI layout;
+- spacing;
+- visual hierarchy;
+- colour system / colour coding;
+- transport/BPM/record/play placement;
+- how controls are visually exposed;
+- overall interaction feel.
 
-Make the surviving Jungulator artifacts directly available to the Max specialist branch without modifying the originals, and deepen the first-pass analysis before any repair attempt.
+The engineering/Max side owns:
 
-## Work performed
+- DSP;
+- timing and sync;
+- playback engines;
+- sequencing state and behaviour;
+- Jungulator logic;
+- routing;
+- stable parameter/state interfaces that the UI can control.
 
-The source files uploaded on `main/patches/` were mirrored byte-for-byte onto `max-msp` using their existing Git blob objects. No conversion, re-save or content rewrite was performed.
+Engineering may specify that a parameter/state must exist, but should not redesign the visible interface without explicit product direction.
 
-Commit:
+The UI must not block Alpha 0.1. A temporary developer-facing control surface may be used while the final visual interface evolves separately.
 
-`841bc38aa03a1c8c465ad0003217577ca9219422`
+## 8. Current development philosophy
 
-This means the Max specialist can now inspect the source material directly while remaining inside the agreed working branch.
+We are **not** trying to restore old Max code merely for historical purity.
 
-## New findings
+We are extracting the musical/behavioural DNA of Jungulator and rebuilding it in a modern, understandable architecture while preserving the qualities that made the original unusual.
 
-A deeper serialized-content scan of `jungulator_metro.maxpat` changed our understanding of that file:
+Original behaviour should be studied before being modernised.
 
-- it contains **dozens of `metro` objects** rather than merely one global BPM clock;
-- it contains **dozens of `random` objects**;
-- observed values include `metro 5`, `metro 10`, `random 40`, `random 100`, `random 7` and `random 8`;
-- `sfrecord~ 2` is also present;
-- the repeated structures strongly suggest nested/embedded legacy patchers and potentially per-module timing/random logic.
+The intended trajectory is:
 
-This is important because those repeated clock/random structures may encode part of the Jungulator's characteristic rhythmic mangling behaviour.
+```text
+preserve
+  -> understand
+  -> specify behaviour
+  -> build playable minimum
+  -> A/B against original
+  -> tune character
+  -> expand
+```
 
-An initial text scan did not find obvious `buffer~`, `groove~`, `play~`, `sfplay~` or `index~` objects in the metro export. Therefore the complete sample-playback engine has **not** yet been proven recovered.
+The target is not a generic glitch sampler with a Jungulator label. The target is a playable instrument that retains Jungulator's constrained instability while extending it in ways the original could not support, especially sequencing and one-shot performance.
 
-The modern `jungulator_notOriginal` reconstruction does contain `groove~ snd 2`, `metro 125`, `random 128` and `coll jungulator_patterns`, but those are reconstruction evidence only and cannot be treated as proof of the original implementation.
-
-## `.mxf` assessment
-
-`iamthepcjungulator.mxf` is approximately 7.64 MB and binary. Current Cycling '74 documentation recognizes `.mxf` as a Max Collective format, which can contain patchers and dependencies. It remains our strongest candidate for missing original pod/DSP material.
-
-No destructive conversion was attempted.
-
-## Files changed
-
-- `docs/JUNGULATOR_RECOVERY_ANALYSIS.md` expanded with the deeper forensic findings, explicit repair policy and controlled `.mxf` recovery path.
-- `docs/DEVELOPMENT_LOG.md` updated with this session.
-
-## Decision
-
-Do **not** clean up or rewrite the legacy `.maxpat` exports simply because geometry, hidden objects or old patching idioms look strange. Those may be behavioural evidence.
-
-Only mechanically provable corruption will be fixed, and repaired variants will go under `patches/recovered/`.
-
-## Next action
-
-1. Open the readable legacy patchers in Max and capture Console errors.
-2. Map the repeated `metro`/`random` structures object-by-object.
-3. Inventory send/receive names, nested subpatchers and dependencies.
-4. Open a copy of the `.mxf` in Max without overwriting the original.
-5. Export any recoverable embedded patchers separately.
-6. Compare recovered code against the text exports before designing the new flöde~ engine.
-
-Status: **FORENSIC RECOVERY ACTIVE**
+Status: **LOCKED FOR ALPHA 0.1**
