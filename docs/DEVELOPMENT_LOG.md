@@ -98,9 +98,11 @@ Robin will upload the available original `.maxpat` from **I Am The Mighty Jungul
 /reference/jungulator/
 ```
 
-Status: **WAITING FOR UPLOAD**
+Status: **SUPERSEDED BY 2026-09-19 RECOVERY SESSION**
 
-This file should be treated as a historical/technical reference rather than automatically rewritten or cleaned up.
+The surviving files were instead added under `main/patches/`, which is now treated as the source/reference location for forensic analysis.
+
+This material should be treated as historical/technical reference rather than automatically rewritten or cleaned up.
 
 Before implementation, the specialist should investigate how the original patch achieves its characteristic behaviour, including where applicable:
 
@@ -131,7 +133,8 @@ The specialist's first task is repository and architecture analysis.
 1. Root `README.md`
 2. Existing documentation under `/docs`
 3. Relevant prototype/design material where needed to understand the instrument
-4. Original Jungulator `.maxpat` once available in `/reference/jungulator/`
+4. Surviving Jungulator source artifacts under `/patches/`
+5. `docs/JUNGULATOR_RECOVERY_ANALYSIS.md`
 
 ### Analysis deliverable
 
@@ -215,23 +218,61 @@ The log should record failed experiments and rejected approaches when they teach
 
 ---
 
-## Immediate next action
+# 2026-09-19 — Jungulator source recovery begins
 
-**Owner: Robin**
+## Goal
 
-Upload the original Jungulator `.maxpat` into:
+Inspect the newly uploaded Jungulator-related source artifacts, determine which material is original/legacy versus reconstructed, assess recoverability, and avoid destroying evidence while preparing for deeper Max/MSP analysis.
+
+## Source material found on `main`
 
 ```text
-/reference/jungulator/
+patches/jungulator_notOriginal/iamthepcjungulator_notOriginal.maxpat
+patches/jungulator_metro/jungulator_metro.maxproj
+patches/jungulator_metro/patchers/jungulator_metro.maxpat
+patches/jungulator_audiooptions/patchers/jungulator_audiooptions.maxpat
+patches/iamthepcjungulator.mxf
 ```
 
-After Robin confirms the upload:
+## Findings
 
-1. Verify the file exists and is readable.
-2. Inspect its structure before modifying anything.
-3. Hand the Max/MSP specialist the analysis assignment above.
-4. Review the specialist's findings jointly.
-5. Agree on the first Max/MSP implementation milestone.
-6. Only then begin engine implementation.
+- `iamthepcjungulator_notOriginal.maxpat` is valid readable Max patch JSON, but the patch identifies itself as a modern UI shell and a `non-lossless reconstruction`. It therefore cannot be treated as authoritative original Jungulator DSP code.
+- `jungulator_metro.maxpat` contains older-style Max patching and concrete control/event logic. It is a high-value source for BPM/metro/global-control reconstruction.
+- `jungulator_metro.maxproj` contains one local top-level patcher and no declared project search paths. This is useful because it limits what the project metadata itself claims to contain, but it does not prove that the patch has no runtime dependencies through Max send/receive names or externals.
+- `jungulator_audiooptions.maxpat` contains concrete `adstatus`-based audio/scheduler configuration logic, including overdrive, takeover and I/O vector-size handling. It is useful historical architecture evidence even where those settings may not map directly to a future Max for Live device.
+- `iamthepcjungulator.mxf` is binary and cannot be decoded by the text-only GitHub connector. It is potentially the most valuable remaining source because it may contain original collective payload not present in the text exports.
 
-Status: **IN PROGRESS**
+## Safety decision
+
+No original source file on `main` was modified.
+
+Recovery will be forensic and additive. Mechanically safe repairs, if discovered, will be written separately under `max-msp`, preferably beneath `patches/recovered/`, with provenance notes.
+
+Missing musical/DSP behaviour will **not** be invented merely to make a patch look complete.
+
+## Documentation added
+
+Created:
+
+`docs/JUNGULATOR_RECOVERY_ANALYSIS.md`
+
+This contains the recovery inventory, confidence levels, repair policy and next steps.
+
+## Open questions
+
+- Does the `.mxf` contain the original per-pod mangling patchers or embedded dependencies?
+- Are all six pod algorithms present anywhere in the available exports?
+- Which send/receive names and hidden patcher relationships connect metro, audio settings and pod logic?
+- Which externals or abstractions were bundled with the original collective?
+- Can the `.mxf` be opened or extracted in a compatible Max environment without modifying it?
+
+## Next action
+
+1. Preserve/checksum the `.mxf` before experimentation.
+2. Test the text `.maxpat` files in Max and capture console errors/missing objects.
+3. Build an object/dependency map of the legacy metro and audio-options patches.
+4. Inspect/extract the `.mxf` with a binary-aware Max environment.
+5. Compare recovered material against existing exports.
+6. Only then decide what must be repaired or reconstructed for flöde~.
+
+Status: **RECOVERY IN PROGRESS**
