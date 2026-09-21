@@ -293,3 +293,29 @@ preserve
 The target is not a generic glitch sampler with a Jungulator label. The target is a playable instrument that retains Jungulator's constrained instability while extending it in ways the original could not support, especially sequencing and one-shot performance.
 
 Status: **LOCKED FOR ALPHA 0.1**
+
+---
+
+# 2026-09-22 — POD v0.1 contract checkpoint
+
+Codex inspected GitHub Issue #5, the `max-msp` branch, the required architecture documents, and the preserved Jungulator artefacts. No playable flöde~ Alpha patch or JavaScript generator exists on the branch yet; the readable Max patches remain forensic/reference material and were not modified.
+
+Stage 1 has begun with a versioned minimal contract in `docs/POD_V01_CONTRACT.md`. It locks one master transport, the initial POD state, a deterministic seed, the JUNG-to-Max event list, device/POD-scoped resource names, validation bounds, observability, and the native MSP signal path.
+
+Environment and implementation discoveries for the next session:
+
+- branch head before this checkpoint was `49b807cde3f0c8eb6950b9a115a18cae07612c62`;
+- Issue #5 had no comments before the checkpoint;
+- Max 9 is installed at `C:\Program Files\Cycling '74\Max 9\Max.exe`;
+- preserved patch exports identify Max 8.6 and Max 9.0.7 material;
+- the repository contains no reference WAV files;
+- the implementation host's bundled Git executable lacks the HTTPS remote helper, so this checkpoint was committed and advanced on `max-msp` through the authenticated GitHub API rather than by merging or touching `dev`/`main`.
+
+Architecture status:
+
+- `IMPLEMENTED`: POD v0.1 contract only.
+- `VERIFIED`: repository/issue state and local Max 9 availability.
+- `UNVERIFIED`: all new Max runtime, transport, state, DSP, and behavioural code.
+
+Exact continuation: create `patches/flode_alpha_01/flode_alpha_01.maxproj`, `patches/flode_alpha_01/patchers/flode_alpha_01.maxpat`, `patches/flode_alpha_01/patchers/flode_pod_v01.maxpat`, and `patches/flode_alpha_01/README.md`; then validate and open the empty Stage 1 signal path in Max 9 before starting Apache playback.
+
