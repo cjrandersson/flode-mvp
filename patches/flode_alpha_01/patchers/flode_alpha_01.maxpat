@@ -24,7 +24,8 @@
       { "box": { "id": "obj-16", "maxclass": "newobj", "text": "flode_pod_v01 #0 A", "patching_rect": [160.0, 380.0, 142.0, 22.0] } },
       { "box": { "id": "obj-17", "maxclass": "newobj", "text": "print flode.pod.A", "patching_rect": [470.0, 380.0, 122.0, 22.0] } },
       { "box": { "id": "obj-18", "maxclass": "newobj", "text": "dac~ 1 2", "patching_rect": [160.0, 450.0, 68.0, 22.0] } },
-      { "box": { "id": "obj-19", "maxclass": "comment", "text": "Enable audio from the Max toolbar. Empty POD output is silent.", "patching_rect": [245.0, 450.0, 355.0, 22.0] } }
+      { "box": { "id": "obj-19", "maxclass": "comment", "text": "Enable audio from the Max toolbar. Empty POD output is silent.", "patching_rect": [245.0, 450.0, 355.0, 22.0] } },
+      { "box": { "id": "obj-20", "maxclass": "newobj", "text": "prepend tick", "patching_rect": [160.0, 350.0, 88.0, 22.0] } }
     ],
     "lines": [
       { "patchline": { "source": ["obj-3", 0], "destination": ["obj-4", 0] } },
@@ -36,7 +37,8 @@
       { "patchline": { "source": ["obj-14", 0], "destination": ["obj-15", 0] } },
       { "patchline": { "source": ["obj-10", 0], "destination": ["obj-11", 0] } },
       { "patchline": { "source": ["obj-11", 0], "destination": ["obj-12", 0] } },
-      { "patchline": { "source": ["obj-12", 1], "destination": ["obj-16", 0] } },
+      { "patchline": { "source": ["obj-12", 1], "destination": ["obj-20", 0] } },
+      { "patchline": { "source": ["obj-20", 0], "destination": ["obj-16", 0] } },
       { "patchline": { "source": ["obj-12", 0], "destination": ["obj-13", 0] } },
       { "patchline": { "source": ["obj-13", 0], "destination": ["obj-15", 0] } },
       { "patchline": { "source": ["obj-16", 0], "destination": ["obj-18", 0] } },
