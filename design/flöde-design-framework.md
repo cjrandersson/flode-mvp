@@ -1,260 +1,184 @@
-To make this system highly interpretable for AI code assistants like ChatGPT, Claude, and GitHub Copilot, we must structuralize the UI using an **AI-Promptable Design Token architecture**.
+# flöde~ Design Framework
 
-AI models reason best when UI logic is decoupled from absolute dimensions. By converting the visual asset choices of **flöde\~** and **Fors** into strict mathematical rules, geometric ratios, and predictable JSON object states, any LLM can instantly read your code or instructions and output pixel-perfect additions without breaking the interface layout.
+**Status:** Visual and interaction guidance  
+**Branch:** `max-msp`  
+**Scope:** The shared visual language for the six-pod instrument, Max 9 `v8ui` components, and the web prototype.
 
-Here is the strategy and code execution framework to make your device fully AI-optimized.
+This document describes how flöde~ should look and feel. It does **not** define the audio engine or replace [POD v0.1 contract](../docs/POD_V01_CONTRACT.md). When behaviour and appearance conflict, the audio contract wins until the design is deliberately revised.
 
-## ---
+## Design intent
 
-**Step 1: The AI Context Prompt (System Token Map)**
+flöde~ should feel like a compact, responsive audio instrument — not a web dashboard. The interface is matte, structural and calm: dark graphite surfaces, clear boundaries between pods, deliberate colour, and no decorative visual noise.
 
-*Copy and save this specific Markdown block as ai-ui-rules.md in your project folder. Whenever you ask an AI model to write a new UI module for your device, paste this context map first.*
+The interface must make four things immediately legible:
 
-`# SYSTEM CONTEXT: FLÖDE~ / FORS DESIGN FRAMEWORK`
+1. Which pod is being controlled.
+2. What part of the sound is playing and looping.
+3. Which generative mode is active.
+4. What the shared master transport is doing.
 
-`## 1. DESIGN TOKENS (STRICT COLOR MATRIX)`  
-`- COLOR_BG      = [0.08, 0.09, 0.11, 1.0] // Canvas background (Deep Carbon)`  
-`- COLOR_CARD    = [0.12, 0.13, 0.15, 1.0] // Pod/Module containers`  
-`- COLOR_OFF     = [0.18, 0.20, 0.24, 1.0] // Inactive tracks/ticks (Dark Slate)`  
-`- COLOR_ACCENT  = [1.0, 0.55, 0.0, 1.0]  // Active primary state (Vivid Orange)`  
-`- COLOR_TEXT    = [0.90, 0.90, 0.90, 1.0] // High-readability titles/values`  
-`- COLOR_MUTED   = [0.55, 0.58, 0.62, 1.0] // Sub-labels/Inactive static text`
+## Design tokens
 
-`## 2. GEOMETRICS & STRUCTURAL SCALING LAWS`  
-``- All UI nodes must scale dynamically using relative canvas dimensions: `width = box.rect[2] - box.rect[0]` and `height = box.rect[3] - box.rect[1]`.``  
-``- Do not use hardcoded pixel values for layouts. Use component boundary ratios (e.g., `radius = Math.min(width, height) * 0.38`).``  
-``- Styling Engine: Max 9 `v8ui` running modern ECMAScript 6 (ES6) over `mgraphics`.``
+Use semantic tokens rather than scattering literal colours through component scripts. RGBA values use the Max/mgraphics range `0.0–1.0`.
 
-`## 3. STATE SCHEMAS FOR INTERACTIVE COMPONENTS`  
-`- Component states must read from an unified parameter object.`  
-``- Mouse inputs must mutate normalized values (`0.0` to `1.0`) first, before translating them to raw hardware units.``
+```js
+const TOKENS = {
+  canvas:       [0.08, 0.09, 0.11, 1.0], // deep carbon
+  panel:        [0.12, 0.13, 0.15, 1.0], // pod / master panel
+  panelRaised:  [0.16, 0.17, 0.19, 1.0], // selected or raised control surface
+  line:         [0.28, 0.30, 0.34, 1.0], // borders, tracks and ticks
+  text:         [0.90, 0.90, 0.90, 1.0],
+  textMuted:    [0.55, 0.58, 0.62, 1.0],
+  disabled:     [0.18, 0.20, 0.24, 1.0],
 
-## ---
+  eqLow:        [1.00, 0.40, 0.32, 1.0], // coral
+  eqMid:        [1.00, 0.78, 0.18, 1.0], // yellow
+  eqHigh:       [0.35, 0.78, 1.00, 1.0]  // light cyan
+};
+```
 
-**Step 2: The Core AI-Optimized Component Engines**
+Each pod receives one restrained `podAccent` colour. It is used for its large identity letter, top edge, selected mode, waveform play/loop state and active controls. The colour should never replace readable text or create glow.
 
-Below are the fully optimized, production-ready ES6 files for the **Sample Slicer Interface** (with complete file drag-and-drop hooks) and the **Vertical Parameter Fader**. The code is styled with clear documentation boundaries so AI models can easily read the state loop and inject modifications.
+## Geometry and scaling
 
-## **File 1: slicer.js (Multi-segment Waveform & Drag-and-Drop)**
+- Calculate component geometry from its current `box.rect` width and height.
+- Prefer ratios for layout: for example, `knobRadius = Math.min(width, height) * 0.16`.
+- Small fixed values are allowed only as drawing minimums — such as a 1 px line or minimum hit area — never as the main layout system.
+- Keep a control's position and size stable while its value or mode changes.
+- Use thin borders, little or no corner rounding, no glassmorphism and no decorative shadows.
+- Use a neutral Helvetica/Satoshi-like sans serif. Labels are compact; values and pod letters are more prominent.
 
-*Save this file inside your search path as slicer.js. Create it in your patcher via v8ui slicer.js.*
+## Instrument layout
 
-*`/**`*  
- *`* AI-Optimized Audio Slicer Node for Max 9 v8ui`*  
- *`* Architectural Features: Drag-and-Drop file binding, transient slice maps, dynamic zoom metrics.`*  
- *`*/`*
+### Global header
 
-`const mg = mgraphics;`  
-`mg.init();`
+The top of the main window contains only a small `flöde~` wordmark and a compact **Settings / Preferences** control. It is deliberately quiet.
 
-*`// 1. Core Structural State (Exposed for easy AI tracking/modification)`*  
-`declareAttribute("activeSlice", "int");`  
-`declareAttribute("totalSlices", "int");`  
-`declareAttribute("loopStart", "float"); // Normalized 0.0 - 1.0`  
-`declareAttribute("loopEnd", "float");   // Normalized 0.0 - 1.0`
+### Six-pod view
 
-`var activeSlice = 2;`  
-`var totalSlices = 16;`  
-`var loopStart = 0.25;`  
-`var loopEnd = 0.55;`  
-`var fileName = "break_amen_174bpm.wav";`
+Pods A–F are shown in two rows of three. Every pod has:
 
-*`// Design Token Bindings`*  
-`const TOKENS = {`  
-    `bg: [0.08, 0.09, 0.11, 1.0],`  
-    `off: [0.18, 0.20, 0.24, 0.4],`  
-    `accent: [1.0, 0.55, 0.0, 1.0],`  
-    `accentMuted: [1.0, 0.55, 0.0, 0.15],`  
-    `text: [0.9, 0.9, 0.9, 1.0],`  
-    `grid: [0.3, 0.3, 0.3, 0.3]`  
-`};`
+- a thin boundary and modest gap from its neighbours;
+- a narrow top edge in its own accent colour;
+- a large coloured identity letter (`A`–`F`) rather than a redundant “POD A” title;
+- the same structural order, so a player can move between pods without relearning the layout.
 
-`function paint() {`  
-    `let w = this.box.rect[2] - this.box.rect[0];`  
-    `let h = this.box.rect[3] - this.box.rect[1];`  
-      
-    `// Canvas Base Draw`  
-    `mg.set_source_rgba(TOKENS.bg);`  
-    `mg.rectangle(0, 0, w, h);`  
-    `mg.fill();`
+### Pod order
 
-    `// Generate Mock Waveform Geometric Profile (Procedural representation for performance scaling)`  
-    `mg.set_source_rgba(TOKENS.accent);`  
-    `mg.set_line_width(1.5);`  
-    `let centerLine = h * 0.5;`  
-    `for (let i = 0; i < w; i += 2) {`  
-        `let waveHeight = (Math.sin(i * 0.05) * Math.cos(i * 0.012) * 0.4 + 0.1) * (h * 0.7);`  
-        `mg.move_to(i, centerLine - waveHeight / 2);`  
-        `mg.line_to(i, centerLine + waveHeight / 2);`  
-    `}`  
-    `mg.stroke();`
+```text
+Identity letter / status
+Waveform + slice and loop editor
+GEN MODE + fixed mode-parameter field
+Playback and generative controls
+Volume and Pan knobs
+Three-band EQ
+Mute / Solo and secondary performance controls
+```
 
-    `// Render Slice Separation Borders`  
-    `mg.set_source_rgba(TOKENS.grid);`  
-    `mg.set_line_width(1.0);`  
-    `let sliceWidth = w / totalSlices;`  
-    `for (let s = 1; s < totalSlices; s++) {`  
-        `let xPos = s * sliceWidth;`  
-        `mg.move_to(xPos, 0);`  
-        `mg.line_to(xPos, h);`  
-    `}`  
-    `mg.stroke();`
+The exact density may change between the single-Pod editor and six-Pod overview, but the order must not.
 
-    `// Active Loop Region Window (Fors Vector Highlight style)`  
-    `let startX = loopStart * w;`  
-    `let endX = loopEnd * w;`  
-    `mg.set_source_rgba(TOKENS.accentMuted);`  
-    `mg.rectangle(startX, 0, endX - startX, h);`  
-    `mg.fill();`
+### Master panel
 
-    `// Draw Loop Boundary Pillars`  
-    `mg.set_source_rgba(TOKENS.accent);`  
-    `mg.set_line_width(3.0);`  
-    `mg.move_to(startX, 0); mg.line_to(startX, h);`  
-    `mg.move_to(endX, 0); mg.line_to(endX, h);`  
-    `mg.stroke();`
+The master is a separate broad panel at the bottom of the main window. It contains, left to right:
 
-    `// Floating File Information Text Node`  
-    `mg.set_source_rgba(TOKENS.text);`  
-    `mg.select_font_face("Arial", "normal", "bold");`  
-    `mg.set_font_size(11.0);`  
-    `mg.move_to(15, 20);`  
-    `mg.show_text(fileName.toUpperCase());`  
-`}`
+```text
+MASTER → BPM → Tap → Record / Play / Stop
+       → Swing → MIDI Clock Out → Host Sync → output meters → master FX chain
+```
 
-*`/**`*  
- *`* Native Max Drag & Drop System Integration`*  
- *`*/`*  
-`function onfiledrop(filepath) {`  
-    `// Isolate the filename from absolute operating system paths`  
-    `let pathParts = filepath.split('/');`  
-    `if(pathParts.length === 1) pathParts = filepath.split('\\');`  
-    `fileName = pathParts[pathParts.length - 1];`  
-      
-    `// Emit notification to structural patch nodes (e.g., live.drop or buffer~)`  
-    `outlet(0, "file", filepath);`  
-    `mg.redraw();`  
-`}`
+Transport and global feedback do not belong in the top header.
 
-*`/**`*  
- *`* Click & Mouse Coordinate Calculation Rules`*  
- *`*/`*  
-`function onmousedown(x, y, button) {`  
-    `let w = this.box.rect[2] - this.box.rect[0];`  
-    `let clickedSlice = Math.floor((x / w) * totalSlices);`  
-    `activeSlice = Math.min(totalSlices - 1, Math.max(0, clickedSlice));`  
-      
-    `// Output target selection parameters`  
-    `let sliceData = { sliceIndex: activeSlice, normalizedX: x / w };`  
-    `outlet(1, "sliceSelect", sliceData.sliceIndex);`  
-    `mg.redraw();`  
-`}`
+## Component contracts
 
-## **File 2: slider.js (Flat Geometric Fader Module)**
+### Waveform and slicing editor
 
-*Save this file inside your search path as slider.js. Create it via v8ui slider.js.*
+The waveform is the pod's primary surface and must be based on real buffer/audio data, not a decorative procedural wave.
 
-*`/**`*  
- *`* AI-Promptable Vertical Parameter Slider Engine`*  
- *`* Minimal design maximizing spatial efficiency for multi-channel grid matrices.`*  
- *`*/`*
+It shows:
 
-`const mg = mgraphics;`  
-`mg.init();`
+- the loaded filename and audible waveform;
+- slice boundaries and the active slice;
+- a clearly shaded loop overlay;
+- loop start and end handles in the pod accent;
+- the playback cursor, drawn responsively from audio/transport state;
+- **SLICE** with **MODE: Transients** beneath it when transient slicing is active.
 
-`declareAttribute("value", "float");`  
-`declareAttribute("min", "float");`  
-`declareAttribute("max", "float");`  
-`declareAttribute("title", "string");`
+The loop overlay is an editor state: audio outside the selected start/end region is visually subdued, while the active area remains clear.
 
-`var value = 0.5;`  
-`var min = 0.0;`  
-`var max = 1.0;`  
-`var title = "VOL";`
+### Generative modes
 
-`const DESIGN = {`  
-    `canvas: [0.08, 0.09, 0.11, 1.0],`  
-    `track: [0.18, 0.20, 0.24, 1.0],`  
-    `active: [1.0, 0.55, 0.0, 1.0],`  
-    `typography: [0.9, 0.9, 0.9, 1.0]`  
-`};`
+All pods show the same mode row:
 
-`function paint() {`  
-    `let w = this.box.rect[2] - this.box.rect[0];`  
-    `let h = this.box.rect[3] - this.box.rect[1];`  
-      
-    `// Background Layer`  
-    `mg.set_source_rgba(DESIGN.canvas);`  
-    `mg.rectangle(0, 0, w, h);`  
-    `mg.fill();`
+```text
+PURE · JUNG · WEIGHTED · WALK · MEMORY · CHAOS
+```
 
-    `// Define geometric bounding values for vertical elements`  
-    `let trackX = w * 0.5;`  
-    `let paddingY = 20;`   
-    `let workingHeight = h - (paddingY * 2);`  
-      
-    `// Normalized current level positioning computation`  
-    `let pct = (value - min) / (max - min);`  
-    `let handleY = paddingY + (workingHeight * (1.0 - pct));`
+The selected name receives the pod accent; do not add a checkmark. A fixed parameter field immediately below the mode row changes its values and labels for the active mode without moving the rest of the interface.
 
-    `// Base Level Track`  
-    `mg.set_source_rgba(DESIGN.track);`  
-    `mg.set_line_width(2.0);`  
-    `mg.move_to(trackX, paddingY);`  
-    `mg.line_to(trackX, paddingY + workingHeight);`  
-    `mg.stroke();`
+RND controls slice/position probability. RND2 controls playback-speed variation and therefore can change pitch; its label and help must make this explicit.
 
-    `// Active Orange Segment Filling`  
-    `mg.set_source_rgba(DESIGN.active);`  
-    `mg.set_line_width(3.0);`  
-    `mg.move_to(trackX, paddingY + workingHeight);`  
-    `mg.line_to(trackX, handleY);`  
-    `mg.stroke();`
+### Knobs and sliders
 
-    `// Minimal Horizontal Cap indicator`  
-    `mg.set_source_rgba(DESIGN.active);`  
-    `mg.set_line_width(2.0);`  
-    `mg.move_to(trackX - 6, handleY);`  
-    `mg.line_to(trackX + 6, handleY);`  
-    `mg.stroke();`
+| Control | Form | Notes |
+| --- | --- | --- |
+| Volume | Knob | Large, physical and easy to grab |
+| Pan | Knob, directly below Volume | Same visual family and size |
+| EQ Low / Mid / High | Three knobs | Coral / yellow / light cyan scales and markers |
+| Speed, Range, RND, RND2, Jitter | Short horizontal sliders | Compact, readable and never stretched across empty space |
+| Slice / transient density, fades | Slider or compact value control | Depends on available pod density |
+| Mute / Solo | Buttons | Clear active state; secondary to waveform and core controls |
 
-    `// Param Label Alignment Logic`  
-    `mg.set_source_rgba(DESIGN.typography);`  
-    `mg.select_font_face("Arial", "normal", "bold");`  
-    `mg.set_font_size(9.0);`  
-    `let strLen = mg.text_measure(title);`  
-    `mg.move_to(trackX - (strLen / 2), h - 6);`  
-    `mg.show_text(title);`  
-`}`
+Avoid grids of tiny knobs, tiny click targets and redundant REC icons inside individual pods.
 
-`function onmousedrag(x, y, modifiers) {`  
-    `let h = this.box.rect[3] - this.box.rect[1];`  
-    `let paddingY = 20;`  
-    `let workingHeight = h - (paddingY * 2);`  
-      
-    `// Continuous dynamic tracking calculation`  
-    `let targetPct = 1.0 - ((y - paddingY) / workingHeight);`  
-    `targetPct = Math.min(1.0, Math.max(0.0, targetPct));`  
-      
-    `value = min + targetPct * (max - min);`  
-    `outlet(0, value);`  
-    `mg.redraw();`  
-`}`
+## Interaction rules
 
-## ---
+- Control response should be immediate and continuous. Do not animate input in a way that makes it feel delayed or plastic.
+- Pointer drag changes the parameter; **Shift + drag** enables fine adjustment.
+- Loop handles are directly draggable. A change updates the overlay immediately.
+- The play cursor follows audio/transport timing, not a visually guessed timer.
+- Smooth audio parameter changes enough to avoid clicks, but do not hide rhythmic aggression or introduce perceptible lag.
+- Active state uses colour, value and motion together; colour alone must not carry important information.
 
-**Step 3: How to Instruct the AI Going Forward**
+## State handoff for components
 
-Now that your environment relies on structured **Design Tokens**, you can give incredibly effective prompts to ChatGPT or Codex when expanding your device.
+UI components receive a single state object and emit normalized interaction values before the patch maps them to audio units.
 
-**Example Prompts you can use:**
+```js
+const podUiState = {
+  podId: "A",
+  accent: [1.0, 0.55, 0.0, 1.0],
+  sampleLoaded: true,
+  loopStart: 0.25,  // normalized 0.0–1.0
+  loopEnd: 0.55,    // normalized 0.0–1.0
+  activeSlice: 7,
+  sliceCount: 16,
+  mode: "jung",
+  modeParams: { repeatNew: 0.55 },
+  volume: 0.80,     // normalized before mapping
+  pan: 0.0,         // mapped to -1.0–1.0
+  isPlaying: true
+};
+```
 
-*"Using the FLÖDE\~ / FORS DESIGN FRAMEWORK token map, write a new component script for a stereo pan slider widget. It must draw a flat horizontal path centered at 0.5 using v8ui. Use TOKENS.accent when moving out from the center, and output values between \-1.0 and 1.0 out of outlet(0)."*
+A renderer may draw this state, but it must not become a second owner of persistent audio state. The Max patch/state layer remains authoritative.
 
-*"Review the slicer.js script provided. Modify the interaction rules inside the onmousedown module so that if a user holds the Shift key (check using the modifiers parameter), it mutates loopStart and loopEnd parameters rather than choosing an active slice index."*
+## Implementation notes
 
-If you are ready to expand your system components further, tell me if you want to write:
+- Max 9 `v8ui` and `mgraphics` are appropriate for custom visual components.
+- Keep drawing, user interaction and Max/audio messages separate: rendering reads state; input emits normalized commands; the patch owns audio state.
+- Treat a component script as a reference implementation until it is tested in Max 9 with real buffers, DSP and user input.
+- Add a component only when it improves control or feedback. Do not add widgets merely because the framework permits them.
 
-> * A custom **LFO/Envelope visualizer canvas** that paints real-time modulation data lines.  
-> * An AI-optimized structure for an **XY modulation pad layout grid**.  
-> * A automated script to bind the theme colors dynamically to **Ableton Live's master skin settings**.
+## AI handoff
+
+When requesting a new component, provide this document plus:
+
+1. the component's input state;
+2. the messages it emits;
+3. its visual location in the pod or master panel;
+4. its interaction behaviour and precision requirements;
+5. what it must not change.
+
+Example:
+
+> Implement a Max 9 v8ui loop-overlay component for a pod waveform. Read normalized `loopStart`, `loopEnd`, `playhead` and `accent` from the supplied state. Render only the overlay and handles; do not draw fake waveform data, own audio state or alter the pod layout. Dragging a handle must emit normalized loop values. Shift + drag is fine adjustment.
