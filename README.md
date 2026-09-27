@@ -4,6 +4,16 @@
 
 flöde~ is a six-pod sampler, generative sequencer, audio mangler and looper built around a shared master clock/BPM. The project evolves the character and workflow of the original I Am The Mighty Jungulator into a cleaner, more robust Max/MSP / Max for Live / standalone instrument.
 
+---
+
+# 🎛️ DEVELOPMENT COCKPIT
+
+> **Operativ source of truth för projektets aktuella läge.** Den visuella tavlan ska hållas synkroniserad med Issue #5, aktuell branch-status, owners, milestones och nästa steg.
+
+![flöde~ Development Cockpit](assets/graphics/development-cockpit.svg)
+
+---
+
 ## Max/MSP quick access — `max-msp`
 
 - **Open first — Max project:** [flode_alpha_01.maxproj](https://github.com/cjrandersson/flode-mvp/blob/max-msp/patches/flode_alpha_01/flode_alpha_01.maxproj)
@@ -42,4 +52,4 @@ The interface must feel like an audio instrument, not a web dashboard. Waveforms
 - `design/figma-export/` current Figma AI export reference
 
 ## Current build status
-The original Pod A build pass established the core Max engine: `dropfile → buffer~ → waveform~ → groove~ → volume/pan → stereo out`. The next implementation target is the complete Pod A sampler UX before duplicating the pod A–F.
+The original Pod A build pass established the core Max engine: `dropfile → buffer~ → waveform~ → groove~ → volume/pan → stereo out`. The active Alpha 0.1 work remains constrained to `max-msp` and Issue #5.
