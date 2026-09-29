@@ -1,113 +1,89 @@
-# flöde~ Alpha 0.1 — Stage 1 skeleton
+# flöde~ Alpha 0.1 — TV001 Part A
 
-**Status: PARTIAL.** The four project files exist; Stage 1 has not passed its
-runtime or full state-contract exit criteria. The locked contract is
-[docs/POD_V01_CONTRACT.md](../../docs/POD_V01_CONTRACT.md). Continue only on
-`max-msp`.
+**Stage 1 static gate: PASS. UNVERIFIED IN MAX RUNTIME.**
+Part B / First Audible playback has not started at this checkpoint.
+Branch: `max-msp`. Open `flode_alpha_01.maxproj` in this folder with its
+`patchers/` and `media/` folders beside it. The duplicate nested project is gone.
 
-This is an unloaded developer harness. Sample loading/playback, Apache Break,
-JUNG behaviour, sequencing, transient analysis, effects, and production UI are
-not implemented here.
+## Repository truth
 
-## Repository checkpoint
+Starting upstream: `2aa596dafd5b0881740cfadc32969197892a4a35`. PR #7's earlier
+state/safety completion report was not reflected in those upstream files.
+The original master transport, 16n metro, diagnostic `counter 0 15`, POD tick
+path, scoped buffer declaration, gain/pan bounds and stereo routing remain.
 
-On 2026-09-24, the live branch was verified at
-`328ae3386d577ae1187af7be27ab16a700d2f2ee`, whose direct parent is the older
-handoff `e2a10fee1103c2ed5ac099f4832f1cb8479b52b3`. That newer commit already
-created all four requested files. They must not be recreated from the older
-checkpoint.
+## State and controls
 
-The follow-up correction adds `prepend tick` between the top-level integer
-trigger and the POD inlet. Previously the POD received a bare integer, while
-its `route tick gain pan` expected a selector. The integer therefore reached
-the unconnected unmatched outlet. Both diagnostic paths now receive
-`tick <index>`. This corrects message routing only; it does not establish
-that Max's scheduler or audio device has been tested.
+`dict #1.pod.#2.state @embed 0` is the authoritative POD state owner.
+Defaults initialize on opening; no preset/disk persistence feature is implied.
+Scalar validators check arity/type before predicates. DSP/debug values derive
+from the dictionary. Other registers are transient execution/metadata caches.
 
-## Open in Max 9
+Send messages to the POD's existing left inlet with temporary Max message boxes.
+No production UI is added.
 
-1. Keep the project folder and its `patchers/` folder together.
-2. Open `flode_alpha_01.maxproj`.
-3. Open the top-level `flode_alpha_01.maxpat` from the project window.
-4. Open the Max Console; look for `flode.transport` and `flode.pod.A`.
-5. Leave the buffer unloaded. Enable the start/stop toggle to inspect ticks.
-6. If checking the silent DSP path, enable audio from Max's toolbar.
-
-The top-level patch owns one internal `transport`, default BPM 92, and one
-`metro 16n @transport internal @quantize 16n`. The POD instance is
-`flode_pod_v01 #0 A`. The diagnostic counter cycles 0–15; it is a step index,
-not the future JUNG event ID.
-
-## Present structure and safety boundary
-
-- The POD buffer uses the instance/POD name `#1.pod.#2.buffer`.
-- `groove~` has a fixed zero rate, with no sample-load or event-execution input.
-- Gain is clamped to 0–1 and pan to -1–1, with 10 ms coefficient smoothing.
-  Their defaults are 0.8 and 0.0.
-- The stereo signal path is present. Its unloaded output is expected to be
-  silent; this still needs the manual DSP check below.
-- Only native Max/MSP objects and the included POD abstraction are referenced.
-- The current inlet handles `tick`, `gain`, and `pan`. Other messages are
-  ignored. This is not the versioned JUNG event validator.
-- The internal Max transport is shared globally. Test one harness at a time
-  for the transport checks. POD resource isolation is a separate check.
-
-## Verification evidence
-
-| Check | Result |
+| Message | Meaning |
 | --- | --- |
-| Project and both patchers parse as JSON | PASS, static check on 2026-09-24 |
-| Project references, unique object IDs, patch-cord endpoints | PASS, static check |
-| Tick message path before the correction | FAIL: raw integers never match the POD's `tick` selector |
-| Tick message path after the correction | PASS in a limited message-flow simulation; both print paths receive matching ticks, including the 15-to-0 wrap |
-| Max 9.0.7 bounded launch at the earlier commit | Reported in [Issue #5](https://github.com/cjrandersson/flode-mvp/issues/5#issuecomment-5768677369): process started and no error/missing-object log entry was seen during that window |
-| Interactive Max 9 test of this correction | NOT RUN |
-| Audio-device/DSP test | NOT RUN |
+| `api_version 1` | Only supported integer version |
+| `gain 0.8` / `pan 0.` | Finite numeric scalar, clamped to 0–1 / −1–1 |
+| `base_rate 1.` | Finite positive scalar; stop before changing state |
+| `jung_enabled 0` | Only supported value; no JUNG execution |
+| `seed 42691` | Integer state only; no RNG |
+| `slice_count 16` | Positive integer state only; no slicing |
+| `debug_enabled 0` / `debug_enabled 1` | Gate routine POD and harness diagnostics |
+| `getstate` | Print state; enable debug first |
+| `sample_path "absolute/path/to/file.wav"` | One-symbol load request; actual loaded path is derived from buffer metadata |
+| `stop` | Cancel pending transition and release to silence |
 
-The 2026-09-24 verification host is Linux and has no available Max runtime.
-The earlier launch report applies to the earlier commit; it is not evidence
-that this correction, interactive tick routing, or DSP has run successfully.
+`sample_loaded` and `pod_id` are read-only. Unsupported selectors, malformed
+controls and all events reach the fail-silent boundary. Errors remain visible
+with debug off. A successful base-rate change stops playback; it is not a live
+rate-modulation system.
 
-## Manual Max 9 checks still required
+## Loading and safety
 
-Record the tested commit, Max version, operating system, sample rate/vector
-size, and actual console output in Issue #5.
+A load request revokes availability, releases the amplitude boundary, stops
+`groove~`, then executes a low-priority buffer replacement. `sizeinsamps 0`
+removes stale data before replacement. The original buffer declaration is
+unchanged; file loading determines channel allocation. The completion bang
+triggers reset metadata → fresh `info~` query → validity check. Only positive
+finite duration/sample rate and one or two channels produce `sample_loaded 1`.
+`sample_path` is written from `info~`'s full-path outlet. Failed loading leaves
+unloaded, silent state and may produce Max's native file error.
 
-| Check | Action | Expected result |
-| --- | --- | --- |
-| Open | Open the project and top patch; inspect Console and object boxes | Both patchers resolve; no red/missing objects or creation/connection errors |
-| Idle | Leave transport off and buffer unloaded | No repeating tick diagnostics |
-| Clock/POD agreement | Start at 92 BPM and watch at least two 0–15 cycles | One `flode.transport: tick n` and one `flode.pod.A: tick n` for each pulse; matching indices, including 15 → 0 |
-| Tempo response | Change BPM from 92 to 120, then 60 | Both paths change together; 16th notes average 125 ms at 120 BPM and 250 ms at 60 BPM |
-| Stop/restart | Stop, wait, and restart repeatedly | Repeating ticks stop and resume without accumulating duplicate streams; record the observed resume index |
-| Empty DSP | Turn audio on, start/stop transport, then turn audio off | Silence on both output channels; no DSP errors |
-| Gain/pan bounds | In the POD patch, send `gain -1.`, `gain 2.`, `pan -2.`, and `pan 2.`; inspect the existing clips/coefficient path | Gain remains 0–1, pan -1–1, output stays silent; restore `gain 0.8` and `pan 0.` |
-| Resource isolation | Open a second top-level instance and inspect the two POD buffer names with transports stopped | Different top-level scopes; no shared POD buffer. Close the extra instance before repeating clock tests |
+`p playback_safety` supplies a separate `line~ 0.` envelope to both channels,
+before the original gain/pan path. Release uses 10 ms, following the existing
+convention. A new request cancels the previous ramp; envelope completion precedes safe
+playback/buffer changes. DSP-off cancels pending work and forces silence;
+loading with DSP off does not wait for an audio ramp. Part A contains no
+attack or nonzero rate path.
 
-These are expected results, not recorded passes. Any temporary inspection
-objects used in Max are local diagnostics and should not be saved into this
-checkpoint.
+The eleven-field event validator checks API/POD, typed IDs, monotonic received
+IDs, decision names, integer slice clamping, finite nonzero rate, offset
+−12…12 ms, repeat 1…3, boolean reverse, rate/reverse relationship and integer
+seed state. Validated events still return `unsupported_event_no_execution`.
+There is no slice, repeat, reverse, offset, pattern or scheduling execution.
+Rejected raw events remain visible for diagnosis.
 
-## Remaining Stage 1 implementation work
+## Static verification and Max status
 
-After the manual skeleton checkpoint required by the latest Issue #5 comment:
+From repository root: `python scripts/verify_tv001.py --part A`.
+It checks recursive JSON/cord/subpatch integrity, project references,
+state/load/debug/safety wiring, preserved clock topology and excluded objects.
+The 34 predicate-model cases use Python numeric semantics, not Max dispatch.
+See [gate evidence](../../docs/test-evidence/max9/stage1/TV001_STATIC_GATE.md).
 
-- Implement one authoritative owner for the minimal POD state from the
-  contract. The current `state A empty_safe` message is only a startup label,
-  not the required state model.
-- Initialize and expose the contract's API version, sample reference/loaded
-  state, base rate, JUNG-enable value, seed `42691`, slice count, and debug
-  enable alongside gain/pan. Unsupported API versions must be rejected.
-- Make actual state changes observable and diagnostics disableable. At present
-  only the startup label and routed ticks are logged.
-- Provide/verify the locked event-envelope and safe region/execution boundary
-  before any later playback is enabled. Gain/pan smoothing is not an event
-  de-click envelope.
-- Record the resulting Max-side console/runtime evidence in Issue #5 before
-  declaring Stage 1 complete.
+CJ's earlier open/clock/manual-load smoke test is recorded in
+[Issue #5](https://github.com/cjrandersson/flode-mvp/issues/5#issuecomment-5859685590).
+It applies to the earlier skeleton, not the new implementation.
 
-No full JUNG event validation, deterministic RNG, audible de-click behaviour,
-state persistence, Max for Live integration, or compatibility below Max 9 has
-been verified. Do not begin Apache playback or JUNG implementation while
-Stage 1 remains partial. Preserved Jungulator files and `dev`/`main` are
-outside this change.
+**UNVERIFIED IN MAX RUNTIME:** object creation, dictionary initialization,
+message dispatch, load callbacks/failure recovery, DSP-off transitions, envelope
+completion, debug gating, audio, bounds and resource isolation. This host has
+no Max 9 executable. No audible or click-free claim is made.
+
+Part A manual check: open the canonical project, enable DSP while unloaded,
+verify silence, send the documented controls, inspect state, toggle debug,
+try malformed controls/events, and verify loading cannot enable audio. Test
+resource isolation with two parent instances and transports stopped only.
+The globally shared standalone transport remains an accepted limitation.

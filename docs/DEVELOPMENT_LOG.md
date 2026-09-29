@@ -319,3 +319,16 @@ Architecture status:
 
 Exact continuation: create `patches/flode_alpha_01/flode_alpha_01.maxproj`, `patches/flode_alpha_01/patchers/flode_alpha_01.maxpat`, `patches/flode_alpha_01/patchers/flode_pod_v01.maxpat`, and `patches/flode_alpha_01/README.md`; then validate and open the empty Stage 1 signal path in Max 9 before starting Apache playback.
 
+
+## 2026-09-29 — TV001 Part A static foundation
+
+Starting upstream `max-msp`: `2aa596dafd5b0881740cfadc32969197892a4a35`.
+Implemented native scoped state/control/event validation, derived buffer
+availability, 10 ms amplitude safety boundary and gateable diagnostics.
+Removed the nested descriptor and corrected premature M1.1 wording in UI R&D.
+Earlier PR #7 completion claims were absent from the upstream files.
+
+Stage 1 static gate PASS; Part B has not started at this checkpoint.
+Evidence: `docs/test-evidence/max9/stage1/TV001_STATIC_GATE.md`.
+UNVERIFIED IN MAX RUNTIME: no Max 9 on this host; no runtime-complete or
+click-free claim. No excluded work introduced.
