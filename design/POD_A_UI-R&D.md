@@ -7,11 +7,11 @@
 
 POD A shall use a reusable JavaScript UI component system, with an MGraphics-rendered waveform/transport view and compact graphical controls. The purpose is to make POD A clear, responsive and consistent with the flöde~ visual language while keeping audio, transport and file operations controller-owned.
 
-The following M1.1 signal path is target/planned architecture, not yet implemented upstream:
+The TV001 M1.1 path is implemented in repository files; Max 9 runtime/audio remains unverified:
 
-    Apache Break → scoped buffer~ → groove~ (sig~ 1.) → existing gain/pan → stereo
+    Apache Break → scoped buffer~ → groove~ (controlled rate; 1.0 = normal) → safety envelope → existing gain/pan → stereo
 
-Target Start/Stop is explicit. The UI layer must never perform DSP, timing, buffer scanning, audio analysis, file selection, disk writing or direct engine mutation.
+Start/Stop remains explicit. The UI layer must never perform DSP, timing, buffer scanning, audio analysis, file selection, disk writing or direct engine mutation.
 
 This is an architecture and design contract, not a claim that the UI has already been implemented.
 

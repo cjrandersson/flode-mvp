@@ -13,7 +13,7 @@
       100.0,
       100.0,
       1650.0,
-      1250.0
+      1620.0
     ],
     "openinpresentation": 0,
     "boxes": [
@@ -21,7 +21,7 @@
         "box": {
           "id": "obj-1",
           "maxclass": "comment",
-          "text": "POD v0.1 — TV001 Part A: native state, validation, silent safety foundation",
+          "text": "POD v0.1 — TV001: state/safety foundation + minimal First Audible playback",
           "patching_rect": [
             30.0,
             20.0,
@@ -110,7 +110,7 @@
         "box": {
           "id": "obj-10",
           "maxclass": "comment",
-          "text": "rate is fixed at 0: no playback behaviour in this checkpoint",
+          "text": "Controlled rate: zero until validated play; base_rate 1. = normal forward playback.",
           "patching_rect": [
             500.0,
             165.0,
@@ -330,7 +330,7 @@
               80.0,
               80.0,
               1200.0,
-              850.0
+              1400.0
             ],
             "openinpresentation": 0,
             "boxes": [
@@ -428,7 +428,7 @@
                     650.0,
                     22.0
                   ],
-                  "text": "route tick gain pan api_version base_rate jung_enabled seed slice_count debug_enabled sample_path getstate stop event"
+                  "text": "route tick gain pan api_version base_rate jung_enabled seed slice_count debug_enabled sample_path getstate stop event play retrigger load_apache"
                 }
               },
               {
@@ -5050,7 +5050,7 @@
                     536.0,
                     22.0
                   ],
-                  "text": "JUNG enable=1, read-only fields and playback commands are unsupported in Part A."
+                  "text": "No JUNG execution. Playback requests are unparameterized full-sample play/stop/retrigger only."
                 }
               },
               {
@@ -5064,6 +5064,122 @@
                     22.0
                   ],
                   "text": "t l b"
+                }
+              },
+              {
+                "box": {
+                  "id": "play",
+                  "maxclass": "outlet",
+                  "patching_rect": [
+                    810.0,
+                    1000.0,
+                    55.0,
+                    22.0
+                  ]
+                }
+              },
+              {
+                "box": {
+                  "id": "play_empty",
+                  "maxclass": "newobj",
+                  "patching_rect": [
+                    30.0,
+                    1140.0,
+                    67.0,
+                    22.0
+                  ],
+                  "text": "route bang"
+                }
+              },
+              {
+                "box": {
+                  "id": "play_bad",
+                  "maxclass": "message",
+                  "patching_rect": [
+                    160.0,
+                    1185.0,
+                    120.60000000000001,
+                    22.0
+                  ],
+                  "text": "error invalid_play"
+                }
+              },
+              {
+                "box": {
+                  "id": "retrigger_empty",
+                  "maxclass": "newobj",
+                  "patching_rect": [
+                    380.0,
+                    1140.0,
+                    67.0,
+                    22.0
+                  ],
+                  "text": "route bang"
+                }
+              },
+              {
+                "box": {
+                  "id": "retrigger_bad",
+                  "maxclass": "message",
+                  "patching_rect": [
+                    510.0,
+                    1185.0,
+                    154.1,
+                    22.0
+                  ],
+                  "text": "error invalid_retrigger"
+                }
+              },
+              {
+                "box": {
+                  "id": "load_apache_empty",
+                  "maxclass": "newobj",
+                  "patching_rect": [
+                    730.0,
+                    1140.0,
+                    67.0,
+                    22.0
+                  ],
+                  "text": "route bang"
+                }
+              },
+              {
+                "box": {
+                  "id": "load_apache_bad",
+                  "maxclass": "message",
+                  "patching_rect": [
+                    860.0,
+                    1185.0,
+                    167.5,
+                    22.0
+                  ],
+                  "text": "error invalid_load_apache"
+                }
+              },
+              {
+                "box": {
+                  "id": "apache_path",
+                  "maxclass": "newobj",
+                  "patching_rect": [
+                    730.0,
+                    1230.0,
+                    402.0,
+                    22.0
+                  ],
+                  "text": "symbol \"Project:/media/Apache Break ( Driven Silk Red ).wav\""
+                }
+              },
+              {
+                "box": {
+                  "id": "project_absolute",
+                  "maxclass": "newobj",
+                  "patching_rect": [
+                    730.0,
+                    1270.0,
+                    160.8,
+                    22.0
+                  ],
+                  "text": "conformpath max absolute"
                 }
               }
             ],
@@ -5803,18 +5919,6 @@
               {
                 "patchline": {
                   "source": [
-                    "route",
-                    13
-                  ],
-                  "destination": [
-                    "unknown",
-                    0
-                  ]
-                }
-              },
-              {
-                "patchline": {
-                  "source": [
                     "unknown",
                     0
                   ],
@@ -5856,6 +5960,186 @@
                   ],
                   "destination": [
                     "state",
+                    0
+                  ]
+                }
+              },
+              {
+                "patchline": {
+                  "source": [
+                    "route",
+                    16
+                  ],
+                  "destination": [
+                    "unknown",
+                    0
+                  ]
+                }
+              },
+              {
+                "patchline": {
+                  "source": [
+                    "route",
+                    13
+                  ],
+                  "destination": [
+                    "play_empty",
+                    0
+                  ]
+                }
+              },
+              {
+                "patchline": {
+                  "source": [
+                    "play_empty",
+                    1
+                  ],
+                  "destination": [
+                    "play_bad",
+                    0
+                  ]
+                }
+              },
+              {
+                "patchline": {
+                  "source": [
+                    "play_bad",
+                    0
+                  ],
+                  "destination": [
+                    "error",
+                    0
+                  ]
+                }
+              },
+              {
+                "patchline": {
+                  "source": [
+                    "play_empty",
+                    0
+                  ],
+                  "destination": [
+                    "play",
+                    0
+                  ]
+                }
+              },
+              {
+                "patchline": {
+                  "source": [
+                    "route",
+                    14
+                  ],
+                  "destination": [
+                    "retrigger_empty",
+                    0
+                  ]
+                }
+              },
+              {
+                "patchline": {
+                  "source": [
+                    "retrigger_empty",
+                    1
+                  ],
+                  "destination": [
+                    "retrigger_bad",
+                    0
+                  ]
+                }
+              },
+              {
+                "patchline": {
+                  "source": [
+                    "retrigger_bad",
+                    0
+                  ],
+                  "destination": [
+                    "error",
+                    0
+                  ]
+                }
+              },
+              {
+                "patchline": {
+                  "source": [
+                    "retrigger_empty",
+                    0
+                  ],
+                  "destination": [
+                    "play",
+                    0
+                  ]
+                }
+              },
+              {
+                "patchline": {
+                  "source": [
+                    "route",
+                    15
+                  ],
+                  "destination": [
+                    "load_apache_empty",
+                    0
+                  ]
+                }
+              },
+              {
+                "patchline": {
+                  "source": [
+                    "load_apache_empty",
+                    1
+                  ],
+                  "destination": [
+                    "load_apache_bad",
+                    0
+                  ]
+                }
+              },
+              {
+                "patchline": {
+                  "source": [
+                    "load_apache_bad",
+                    0
+                  ],
+                  "destination": [
+                    "error",
+                    0
+                  ]
+                }
+              },
+              {
+                "patchline": {
+                  "source": [
+                    "load_apache_empty",
+                    0
+                  ],
+                  "destination": [
+                    "apache_path",
+                    0
+                  ]
+                }
+              },
+              {
+                "patchline": {
+                  "source": [
+                    "apache_path",
+                    0
+                  ],
+                  "destination": [
+                    "project_absolute",
+                    0
+                  ]
+                }
+              },
+              {
+                "patchline": {
+                  "source": [
+                    "project_absolute",
+                    0
+                  ],
+                  "destination": [
+                    "load",
                     0
                   ]
                 }
@@ -11701,7 +11985,7 @@
                     650.0,
                     22.0
                   ],
-                  "text": "0=stop, 2=load. Complete the MSP release before mutating playback/buffer. DSP-off cancels pending work."
+                  "text": "0=stop, 1=play, 2=load. Newest request replaces pending action; no POD clock."
                 }
               },
               {
@@ -11712,6 +11996,43 @@
                   "patching_rect": [
                     450.0,
                     150.0,
+                    55.0,
+                    22.0
+                  ]
+                }
+              },
+              {
+                "box": {
+                  "id": "start_attack",
+                  "maxclass": "inlet",
+                  "patching_rect": [
+                    300.0,
+                    25.0,
+                    55.0,
+                    22.0
+                  ]
+                }
+              },
+              {
+                "box": {
+                  "id": "attack",
+                  "maxclass": "message",
+                  "patching_rect": [
+                    300.0,
+                    360.0,
+                    55.0,
+                    22.0
+                  ],
+                  "text": "1. 10"
+                }
+              },
+              {
+                "box": {
+                  "id": "dsp_status",
+                  "maxclass": "outlet",
+                  "patching_rect": [
+                    800.0,
+                    660.0,
                     55.0,
                     22.0
                   ]
@@ -12068,6 +12389,42 @@
                     0
                   ]
                 }
+              },
+              {
+                "patchline": {
+                  "source": [
+                    "start_attack",
+                    0
+                  ],
+                  "destination": [
+                    "attack",
+                    0
+                  ]
+                }
+              },
+              {
+                "patchline": {
+                  "source": [
+                    "attack",
+                    0
+                  ],
+                  "destination": [
+                    "amp",
+                    0
+                  ]
+                }
+              },
+              {
+                "patchline": {
+                  "source": [
+                    "dsp_order",
+                    1
+                  ],
+                  "destination": [
+                    "dsp_status",
+                    0
+                  ]
+                }
               }
             ]
           }
@@ -12161,7 +12518,7 @@
             55.0,
             22.0
           ],
-          "text": "sel 2"
+          "text": "sel 2 1"
         }
       },
       {
@@ -12565,6 +12922,292 @@
             22.0
           ],
           "text": "prepend debug_enabled"
+        }
+      },
+      {
+        "box": {
+          "id": "play_request",
+          "maxclass": "newobj",
+          "patching_rect": [
+            30.0,
+            1140.0,
+            55.0,
+            22.0
+          ],
+          "text": "t b b"
+        }
+      },
+      {
+        "box": {
+          "id": "play_state",
+          "maxclass": "newobj",
+          "patching_rect": [
+            600.0,
+            1170.0,
+            368.5,
+            22.0
+          ],
+          "text": "dict.unpack sample_loaded: base_rate: sample_length_ms:"
+        }
+      },
+      {
+        "box": {
+          "id": "ready_before_release",
+          "maxclass": "newobj",
+          "patching_rect": [
+            30.0,
+            1180.0,
+            55.0,
+            22.0
+          ],
+          "text": "int 0"
+        }
+      },
+      {
+        "box": {
+          "id": "can_request",
+          "maxclass": "newobj",
+          "patching_rect": [
+            30.0,
+            1220.0,
+            55.0,
+            22.0
+          ],
+          "text": "sel 1 0"
+        }
+      },
+      {
+        "box": {
+          "id": "play_action",
+          "maxclass": "message",
+          "patching_rect": [
+            30.0,
+            1260.0,
+            55.0,
+            22.0
+          ],
+          "text": "1"
+        }
+      },
+      {
+        "box": {
+          "id": "not_loaded",
+          "maxclass": "message",
+          "patching_rect": [
+            230.0,
+            1260.0,
+            221.1,
+            22.0
+          ],
+          "text": "error play_requires_valid_sample_and_DSP"
+        }
+      },
+      {
+        "box": {
+          "id": "preflight",
+          "maxclass": "newobj",
+          "patching_rect": [
+            600.0,
+            1220.0,
+            55.0,
+            22.0
+          ],
+          "text": "t b b"
+        }
+      },
+      {
+        "box": {
+          "id": "ready_after_release",
+          "maxclass": "newobj",
+          "patching_rect": [
+            600.0,
+            1260.0,
+            55.0,
+            22.0
+          ],
+          "text": "int 0"
+        }
+      },
+      {
+        "box": {
+          "id": "still_ready",
+          "maxclass": "newobj",
+          "patching_rect": [
+            600.0,
+            1300.0,
+            55.0,
+            22.0
+          ],
+          "text": "sel 1 0"
+        }
+      },
+      {
+        "box": {
+          "id": "refresh_before_start",
+          "maxclass": "newobj",
+          "patching_rect": [
+            800.0,
+            1300.0,
+            55.0,
+            22.0
+          ],
+          "text": "t b b"
+        }
+      },
+      {
+        "box": {
+          "id": "ready_after_metadata",
+          "maxclass": "newobj",
+          "patching_rect": [
+            800.0,
+            1340.0,
+            55.0,
+            22.0
+          ],
+          "text": "int 0"
+        }
+      },
+      {
+        "box": {
+          "id": "start_allowed",
+          "maxclass": "newobj",
+          "patching_rect": [
+            800.0,
+            1380.0,
+            55.0,
+            22.0
+          ],
+          "text": "sel 1 0"
+        }
+      },
+      {
+        "box": {
+          "id": "start_valid",
+          "maxclass": "newobj",
+          "patching_rect": [
+            600.0,
+            1420.0,
+            73.7,
+            22.0
+          ],
+          "text": "t b b b b b"
+        }
+      },
+      {
+        "box": {
+          "id": "play_rate",
+          "maxclass": "newobj",
+          "patching_rect": [
+            850.0,
+            1460.0,
+            55.0,
+            22.0
+          ],
+          "text": "float 1."
+        }
+      },
+      {
+        "box": {
+          "id": "play_end",
+          "maxclass": "newobj",
+          "patching_rect": [
+            600.0,
+            1460.0,
+            55.0,
+            22.0
+          ],
+          "text": "float 0."
+        }
+      },
+      {
+        "box": {
+          "id": "full_start",
+          "maxclass": "message",
+          "patching_rect": [
+            700.0,
+            1460.0,
+            55.0,
+            22.0
+          ],
+          "text": "0."
+        }
+      },
+      {
+        "box": {
+          "id": "position_zero",
+          "maxclass": "message",
+          "patching_rect": [
+            980.0,
+            1460.0,
+            55.0,
+            22.0
+          ],
+          "text": "0."
+        }
+      },
+      {
+        "box": {
+          "id": "sample_duration_signal",
+          "maxclass": "newobj",
+          "patching_rect": [
+            1150.0,
+            1370.0,
+            55.0,
+            22.0
+          ],
+          "text": "sig~ 0."
+        }
+      },
+      {
+        "box": {
+          "id": "end_taper",
+          "maxclass": "newobj",
+          "patching_rect": [
+            1150.0,
+            1420.0,
+            482.40000000000003,
+            22.0
+          ],
+          "text": "expr~ min(1.\\, max(0.\\, ((1. - $v1) * $v2) / max(0.000001\\, 10. * $v3)))"
+        }
+      },
+      {
+        "box": {
+          "id": "playback_amplitude",
+          "maxclass": "newobj",
+          "patching_rect": [
+            1150.0,
+            1480.0,
+            55.0,
+            22.0
+          ],
+          "text": "*~"
+        }
+      },
+      {
+        "box": {
+          "id": "play_note",
+          "maxclass": "comment",
+          "patching_rect": [
+            600.0,
+            1520.0,
+            650.0,
+            22.0
+          ],
+          "text": "Full buffer only, @loop 0. Start resets to 0 ms after release. End taper is amplitude safety, not slicing."
+        }
+      },
+      {
+        "box": {
+          "id": "play_dsp_check",
+          "maxclass": "newobj",
+          "text": "expr ($i1 == 1) && ($i2 == 1)",
+          "patching_rect": [
+            230.0,
+            1180.0,
+            240.0,
+            22.0
+          ]
         }
       }
     ],
@@ -13070,30 +13713,6 @@
           "destination": [
             "amp_right",
             0
-          ]
-        }
-      },
-      {
-        "patchline": {
-          "source": [
-            "safety",
-            0
-          ],
-          "destination": [
-            "amp_left",
-            1
-          ]
-        }
-      },
-      {
-        "patchline": {
-          "source": [
-            "safety",
-            0
-          ],
-          "destination": [
-            "amp_right",
-            1
           ]
         }
       },
@@ -13861,6 +14480,534 @@
           ],
           "destination": [
             "obj-5",
+            0
+          ]
+        }
+      },
+      {
+        "patchline": {
+          "source": [
+            "controls",
+            6
+          ],
+          "destination": [
+            "play_request",
+            0
+          ]
+        }
+      },
+      {
+        "patchline": {
+          "source": [
+            "play_request",
+            1
+          ],
+          "destination": [
+            "state",
+            0
+          ]
+        }
+      },
+      {
+        "patchline": {
+          "source": [
+            "state",
+            0
+          ],
+          "destination": [
+            "play_state",
+            0
+          ]
+        }
+      },
+      {
+        "patchline": {
+          "source": [
+            "play_state",
+            0
+          ],
+          "destination": [
+            "ready_before_release",
+            1
+          ]
+        }
+      },
+      {
+        "patchline": {
+          "source": [
+            "play_request",
+            0
+          ],
+          "destination": [
+            "ready_before_release",
+            0
+          ]
+        }
+      },
+      {
+        "patchline": {
+          "source": [
+            "can_request",
+            0
+          ],
+          "destination": [
+            "play_action",
+            0
+          ]
+        }
+      },
+      {
+        "patchline": {
+          "source": [
+            "play_action",
+            0
+          ],
+          "destination": [
+            "safety",
+            0
+          ]
+        }
+      },
+      {
+        "patchline": {
+          "source": [
+            "can_request",
+            1
+          ],
+          "destination": [
+            "not_loaded",
+            0
+          ]
+        }
+      },
+      {
+        "patchline": {
+          "source": [
+            "not_loaded",
+            0
+          ],
+          "destination": [
+            "error_order",
+            0
+          ]
+        }
+      },
+      {
+        "patchline": {
+          "source": [
+            "action_route",
+            1
+          ],
+          "destination": [
+            "preflight",
+            0
+          ]
+        }
+      },
+      {
+        "patchline": {
+          "source": [
+            "preflight",
+            1
+          ],
+          "destination": [
+            "state",
+            0
+          ]
+        }
+      },
+      {
+        "patchline": {
+          "source": [
+            "play_state",
+            0
+          ],
+          "destination": [
+            "ready_after_release",
+            1
+          ]
+        }
+      },
+      {
+        "patchline": {
+          "source": [
+            "preflight",
+            0
+          ],
+          "destination": [
+            "ready_after_release",
+            0
+          ]
+        }
+      },
+      {
+        "patchline": {
+          "source": [
+            "ready_after_release",
+            0
+          ],
+          "destination": [
+            "still_ready",
+            0
+          ]
+        }
+      },
+      {
+        "patchline": {
+          "source": [
+            "still_ready",
+            1
+          ],
+          "destination": [
+            "not_loaded",
+            0
+          ]
+        }
+      },
+      {
+        "patchline": {
+          "source": [
+            "still_ready",
+            0
+          ],
+          "destination": [
+            "refresh_before_start",
+            0
+          ]
+        }
+      },
+      {
+        "patchline": {
+          "source": [
+            "refresh_before_start",
+            1
+          ],
+          "destination": [
+            "completion",
+            0
+          ]
+        }
+      },
+      {
+        "patchline": {
+          "source": [
+            "play_state",
+            0
+          ],
+          "destination": [
+            "ready_after_metadata",
+            1
+          ]
+        }
+      },
+      {
+        "patchline": {
+          "source": [
+            "refresh_before_start",
+            0
+          ],
+          "destination": [
+            "ready_after_metadata",
+            0
+          ]
+        }
+      },
+      {
+        "patchline": {
+          "source": [
+            "ready_after_metadata",
+            0
+          ],
+          "destination": [
+            "start_allowed",
+            0
+          ]
+        }
+      },
+      {
+        "patchline": {
+          "source": [
+            "start_allowed",
+            1
+          ],
+          "destination": [
+            "not_loaded",
+            0
+          ]
+        }
+      },
+      {
+        "patchline": {
+          "source": [
+            "start_allowed",
+            0
+          ],
+          "destination": [
+            "start_valid",
+            0
+          ]
+        }
+      },
+      {
+        "patchline": {
+          "source": [
+            "play_state",
+            1
+          ],
+          "destination": [
+            "play_rate",
+            1
+          ]
+        }
+      },
+      {
+        "patchline": {
+          "source": [
+            "play_state",
+            2
+          ],
+          "destination": [
+            "play_end",
+            1
+          ]
+        }
+      },
+      {
+        "patchline": {
+          "source": [
+            "start_valid",
+            4
+          ],
+          "destination": [
+            "play_end",
+            0
+          ]
+        }
+      },
+      {
+        "patchline": {
+          "source": [
+            "play_end",
+            0
+          ],
+          "destination": [
+            "obj-9",
+            2
+          ]
+        }
+      },
+      {
+        "patchline": {
+          "source": [
+            "start_valid",
+            3
+          ],
+          "destination": [
+            "full_start",
+            0
+          ]
+        }
+      },
+      {
+        "patchline": {
+          "source": [
+            "full_start",
+            0
+          ],
+          "destination": [
+            "obj-9",
+            1
+          ]
+        }
+      },
+      {
+        "patchline": {
+          "source": [
+            "start_valid",
+            2
+          ],
+          "destination": [
+            "play_rate",
+            0
+          ]
+        }
+      },
+      {
+        "patchline": {
+          "source": [
+            "play_rate",
+            0
+          ],
+          "destination": [
+            "obj-8",
+            0
+          ]
+        }
+      },
+      {
+        "patchline": {
+          "source": [
+            "start_valid",
+            1
+          ],
+          "destination": [
+            "position_zero",
+            0
+          ]
+        }
+      },
+      {
+        "patchline": {
+          "source": [
+            "position_zero",
+            0
+          ],
+          "destination": [
+            "obj-9",
+            0
+          ]
+        }
+      },
+      {
+        "patchline": {
+          "source": [
+            "start_valid",
+            0
+          ],
+          "destination": [
+            "safety",
+            1
+          ]
+        }
+      },
+      {
+        "patchline": {
+          "source": [
+            "play_state",
+            2
+          ],
+          "destination": [
+            "sample_duration_signal",
+            0
+          ]
+        }
+      },
+      {
+        "patchline": {
+          "source": [
+            "obj-9",
+            2
+          ],
+          "destination": [
+            "end_taper",
+            0
+          ]
+        }
+      },
+      {
+        "patchline": {
+          "source": [
+            "sample_duration_signal",
+            0
+          ],
+          "destination": [
+            "end_taper",
+            1
+          ]
+        }
+      },
+      {
+        "patchline": {
+          "source": [
+            "obj-8",
+            0
+          ],
+          "destination": [
+            "end_taper",
+            2
+          ]
+        }
+      },
+      {
+        "patchline": {
+          "source": [
+            "safety",
+            0
+          ],
+          "destination": [
+            "playback_amplitude",
+            0
+          ]
+        }
+      },
+      {
+        "patchline": {
+          "source": [
+            "end_taper",
+            0
+          ],
+          "destination": [
+            "playback_amplitude",
+            1
+          ]
+        }
+      },
+      {
+        "patchline": {
+          "source": [
+            "playback_amplitude",
+            0
+          ],
+          "destination": [
+            "amp_left",
+            1
+          ]
+        }
+      },
+      {
+        "patchline": {
+          "source": [
+            "playback_amplitude",
+            0
+          ],
+          "destination": [
+            "amp_right",
+            1
+          ]
+        }
+      },
+      {
+        "patchline": {
+          "source": [
+            "ready_before_release",
+            0
+          ],
+          "destination": [
+            "play_dsp_check",
+            0
+          ]
+        }
+      },
+      {
+        "patchline": {
+          "source": [
+            "safety",
+            2
+          ],
+          "destination": [
+            "play_dsp_check",
+            1
+          ]
+        }
+      },
+      {
+        "patchline": {
+          "source": [
+            "play_dsp_check",
+            0
+          ],
+          "destination": [
+            "can_request",
             0
           ]
         }

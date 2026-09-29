@@ -332,3 +332,16 @@ Stage 1 static gate PASS; Part B has not started at this checkpoint.
 Evidence: `docs/test-evidence/max9/stage1/TV001_STATIC_GATE.md`.
 UNVERIFIED IN MAX RUNTIME: no Max 9 on this host; no runtime-complete or
 click-free claim. No excluded work introduced.
+
+## 2026-09-29 — TV001 Part B / First Audible repository checkpoint
+
+Part A was published at `821e4f7464591a9de9260dead1b6c3f96561691a`, fetched
+back, matched against the checked tree and passed its static gate before
+Part B edits began. Part B adds deterministic project-relative Apache load,
+validated normal-rate full-sample play/stop/retrigger, the Stage 1 envelope,
+short natural-end amplitude taper and the existing run-toggle connection.
+Centralized clock/index topology and native gain/pan/stereo path are preserved.
+
+Static checks PASS; UNVERIFIED IN MAX RUNTIME. See
+`docs/test-evidence/max9/stage2/TV001_M11.md` and the Alpha README for evidence
+and CJ's exact Max 9 checklist. No excluded musical systems or UI added.

@@ -114,7 +114,11 @@ def main():
     assert boxes(s)['release']['text']=='0. 10'
     edge(s,'amp','completion_gate',1,1)
     edge(pod,'obj-9','amp_left'); edge(pod,'obj-9','amp_right',1)
-    edge(pod,'safety','amp_left',0,1); edge(pod,'safety','amp_right',0,1)
+    if part=='A':
+        edge(pod,'safety','amp_left',0,1); edge(pod,'safety','amp_right',0,1)
+    else:
+        edge(pod,'safety','playback_amplitude'); edge(pod,'end_taper','playback_amplitude',0,1)
+        edge(pod,'playback_amplitude','amp_left',0,1); edge(pod,'playback_amplitude','amp_right',0,1)
     edge(pod,'amp_left','obj-21'); edge(pod,'amp_right','obj-22')
     original=json.loads(subprocess.check_output(['git','show',BASE+':patches/flode_alpha_01/patchers/flode_alpha_01.maxpat'],cwd=ROOT))['patcher']
     tb=boxes(top)
@@ -136,6 +140,17 @@ def main():
         assert boxes(s)['attack']['text']=='1. 10'
         assert reaches(pod,'start_valid','obj-8') and reaches(pod,'start_valid','obj-9')
         assert b['obj-9']['text'].endswith('@loop 0')
+        assert cb['apache_path']['text']=='symbol "Project:/media/Apache Break ( Driven Silk Red ).wav"'
+        edge(c,'apache_path','project_absolute'); edge(c,'project_absolute','load')
+        edge(pod,'play_request','state',1); edge(pod,'state','play_state')
+        edge(pod,'play_state','play_rate',1,1); edge(pod,'play_state','play_end',2,1)
+        edge(pod,'start_valid','position_zero',1); edge(pod,'position_zero','obj-9')
+        edge(pod,'start_valid','play_rate',2); edge(pod,'play_rate','obj-8')
+        edge(pod,'play_end','obj-9',0,2); assert b['full_start']['text']=='0.'
+        edge(pod,'start_valid','safety',0,1); edge(s,'attack','amp')
+        edge(pod,'safety','play_dsp_check',2,1)
+        edge(top,'obj-8','run_to_playback'); edge(top,'pod_play','obj-16'); edge(top,'pod_stop','obj-16')
+        assert 'loop 1' not in [x.get('text','') for p in walk(pod) for x in boxes(p).values()]
     print(f'PASS: Part {part} static graph/contracts; {n} predicate-model cases. UNVERIFIED IN MAX RUNTIME.')
 
 if __name__=='__main__':

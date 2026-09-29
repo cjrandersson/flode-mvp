@@ -12,8 +12,8 @@
     "rect": [
       80.0,
       80.0,
-      760.0,
-      520.0
+      800.0,
+      740.0
     ],
     "openinpresentation": 0,
     "boxes": [
@@ -21,7 +21,7 @@
         "box": {
           "id": "obj-1",
           "maxclass": "comment",
-          "text": "flöde~ Alpha 0.1 — Stage 1 runtime skeleton (developer harness)",
+          "text": "flöde~ Alpha 0.1 — First Audible POD developer harness (Max runtime unverified)",
           "patching_rect": [
             30.0,
             20.0,
@@ -34,7 +34,7 @@
         "box": {
           "id": "obj-2",
           "maxclass": "comment",
-          "text": "One master transport; no sample playback or JUNG behaviour.",
+          "text": "One master transport; explicit full-sample playback; no JUNG behaviour.",
           "patching_rect": [
             30.0,
             45.0,
@@ -253,7 +253,7 @@
         "box": {
           "id": "obj-19",
           "maxclass": "comment",
-          "text": "Enable audio from the Max toolbar. Empty POD output is silent.",
+          "text": "Enable DSP first. Load Apache explicitly; Start/Stop also controls POD A.",
           "patching_rect": [
             245.0,
             450.0,
@@ -299,6 +299,123 @@
             22.0
           ],
           "text": "gate 1 1"
+        }
+      },
+      {
+        "box": {
+          "id": "run_to_playback",
+          "maxclass": "newobj",
+          "patching_rect": [
+            30.0,
+            525.0,
+            55.0,
+            22.0
+          ],
+          "text": "sel 0 1"
+        }
+      },
+      {
+        "box": {
+          "id": "pod_stop",
+          "maxclass": "message",
+          "patching_rect": [
+            30.0,
+            570.0,
+            55.0,
+            22.0
+          ],
+          "text": "stop"
+        }
+      },
+      {
+        "box": {
+          "id": "pod_play",
+          "maxclass": "message",
+          "patching_rect": [
+            130.0,
+            570.0,
+            55.0,
+            22.0
+          ],
+          "text": "play"
+        }
+      },
+      {
+        "box": {
+          "id": "load_apache",
+          "maxclass": "message",
+          "patching_rect": [
+            270.0,
+            570.0,
+            73.7,
+            22.0
+          ],
+          "text": "load_apache"
+        }
+      },
+      {
+        "box": {
+          "id": "retrigger",
+          "maxclass": "message",
+          "patching_rect": [
+            390.0,
+            570.0,
+            60.300000000000004,
+            22.0
+          ],
+          "text": "retrigger"
+        }
+      },
+      {
+        "box": {
+          "id": "getstate",
+          "maxclass": "message",
+          "patching_rect": [
+            500.0,
+            570.0,
+            55.0,
+            22.0
+          ],
+          "text": "getstate"
+        }
+      },
+      {
+        "box": {
+          "id": "debug_off",
+          "maxclass": "message",
+          "patching_rect": [
+            30.0,
+            620.0,
+            100.5,
+            22.0
+          ],
+          "text": "debug_enabled 0"
+        }
+      },
+      {
+        "box": {
+          "id": "debug_on",
+          "maxclass": "message",
+          "patching_rect": [
+            190.0,
+            620.0,
+            100.5,
+            22.0
+          ],
+          "text": "debug_enabled 1"
+        }
+      },
+      {
+        "box": {
+          "id": "developer_note",
+          "maxclass": "comment",
+          "patching_rect": [
+            30.0,
+            670.0,
+            603.0,
+            22.0
+          ],
+          "text": "Developer messages only: load → getstate → play/stop/retrigger. Normal speed: base_rate 1."
         }
       }
     ],
@@ -527,6 +644,126 @@
           ],
           "destination": [
             "obj-15",
+            0
+          ]
+        }
+      },
+      {
+        "patchline": {
+          "source": [
+            "obj-8",
+            0
+          ],
+          "destination": [
+            "run_to_playback",
+            0
+          ]
+        }
+      },
+      {
+        "patchline": {
+          "source": [
+            "run_to_playback",
+            0
+          ],
+          "destination": [
+            "pod_stop",
+            0
+          ]
+        }
+      },
+      {
+        "patchline": {
+          "source": [
+            "run_to_playback",
+            1
+          ],
+          "destination": [
+            "pod_play",
+            0
+          ]
+        }
+      },
+      {
+        "patchline": {
+          "source": [
+            "pod_stop",
+            0
+          ],
+          "destination": [
+            "obj-16",
+            0
+          ]
+        }
+      },
+      {
+        "patchline": {
+          "source": [
+            "pod_play",
+            0
+          ],
+          "destination": [
+            "obj-16",
+            0
+          ]
+        }
+      },
+      {
+        "patchline": {
+          "source": [
+            "load_apache",
+            0
+          ],
+          "destination": [
+            "obj-16",
+            0
+          ]
+        }
+      },
+      {
+        "patchline": {
+          "source": [
+            "retrigger",
+            0
+          ],
+          "destination": [
+            "obj-16",
+            0
+          ]
+        }
+      },
+      {
+        "patchline": {
+          "source": [
+            "getstate",
+            0
+          ],
+          "destination": [
+            "obj-16",
+            0
+          ]
+        }
+      },
+      {
+        "patchline": {
+          "source": [
+            "debug_off",
+            0
+          ],
+          "destination": [
+            "obj-16",
+            0
+          ]
+        }
+      },
+      {
+        "patchline": {
+          "source": [
+            "debug_on",
+            0
+          ],
+          "destination": [
+            "obj-16",
             0
           ]
         }
