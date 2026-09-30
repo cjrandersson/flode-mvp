@@ -5166,7 +5166,7 @@
                     402.0,
                     22.0
                   ],
-                  "text": "symbol \"Project:/media/Apache Break ( Driven Silk Red ).wav\""
+                  "text": "zl reg \"Project:/media/Apache Break ( Driven Silk Red ).wav\""
                 }
               },
               {
@@ -12544,7 +12544,7 @@
             55.0,
             22.0
           ],
-          "text": "symbol"
+          "text": "zl reg"
         }
       },
       {
@@ -12726,7 +12726,7 @@
             55.0,
             22.0
           ],
-          "text": "symbol"
+          "text": "zl reg"
         }
       },
       {
@@ -13168,7 +13168,258 @@
             482.40000000000003,
             22.0
           ],
-          "text": "expr~ min(1.\\, max(0.\\, ((1. - $v1) * $v2) / max(0.000001\\, 10. * $v3)))"
+          "text": "p end_taper_native",
+          "patcher": {
+            "fileversion": 1,
+            "rect": [
+              0.0,
+              0.0,
+              550.0,
+              390.0
+            ],
+            "boxes": [
+              {
+                "box": {
+                  "id": "phase",
+                  "maxclass": "inlet",
+                  "patching_rect": [
+                    30.0,
+                    20.0,
+                    30.0,
+                    22.0
+                  ],
+                  "index": 1
+                }
+              },
+              {
+                "box": {
+                  "id": "duration",
+                  "maxclass": "inlet",
+                  "patching_rect": [
+                    210.0,
+                    20.0,
+                    30.0,
+                    22.0
+                  ],
+                  "index": 2
+                }
+              },
+              {
+                "box": {
+                  "id": "rate",
+                  "maxclass": "inlet",
+                  "patching_rect": [
+                    390.0,
+                    20.0,
+                    30.0,
+                    22.0
+                  ],
+                  "index": 3
+                }
+              },
+              {
+                "box": {
+                  "id": "remaining",
+                  "maxclass": "newobj",
+                  "patching_rect": [
+                    30.0,
+                    75.0,
+                    130.0,
+                    22.0
+                  ],
+                  "text": "!-~ 1."
+                }
+              },
+              {
+                "box": {
+                  "id": "remaining_ms",
+                  "maxclass": "newobj",
+                  "patching_rect": [
+                    30.0,
+                    130.0,
+                    130.0,
+                    22.0
+                  ],
+                  "text": "*~"
+                }
+              },
+              {
+                "box": {
+                  "id": "release_ms",
+                  "maxclass": "newobj",
+                  "patching_rect": [
+                    390.0,
+                    75.0,
+                    130.0,
+                    22.0
+                  ],
+                  "text": "*~ 10."
+                }
+              },
+              {
+                "box": {
+                  "id": "safe_denominator",
+                  "maxclass": "newobj",
+                  "patching_rect": [
+                    390.0,
+                    130.0,
+                    130.0,
+                    22.0
+                  ],
+                  "text": "maximum~ 0.000001"
+                }
+              },
+              {
+                "box": {
+                  "id": "ratio",
+                  "maxclass": "newobj",
+                  "patching_rect": [
+                    30.0,
+                    200.0,
+                    130.0,
+                    22.0
+                  ],
+                  "text": "/~"
+                }
+              },
+              {
+                "box": {
+                  "id": "bound",
+                  "maxclass": "newobj",
+                  "patching_rect": [
+                    30.0,
+                    260.0,
+                    130.0,
+                    22.0
+                  ],
+                  "text": "clip~ 0. 1."
+                }
+              },
+              {
+                "box": {
+                  "id": "amplitude",
+                  "maxclass": "outlet",
+                  "patching_rect": [
+                    30.0,
+                    320.0,
+                    30.0,
+                    22.0
+                  ],
+                  "index": 1
+                }
+              }
+            ],
+            "lines": [
+              {
+                "patchline": {
+                  "source": [
+                    "phase",
+                    0
+                  ],
+                  "destination": [
+                    "remaining",
+                    0
+                  ]
+                }
+              },
+              {
+                "patchline": {
+                  "source": [
+                    "remaining",
+                    0
+                  ],
+                  "destination": [
+                    "remaining_ms",
+                    0
+                  ]
+                }
+              },
+              {
+                "patchline": {
+                  "source": [
+                    "duration",
+                    0
+                  ],
+                  "destination": [
+                    "remaining_ms",
+                    1
+                  ]
+                }
+              },
+              {
+                "patchline": {
+                  "source": [
+                    "rate",
+                    0
+                  ],
+                  "destination": [
+                    "release_ms",
+                    0
+                  ]
+                }
+              },
+              {
+                "patchline": {
+                  "source": [
+                    "release_ms",
+                    0
+                  ],
+                  "destination": [
+                    "safe_denominator",
+                    0
+                  ]
+                }
+              },
+              {
+                "patchline": {
+                  "source": [
+                    "remaining_ms",
+                    0
+                  ],
+                  "destination": [
+                    "ratio",
+                    0
+                  ]
+                }
+              },
+              {
+                "patchline": {
+                  "source": [
+                    "safe_denominator",
+                    0
+                  ],
+                  "destination": [
+                    "ratio",
+                    1
+                  ]
+                }
+              },
+              {
+                "patchline": {
+                  "source": [
+                    "ratio",
+                    0
+                  ],
+                  "destination": [
+                    "bound",
+                    0
+                  ]
+                }
+              },
+              {
+                "patchline": {
+                  "source": [
+                    "bound",
+                    0
+                  ],
+                  "destination": [
+                    "amplitude",
+                    0
+                  ]
+                }
+              }
+            ]
+          }
         }
       },
       {

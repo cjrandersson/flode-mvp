@@ -7,6 +7,21 @@ runtime-complete. Part A was published and fetched back at
 Branch: `max-msp`. Open `flode_alpha_01.maxproj` in this folder with its
 `patchers/` and `media/` folders beside it. The duplicate nested project is gone.
 
+## 2026-09-30 opening-error correction
+
+CJ reported `symbol: symbol: No such object` and
+`expr~: expr~: No such object` during project opening. The earlier static
+check missed these unsupported object names. Three path registers now use
+native `zl reg`; the natural-end taper uses native MSP arithmetic inside
+`p end_taper_native`. Its formula and external connections are unchanged.
+Native object references: [zl](https://docs.cycling74.com/reference/zl/),
+[maximum~](https://docs.cycling74.com/reference/maximum~/),
+[clip~](https://docs.cycling74.com/reference/clip~/).
+
+**Fix UNVERIFIED IN MAX RUNTIME.** Close the previous project and reopen a
+fresh corrected download with DSP off. Check Max Console for object-creation
+errors before resuming the unloaded tick/DSP test and then the playback tests.
+
 ## Repository truth
 
 Starting upstream: `2aa596dafd5b0881740cfadc32969197892a4a35`. PR #7's earlier

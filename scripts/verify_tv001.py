@@ -92,6 +92,15 @@ def main():
         assert reaches(c,name+'_error','error')
     assert cb['gain_clip']['text']=='clip 0. 1.' and cb['pan_clip']['text']=='clip -1. 1.'
     assert 'sample_loaded' not in cb['route']['text']
+    # Native registers: cold inlet stores a single path; left bang recalls it.
+    for name in ('pending_path', 'actual_path'):
+        assert b[name]['text'] == 'zl reg'
+    edge(pod, 'load_order', 'pending_path', 2, 1)
+    edge(pod, 'action_route', 'pending_path')
+    edge(pod, 'pending_path', 'load_defer')
+    edge(pod, 'info', 'actual_path', 9, 1)
+    edge(pod, 'loaded_order', 'actual_path', 2)
+    edge(pod, 'actual_path', 'path_state')
     edge(pod,'obj-6','completion',1); edge(pod,'completion','reset_metadata',2); edge(pod,'completion','info',1)
     edge(pod,'info','length',6,1); edge(pod,'info','channels',8,1); edge(pod,'info','sample_rate',0,1)
     edge(pod,'availability','loaded_order'); edge(pod,'loaded_order','loaded'); edge(pod,'loaded','state_write')
@@ -128,7 +137,7 @@ def main():
     for src,dst in edges(original):
         if src[0] in clock_ids and dst[0] in clock_ids: assert (src,dst) in edges(top)
     all_objects=[x.get('text','').split(' ')[0] for p in [top,*walk(pod)] for x in boxes(p).values() if x['maxclass']=='newobj']
-    for forbidden in ['js','v8','node.script','random','drunk','urn','sfrecord~','record~','mc.mixdown~','limiter~']:
+    for forbidden in ['symbol','expr~','js','v8','node.script','random','drunk','urn','sfrecord~','record~','mc.mixdown~','limiter~']:
         assert forbidden not in all_objects,forbidden
     assert all_objects.count('transport')==1 and all_objects.count('metro')==1
     if part=='A':
@@ -140,7 +149,21 @@ def main():
         assert boxes(s)['attack']['text']=='1. 10'
         assert reaches(pod,'start_valid','obj-8') and reaches(pod,'start_valid','obj-9')
         assert b['obj-9']['text'].endswith('@loop 0')
-        assert cb['apache_path']['text']=='symbol "Project:/media/Apache Break ( Driven Silk Red ).wav"'
+        assert cb['apache_path']['text']=='zl reg "Project:/media/Apache Break ( Driven Silk Red ).wav"'
+        taper = b['end_taper']['patcher']; taper_boxes = boxes(taper)
+        expected = {'remaining': '!-~ 1.', 'remaining_ms': '*~',
+                    'release_ms': '*~ 10.', 'safe_denominator': 'maximum~ 0.000001',
+                    'ratio': '/~', 'bound': 'clip~ 0. 1.'}
+        for name, text in expected.items():
+            assert taper_boxes[name]['text'] == text
+        for src, dst, inlet in [('phase','remaining',0), ('remaining','remaining_ms',0),
+                                ('duration','remaining_ms',1), ('rate','release_ms',0),
+                                ('release_ms','safe_denominator',0), ('remaining_ms','ratio',0),
+                                ('safe_denominator','ratio',1), ('ratio','bound',0), ('bound','amplitude',0)]:
+            edge(taper, src, dst, bi=inlet)
+        edge(pod, 'obj-9', 'end_taper', 2)
+        edge(pod, 'sample_duration_signal', 'end_taper', 0, 1)
+        edge(pod, 'obj-8', 'end_taper', 0, 2)
         edge(c,'apache_path','project_absolute'); edge(c,'project_absolute','load')
         edge(pod,'play_request','state',1); edge(pod,'state','play_state')
         edge(pod,'play_state','play_rate',1,1); edge(pod,'play_state','play_end',2,1)

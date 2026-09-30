@@ -345,3 +345,26 @@ Centralized clock/index topology and native gain/pan/stereo path are preserved.
 Static checks PASS; UNVERIFIED IN MAX RUNTIME. See
 `docs/test-evidence/max9/stage2/TV001_M11.md` and the Alpha README for evidence
 and CJ's exact Max 9 checklist. No excluded musical systems or UI added.
+
+
+## 2026-09-30 - CJ runtime opening failures: native object correction
+
+CJ reported `symbol: symbol: No such object` and
+`expr~: expr~: No such object` when opening the downloaded Alpha project.
+These are runtime failures reported by CJ; the earlier static PASS did not
+verify object availability. The exact locally tested commit was not supplied.
+
+Starting upstream: `88ed70b5ec971026f260a1ad689fd1946ca247af`.
+Replaced the three invalid `symbol` object boxes with native `zl reg`
+registers (including the quoted, single-symbol Apache path argument).
+Cold-inlet path storage and bang-driven recall keep the same connections.
+Replaced the invalid `expr~` end taper with an embedded native MSP subpatch:
+`!-~`, `*~`, `maximum~`, `/~`, `clip~`. It implements the same bounded
+remaining-duration / 10-ms-at-rate calculation, with denominator protection.
+No clock, transport, gain/pan, event or musical scope changes.
+
+The verifier now rejects both invalid object names and checks register
+connections and native taper topology. Static checks PASS.
+Correction status: UNVERIFIED IN MAX RUNTIME. CJ must reopen the corrected
+canonical project with DSP off, check for object-creation errors, then resume
+the unloaded tick/DSP checklist before the separate Apache playback tests.
