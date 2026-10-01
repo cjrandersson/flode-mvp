@@ -1,6 +1,6 @@
-# flöde~ UI Component Atlas — v0.1
+# flöde~ UI Component Atlas — v0.2
 
-**Status:** Provisional visual/UI research. Six editable SVG studies and design specifications are ready for review. Reference-picture analysis and CJ visual approval are pending.
+**Status:** Isolated visual/UI research. Nine original pictures supplied; eight inspected and analysed individually. The new reusable library adds nineteen SVG assets and Max/p5 adapters. CJ chose Jersey 10 for labels/POD letters and IBM Plex Mono for numbers. The large all-POD picture and actual host appearance remain pending.
 
 This atlas follows [CJ's approved brief](CODEX_BRIEF.md), the [JUNG Manifesto](../../../docs/JUNG_MANIFESTO.md) and the [JUNG Brain architecture](../../../docs/JUNG_BRAIN_ARCHITECTURE.md). It describes an implementation-neutral visual system. The [standalone Max 9 prototype](../../../prototype/max9-pod-a/) demonstrates the existing Pod A interaction contract separately.
 
@@ -39,7 +39,9 @@ Motion follows state and time supplied by a controller. It never supplies a new 
 
 ## Reference analysis
 
-No reference pictures were present under `references/` when the upstream brief was read. The GitHub connection also could not retrieve the repository PNG/attachment images for visual inspection. There is no completed picture-by-picture extraction claim.
+Eight supplied references have now been [analysed individually](references/ANALYSIS.md): master controls, the POD A waveform layout, modular geometry, compact colour controls, minimalist data plots, spacing, technical typography and symbol language. The [register](references/README.md) records all nine originals, including the large all-POD PNG that remains uninspected.
+
+The [reference-element prototype](../../../prototype/ui-reference-elements/) provides eight implemented geometric families for JavaScript, Max `v8ui`, p5.js and editable SVG. Its thirteen checks and the POD A lab’s ten checks passed with host calls recorded. [UI LAB 001](../../../prototype/ui-lab-001/) remains the focused real-waveform prototype. Both now use [CJ’s bundled font pairing](fonts/).
 
 Available source and written references were examined:
 
@@ -51,7 +53,7 @@ Available source and written references were examined:
 | [Design framework](../../fl%C3%B6de-design-framework.md) | Semantic tokens, stable geometry, pod identity and waveform hierarchy | Decorative hardware treatment; direct production decisions from illustrative studies |
 | [JUNG Manifesto](../../../docs/JUNG_MANIFESTO.md) | Stable/restless tension, one bounded intervention and return home | Independent clocks, recursive visual randomness, exposed probability programming |
 
-The requested console, POD-A, modular/data, generative-control, symbolic-icon and micro-visualization pictures are registered individually in [references/README.md](references/README.md) as pending. Add them there for the next visual pass.
+The original six v0.1 SVG studies remain available as earlier proposals. The new nineteen [reference-derived assets](../../../prototype/ui-reference-elements/graphics/README.md) and ten [POD A lab assets](../../../prototype/ui-lab-001/graphics/README.md) use the selected typography and embed font data.
 
 ## Prototype order and review
 
@@ -60,7 +62,7 @@ The requested console, POD-A, modular/data, generative-control, symbolic-icon an
 3. JUNG glyph: review the five states and canonical return before binding it to an engine.
 4. Compact transport, meters and an occasional macro knob: review scale and density after primary surfaces work.
 
-CJ review is needed for picture fidelity, label/value typography, pod accent balance, glyph interpretation, whether motion communicates musical state clearly, and where a knob is functionally justified. The Max 9 prototype requires a host runtime check. These reviews do not mark an Alpha audio milestone complete.
+CJ review is needed for adaptation fidelity, actual font legibility, accent balance, glyph interpretation, whether motion communicates musical state clearly, and where a knob is functionally justified. The Max 9 prototype requires a host runtime check. These reviews do not mark an Alpha audio milestone complete.
 
 ## Files created
 

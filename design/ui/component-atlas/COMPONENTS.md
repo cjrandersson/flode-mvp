@@ -93,3 +93,11 @@
 **States:** collapsed, expanded, selected context and unavailable content. **Interaction:** emit a discrete expansion request; retain primary waveform/gesture geometry. **Mapping:** view state only, not audio changes. **Motion:** immediate or bounded reveal within 100 ms. **Readability:** a named expansion control, keyboard-accessible where supported.
 
 **Max:** draw context in a dedicated component and keep persistent inspector state external. **SVG/web:** semantic groups and explicit expanded state; no animated layout that moves an active control. No inspector behavior is implemented in v0.1.
+
+## Implemented reference elements — v0.2
+
+[The isolated library](../../../prototype/ui-reference-elements/) supplies pod identity, read-only range construction, relative fader/knob gestures, readouts, explicit-data meters, deterministic JUNG glyphs and six named icon requests. All eight families share rect/line/poly/circle/text geometry across Max mgraphics, p5.js and SVG. The narrowed POD A lab keeps its nine primary component instances and real audio-cache path.
+
+Jersey 10 carries labels/POD letters; IBM Plex Mono carries numeric values/units. This pairing was chosen by CJ. Local browser fonts are awaited before drawing; Max requires OS-installed fonts. SVG exports embed the used faces. Font metrics/legibility still require actual-host review.
+
+The kit's range is deliberately a selection diagram without sample peaks. Meters show NO LEVEL DATA until explicitly supplied; transport symbols emit requests and wait for external confirmation. No clock, engine policy or production UI binding is introduced.

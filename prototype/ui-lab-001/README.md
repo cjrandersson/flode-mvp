@@ -6,7 +6,7 @@ An isolated implementation of [CJ's approved design direction](../../design/UI_L
 
 ## Open in Max 9
 
-Download/extract the `max-msp` branch and open `prototype/ui-lab-001/flode_ui_lab_001.maxproj`, then `flode_ui_lab_001.maxpat`. It opens in Presentation.
+Install both [bundled UI fonts](../../design/ui/component-atlas/fonts/) (Jersey 10 and IBM Plex Mono) in your operating system and restart Max. Download/extract the `max-msp` branch and open `prototype/ui-lab-001/flode_ui_lab_001.maxproj`, then `flode_ui_lab_001.maxpat`. It opens in Presentation.
 
 Drop a WAV/AIFF on the bottom strip. The controller reads the loaded buffer once and builds cached real min/max columns. A file whose name begins with Apache shows APACHE in the header; an empty buffer shows NO SAMPLE.
 
@@ -42,7 +42,7 @@ The default SVG captures NO SAMPLE and an empty waveform. No procedural audio wa
 
 ## Individual elements
 
-[Open the SVG catalog](graphics/README.md). Every asset was exported from the same JavaScript drawing path used by the lab, through the p5 adapter. Colours, geometry and default labels originate in the renderer/controller rather than a separate hand-drawn SVG layout.
+[Open the SVG catalog](graphics/README.md). Every asset is exported from the same JavaScript drawing path used by the lab, via the [committed SVG exporter](scripts/export-svg.cjs). Jersey 10 labels and POD letters follow CJ’s choice; IBM Plex Mono carries numeric readouts. SVGs embed both used font faces and retain editable text; the browser loads the bundled local TTFs before drawing. Colours, geometry and default labels originate in the renderer/controller rather than a separate hand-drawn SVG layout.
 
 Instantiate components in Max:
 
@@ -87,11 +87,12 @@ Ten new lab checks passed in a V8 isolate with p5 calls recorded: component/labe
 
 ```sh
 node prototype/ui-lab-001/tests/lab.test.cjs
+node prototype/ui-lab-001/scripts/export-svg.cjs
 node prototype/p5-pod-a/tests/bridge.test.cjs
 ```
 
-No Max 9 or browser runtime is available here. Actual host opening, p5 appearance, mouse/pointer behavior and audio decoding/loading still need a manual check. SVGs were generated programmatically; font/rendering fidelity needs visual review.
+No Max 9 or browser runtime is available here. Actual host opening, p5 appearance, mouse/pointer behavior and audio decoding/loading still need a manual check. SVGs were generated with the committed exporter; font/rendering fidelity needs visual review. The ten lab checks also passed after the approved Jersey 10 / IBM Plex Mono pairing was applied.
 
-The [reference-image folder](../../design/ui/component-atlas/references/) still contains no supplied pictures. Faithful reconstruction from those original images is blocked until accessible images are provided. This pass implements the written direction and keeps its visual interpretation provisional.
+The [reference-image folder](../../design/ui/component-atlas/references/) now contains nine supplied originals. Eight have been visually inspected and [analysed individually](../../design/ui/component-atlas/references/ANALYSIS.md). The large all-POD PNG could not be retrieved through the connector; its analysis is pending. The new [reference-element library](../ui-reference-elements/) provides geometric adaptations alongside this narrower waveform-first lab.
 
 This study does not change the Alpha 0.1 patches, POD contract, JUNG engine or musical timing architecture. Their stage gates remain in Issue #5.

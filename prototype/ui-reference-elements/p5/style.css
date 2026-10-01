@@ -1,0 +1,7 @@
+html{color-scheme:dark;background:#0e1115;color:#d4dee8;font-family:"Jersey 10",sans-serif}
+body{margin:0}main{max-width:960px;padding:24px;margin:auto}h1{font-size:28px;font-weight:500}
+p,.note{font-size:18px;line-height:1.5;color:#9aa7b4}canvas{display:block;width:100%!important;height:auto!important}
+fieldset{border:1px solid #303840;margin:16px 0;padding:12px}legend{font-size:18px}label{display:inline-block;margin:8px 20px 8px 0}
+input[type=range]{vertical-align:middle;accent-color:#ff9626}button{background:#14171b;color:#d4dee8;border:1px solid #303840;padding:9px 12px;margin:4px;cursor:pointer;font:18px "Jersey 10",sans-serif}
+button[aria-pressed=true]{border-color:#ff9626}button:focus-visible,input:focus-visible{outline:2px solid #45c9e0;outline-offset:3px}
+#events{min-height:24px;font-size:12px;font-family:"IBM Plex Mono",monospace}

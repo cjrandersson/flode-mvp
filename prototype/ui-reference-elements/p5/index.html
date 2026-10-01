@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>flöde~ · Reference elements</title><link rel="stylesheet" href="../../../design/ui/component-atlas/fonts/fonts.css"><link rel="stylesheet" href="style.css">
+<script src="https://cdn.jsdelivr.net/npm/p5@1.11.8/lib/p5.min.js" defer></script>
+<script src="../code/flode_reference_ui.js" defer></script><script src="sketch.js" defer></script>
+</head><body><main><h1>flöde~ · Reference elements</h1>
+<p>Drag JUNG sideways and PAN vertically. Shift gives fine movement; double-click resets.</p>
+<div id="canvas"></div>
+<fieldset><legend>Keyboard controls</legend>
+<label>JUNG · stable ↔ restless <input id="jung-value" type="range" min="0" max="1" step="0.005" value="0.3"></label>
+<label>PAN · left ↔ right <input id="pan-value" type="range" min="0" max="1" step="0.005" value="0.5"></label></fieldset>
+<fieldset><legend>JUNG visual state study</legend>
+<button data-behavior="home" aria-pressed="true">Home</button>
+<button data-behavior="restless" aria-pressed="false">Restless</button>
+<button data-behavior="intervention" aria-pressed="false">Intervention</button>
+<button data-behavior="resolving" aria-pressed="false">Resolving</button>
+<button data-behavior="return_home" aria-pressed="false">Return home</button></fieldset>
+<label><input type="checkbox" id="example-levels"> Show example meter levels</label>
+<fieldset><legend>Symbol requests</legend>
+<button data-symbol="play">Play</button>
+<button data-symbol="stop">Stop</button>
+<button data-symbol="record">Record</button>
+<button data-symbol="loop">Loop</button>
+<button data-symbol="tempo">Tempo</button>
+<button data-symbol="pause">Pause</button>
+</fieldset><p id="events" role="status">Ready</p>
+<p class="note">Visual study. The selection diagram contains no audio. Symbols send requests; the glyph and example levels are manual studies.</p>
+</main></body></html>

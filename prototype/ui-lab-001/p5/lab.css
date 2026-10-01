@@ -1,2 +1,4 @@
 #canvas-host { height: 720px; }
 #drop-audio { top: 666px; }
+body,button,#drop-audio{font-family:"Jersey 10",sans-serif}
+h1{font-size:28px}p,button,#drop-audio,summary{font-size:18px}pre,#status{font-family:"IBM Plex Mono",monospace;font-size:12px}

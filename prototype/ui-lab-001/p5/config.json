@@ -87,5 +87,9 @@
       70
     ]
   ],
-  "accessibleLabel": "UI LAB 001 Pod A. Drag volume, pan, speed, Jung temperament, EQ and loop handles. Shift gives precision."
+  "accessibleLabel": "UI LAB 001 Pod A. Drag volume, pan, speed, Jung temperament, EQ and loop handles. Shift gives precision.",
+  "fonts": [
+    "Jersey 10",
+    "IBM Plex Mono"
+  ]
 }

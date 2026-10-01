@@ -1,6 +1,6 @@
 # JUNG behavioral glyph
 
-**Status:** Provisional visual concept, pending CJ review and actual reference-picture analysis.
+**Status:** Provisional visual concept informed by the inspected modular/geometry references, pending CJ semantic and host review.
 
 ![Five-state glyph](prototypes/jung-glyph-states-v01.svg)
 
@@ -49,3 +49,7 @@ No drag behavior is assigned to this glyph. An optional click could open a behav
 SVG contains only paths, lines, circles, rectangles and text. Store six canonical edge pairs, plus bounded variant coordinates. Max mgraphics can stroke those pairs directly. Canvas/p5.js can use the same normalized pairs. Interpolation needs a shared edge count and no random geometry generation.
 
 The current five-state SVG is static. The standalone Max 9 prototype does not bind it to JUNG or animate it. Review metaphor, scale, legibility, state labels, bounded separation and return before a behavioral connection is considered.
+
+## Reference-derived executable study
+
+The [reference-element library](../../../prototype/ui-reference-elements/) now implements the same invariant as deterministic command geometry in Max, p5.js and SVG. Its [five individual states](../../../prototype/ui-reference-elements/graphics/README.md) use Jersey 10 labels. Tests verify fixed anchor coordinates, identical HOME/RETURN HOME edges and exact resolved edges at phase 1. The glyph is read-only, with externally supplied state/phase and no independent animation or JUNG behavior.

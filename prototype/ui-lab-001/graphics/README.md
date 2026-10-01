@@ -1,24 +1,18 @@
 # UI LAB 001 SVG elements
 
-![Pod A lab preview](pod-a-lab-preview.svg)
-
-These editable SVGs are renderer exports in the default, empty-waveform state.
+These editable vectors come from the lab's actual drawing path via [export-svg.cjs](../scripts/export-svg.cjs). Jersey 10 labels/POD letters and IBM Plex Mono numbers use CJ's chosen pairing. Font data is embedded for standalone sharing; [original licences](../../../design/ui/component-atlas/fonts/) accompany the bundled files.
 
 | Element | Asset |
 | --- | --- |
-| Whole panel | [pod-a-lab-preview.svg](pod-a-lab-preview.svg) |
-| POD A / sample header | [header.svg](header.svg) |
-| Waveform / active region / playhead surface | [waveform.svg](waveform.svg) |
+| POD/sample header | [header.svg](header.svg) |
+| Real-waveform surface, empty default state | [waveform.svg](waveform.svg) |
 | Volume | [vol.svg](vol.svg) |
 | Pan | [pan.svg](pan.svg) |
 | Speed | [speed.svg](speed.svg) |
-| JUNG stable/restless control | [jung.svg](jung.svg) |
-| EQ Low | [eq_low.svg](eq_low.svg) |
-| EQ Mid | [eq_mid.svg](eq_mid.svg) |
-| EQ High | [eq_high.svg](eq_high.svg) |
+| Stable/restless temperament | [jung.svg](jung.svg) |
+| EQ LOW | [eq_low.svg](eq_low.svg) |
+| EQ MID | [eq_mid.svg](eq_mid.svg) |
+| EQ HIGH | [eq_high.svg](eq_high.svg) |
+| Complete default-state composition | [pod-a-lab-preview.svg](pod-a-lab-preview.svg) |
 
-The host renderer draws the playhead after real audio peaks have loaded. These empty-state snapshots do not contain invented waveform or playback data.
-
-The subtle EQ fade is represented by editable translucent rectangles. SVG retains text, lines, rectangles and polygons; there are no external fonts, scripts or raster embeds. Runtime/native font appearance still needs review.
-
-The same source renderer/controller runs in [Max 9 and p5.js](../README.md). The original reference pictures remain pending in the [reference register](../../../design/ui/component-atlas/references/README.md).
+The waveform contains no procedural placeholder. Open the Max/browser lab and load audio to supply cached peaks. For additional icons, knobs, meters and glyphs, see [the reference-element catalog](../../ui-reference-elements/graphics/README.md).

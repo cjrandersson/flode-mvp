@@ -49,10 +49,10 @@ function line(x1, y1, x2, y2, color, weight) {
     rgba(color); mgraphics.set_line_width(weight || 1);
     mgraphics.move_to(x1, y1); mgraphics.line_to(x2, y2); mgraphics.stroke();
 }
-function label(value, x, y, size, color) {
+function label(value, x, y, size, color, numeric) {
     rgba(color || T.text);
-    mgraphics.select_font_face("Arial");
-    mgraphics.set_font_size(size);
+    mgraphics.select_font_face(numeric ? "IBM Plex Mono" : "Jersey 10");
+    mgraphics.set_font_size(numeric ? Math.max(12, size) : Math.max(14, size * 1.25));
     mgraphics.move_to(x, y); mgraphics.show_text(String(value));
 }
 function inside(x, y, r) {
@@ -119,7 +119,7 @@ function drawWaveform(l) {
     state.ruler.forEach(function (text, i) {
         const x = r.x + i * r.w / 8;
         if (i) line(x, r.y, x, r.y + r.h, [0.19, 0.22, 0.25, 0.35]);
-        label(text, x + 4, r.y + 12, 9, T.dim);
+        label(text, x + 4, r.y + 14, 9, T.dim, true);
     });
     rect(sx, r.y, ex - sx, r.h, [1, 0.66, 0, 0.045]);
     [sx, ex].forEach(function (x) {
@@ -138,9 +138,9 @@ function drawWaveform(l) {
     }
     const ty = l.h * 0.95;
     label("POSITION", r.x, ty, 10, T.dim);
-    label(state.position_display, r.x + 70, ty, 12, T.text);
+    label(state.position_display, r.x + 70, ty, 12, T.text, true);
     label("ACTIVE REGION", r.x + r.w * 0.40, ty, 10, T.dim);
-    label(state.start_display + "  →  " + state.end_display, r.x + r.w * 0.54, ty, 12, T.text);
+    label(state.start_display + "  →  " + state.end_display, r.x + r.w * 0.54, ty, 12, T.text, true);
 }
 function drawSlider(l) {
     const r = l.track, value = shownValue(), eq = CONTROL.indexOf("eq_") === 0;
@@ -160,7 +160,7 @@ function drawSlider(l) {
     }
     const name = eq ? CONTROL.slice(3).toUpperCase() : CONTROL.toUpperCase();
     label(name, l.p, l.h * 0.24, 11, T.dim);
-    if (CONTROL !== "jung") label(shownDisplay(), l.w * 0.70, l.h * 0.24, 12, T.text);
+    if (CONTROL !== "jung") label(shownDisplay(), l.w * 0.70, l.h * 0.24, 12, T.text, true);
     line(r.x, r.y, r.x + r.w, r.y, T.line, 1);
     const origin = centered ? r.x + r.w * 0.5 : r.x;
     line(origin, r.y, r.x + r.w * value, r.y, color, 1.5);

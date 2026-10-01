@@ -71,6 +71,11 @@
                 if (!response.ok) throw new Error("Cannot load preview config");
                 config = await response.json();
             }
+            if (config.fonts) {
+                if (!Array.isArray(config.fonts) || config.fonts.some(font => typeof font !== "string"))
+                    throw new Error("Invalid font configuration");
+                await Promise.all(config.fonts.map(font => document.fonts.load('16px "' + font + '"')));
+            }
             const sources = await Promise.all([
                 readSource(config.component), readSource(config.controller)
             ]);

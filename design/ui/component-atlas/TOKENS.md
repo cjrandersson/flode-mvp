@@ -36,9 +36,11 @@ SVG viewBox coordinates are the reference geometry, not mandatory production pix
 
 ## Typography
 
-Propose a neutral installed sans serif for labels and a tabular/monospace face for numeric data. Native prototype defaults to Arial; Courier New is a candidate for technical values after review.
+**CJ selected on 2026-10-01:** Jersey 10 Regular for labels and POD letters; IBM Plex Mono Regular for numeric values and units. [Bundled TTFs, browser CSS and licences](fonts/). Max selects installed family names; install both fonts at OS level and restart Max. Browser previews await local faces before drawing. Updated SVG exports embed the used faces and retain editable text.
 
-Labels: 10–12 at normal scale, uppercase for short structural names. Values: 13–18. POD identity: 28–34. Avoid very small status text as the only carrier of a state. SVG uses Arial/Helvetica/system sans serif to remain portable; font substitutions need visual review.
+Jersey 10 is a display face. Current studies keep labels at 14 units or larger, prominent identity at roughly 24–35. IBM Plex Mono numeric readouts stay at 12 or larger. Exact rendering/legibility needs a real-host review. Earlier v0.1 SVGs preserve their prior Arial typography as historical studies.
+
+The reference-element library introduces an additional restrained orange proposal: **#FF9626** (1, 0.588, 0.149, 1). Existing POD A lab uses its original #FFA800 selection accent. Both are proposals for colour review; the font pairing itself is explicitly selected.
 
 ## Timing and state
 
