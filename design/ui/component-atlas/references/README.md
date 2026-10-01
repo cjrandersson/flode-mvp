@@ -20,55 +20,39 @@ Filenames express the user's intended use; creator, product attribution and orig
 
 The [earlier Max runtime screenshot](../../../../docs/test-evidence/max9/stage1/stage1-max9-podA-apache-buffer-loaded.png) and [README attachment](https://github.com/user-attachments/assets/3948386f-8366-4539-8d8c-84193204560c) remain separate runtime/design references; neither is used as evidence for the all-POD picture. Its separate partial review uses CJ’s chat screenshot of that exact GitHub file.
 
-# Reference images to UI components
+## Reference images to UI components
 
-> **Codex reading instruction:** Before working on flöde~ design or UI components, read this README.md in full, then read the linked ANALYSIS.md and applicable task brief. Interpret the images within the current approved task scope. For UI LAB 001, the POD A waveform-first brief takes precedence: references provide art direction and do not authorize Master/FX work, additional controls, POD B–F design, or Alpha/DSP integration.
->
-> **Filename mapping:** `UI_SPACING_AESTHETIC.png` below refers to the supplied file `SPACING_AESTHETIC.png` listed in the reference register.
+**Codex reading instruction:** Before working on flöde~ design or UI components, read this README in full, the linked [ANALYSIS.md](ANALYSIS.md), and the applicable approved task brief.
 
-Here is the English version of the `README.md` for your design and UI folder:
+The images provide art direction: extract hierarchy, geometry, spacing, typography, and meaningful use of color. Adapt those principles to flöde~ and the intended UI size. Low-resolution images cannot establish exact pixel dimensions or font specifications. Static images show appearance; interaction and motion must be defined by the task brief.
 
-This folder gathers visual inspiration, reference images, and UI components for the instrument **flöde~**.
+The approved task brief takes precedence. For **UI LAB 001**, work only on the isolated POD A v8ui/mgraphics prototype. Master/FX work, additional controls, POD B–F design, and Alpha/DSP integration remain outside its scope.
 
-The purpose of this document is to instruct **Codex** and the development team on exactly how these images should be interpreted, broken down design-wise, and implemented in code to ensure a cohesive, professional, and hardware-inspired user experience.
+### Layout and modular composition
 
-## 📂 Image Overview & Implementation Instructions
+- **`FLÖDE_ALL_PODS_VIEW.png`** — Overview of the six-POD composition. Study alignment, repeated module relationships, and shared hierarchy when an approved task concerns the overall interface. The current image review is partial, as recorded above.
+- **`FLÖDE_MASTER_BPM_MASTER_FX_WINDOW.jpg`** — Reference for grouping, readability, and access to tempo and effects controls. Apply these principles only to an approved Master/FX task; the pictured controls and knobs are not an implementation checklist.
+- **`FLÖDE_SJÄLVSTÄNDIG_MASTER_BPM_WINDOW.jpg`** — Reference for the functional and visual separation of individual PODs and independent master controls. Preserve that modular separation when relevant to the task.
 
-### 1. Layouts & Windows
+### Aesthetics, spacing, and typography
 
-- **`FLÖDE_ALL_PODS_VIEW.png`**
-    - *Description:* Complete overview showing how all parts interact when all 6 PODS are visible in the interface.
-    - *Codex Instruction:* Use this as the main reference for the overall layout structure, grid system, and window composition when all modules are active simultaneously.
-- **`FLÖDE_MASTER_BPM_MASTER_FX_WINDOW.jpg`**
-    - *Description:* Detailed view for the Master BPM and Master FX window.
-    - *Codex Instruction:* Implement the controls, knobs, and layout for effects and tempo precision exactly according to this panel. Focus on clear readability and fast access.
-- **`FLÖDE_SJÄLVSTÄNDIG_MASTER_BPM_WINDOW.jpg`**
-    - *Description:* Our initial design concept for flöde~ featuring the 6 PODS in combination with a separate/independent Master BPM window.
-    - *Codex Instruction:* Refer to this concept to understand how the modular division between master controls and individual pods is intended to be separated functionally and visually.
+- **`FORS-fm-ux-ui.png`** — Study restraint, instrument-like clarity, crisp geometry, thin lines, and economical use of labels and color. Aim for a purpose-built electronic instrument with dark matte surfaces. Avoid decorative hardware, fake rack details, and unnecessary shadows.
+- **`SPACING_AESTHETIC.png`** — Reference for negative space, margins, grouping, and visual balance. Derive a consistent spacing rhythm and verify it at the intended UI size. This is the supplied filename for the reference previously described as `UI_SPACING_AESTHETIC.png`.
+- **`TYPSNITT_SPACING_POD_A_DESIGN_SENSOR.jpg`** — Study technical typography, alignment, line weight, and contrast hierarchy. Its dense sensor layout provides selected visual principles; adapt them to the quieter, waveform-first POD A. POD A will establish reusable visual DNA for later PODs, without designing B–F during LAB 001.
 
-### 2. Aesthetics, Spacing & Typography
+### Signal graphics and interaction cues
 
-- **`FORS-fm-ux-ui.png`**
-    - *Description:* Overall UI/UX reference for the instrument's digital hardware feel.
-    - *Codex Instruction:* Use this image as a style guide for the overall aesthetic (color palette, shadows, contrast, and controls).
-- **`UI_SPACING_AESTHETIC.png`**
-    - *Description:* Detailed guidelines for whitespace, margins, and visual balance in the interface.
-    - *Codex Instruction:* Follow the exact proportions and spacing (padding/margin) shown here to avoid a cluttered look. A minimalist yet functional layout is key.
-- **`TYPSNITT_SPACING_POD_A_DESIGN_SENSOR.jpg`**
-    - *Description:* Typography, element spacing, and the base design of **POD A**, which sets the design standard for the rest of the pods.
-    - *Codex Instruction:* Extract font styles, text sizes, weights, and component placement from here. POD A acts as the "master template" for all other pods (B through F).
+- **`KNAPPAR_LOOP_MODES_COLOURS.jpg`** — Reference for compact control geometry and meaningful state colors. Define default, hover, active, and off appearances only for controls included in the approved task. These states are design proposals, not behavior verified from the still image.
+- **`MULTICOLOR_WAVEFORM_DESIGN_MINIMALISM.jpg`** — Study clear multicolor curves, restrained contrast, and the relationship between graphics and subtle color fields. Translate those principles into a sharp waveform with color encoding signal, state, or action. For LAB 001, the waveform remains the dominant object; the image does not define audio-player behavior.
+- **`ikoner_REC_PLAY_TEMPO_LOOP.jpg`** — Reference for economical symbols and distinct state/action cues. Use only when an approved task requires the corresponding controls; it does not authorize adding transport or tempo controls to POD A.
 
-### 3. Components & Interaction
+### Implementation principles
 
-- **`KNAPPAR_LOOP_MODES_COLOURS.jpg`**
-    - *Description:* Specific design for buttons (e.g., loop on/off) and corresponding color coding for various states.
-    - *Codex Instruction:* Implement button components with states for *Default*, *Hover*, *Active/On*, and *Off*, and follow the specified color scheme for lights/indicators.
-- **`MULTICOLOR_WAVEFORM_DESIGN_MINIMALISM.jpg`**
-    - *Description:* Design concept for a minimalist and multi-colored waveform (multicolor waveform) for our audio player.
-    - *Codex Instruction:* Code the audio player waveform using this multi-colored aesthetic. The waveform should be sharp, clean, and follow minimalist design principles without compromising visual feedback.
+1. **Reusable primitives and tokens:** Keep colors, type sizes, spacing, and line weights in named, centralized values. Compose the approved UI from small reusable drawing primitives suitable for v8ui/mgraphics. Keep visual iteration simple.
+2. **Instrument identity:** Use space, alignment, tone, and contrast to communicate hierarchy. Choose the smallest interaction primitive that clearly communicates each parameter. Simplify before adding borders or controls.
+3. **Signal color:** Use off-black as the base and off-white for primary information. Reserve restrained cyan, orange, acid/yellow, and related muted accents for meaningful signal and state information.
+4. **Interaction and motion:** Define gestures from the approved brief. For LAB 001, EQ point movement is vertical gain adjustment; use subtle active-state response and controlled curve interpolation. Motion communicates state.
+5. **Scale and legibility:** Preserve deliberate relationships between elements when scaling. Check label readability, crisp lines, and usable hit areas at the intended UI size.
+6. **Isolation:** Reference material does not expand implementation scope. Keep UI R&D separate from playable Alpha PODs, DSP, JUNG engine behavior, and master clock architecture.
 
-## 🛠️ General Guidelines for Codex When Generating Code
-
-1. **Design System & Tokens:** Build reusable components based on the patterns in `TYPSNITT_SPACING_POD_A_DESIGN_SENSOR.jpg` and `KNAPPAR_LOOP_MODES_COLOURS.jpg`. Do not hardcode values that should be design tokens (e.g., colors, font sizes, standard spacing).
-2. **Modular Architecture:** Respect the separation between PODS and the Master window (as shown in `FLÖDE_SJÄLVSTÄNDIG_MASTER_BPM_WINDOW.jpg`).
-3. **Responsiveness & Scalability:** The interface for flöde~ should feel like a fixed, physical hardware unit (instrument), meaning the mutual relationships and spacing of elements must be maintained even during scaling.
+For LAB 001, the required composition is waveform, playhead, active region, compact VOL/PAN/SPEED controls, a LOW/MID/HIGH three-point tone curve with a softly fading tinted field, and a single STABLE ↔ RESTLESS JUNG continuum. Waveform first.
