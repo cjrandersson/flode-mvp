@@ -1,127 +1,199 @@
 # UI LAB 001 — POD A / Waveform First
 
-**Status:** CJ APPROVED design direction  
+**Status:** CJ APPROVED — authoritative POD UI direction  
 **Branch:** `max-msp`  
-**Scope:** design/R&D only. This document does not authorize changes to the locked Alpha 0.1 / Issue #5 implementation order.
+**Scope:** design/R&D only. This document does not authorize bypassing the locked Alpha 0.1 / Issue #5 implementation order.
 
-## Objective
+## Core rule
 
-Build the simplest crisp `mgraphics` representation of POD A first. The UI should feel like an instrument, not a dashboard: immediate waveform, obvious play position, a small number of readable controls, and restrained modular colour.
+**Simplify before adding. Waveform first.** POD A establishes the visual and interaction grammar before it is generalized to B–F.
 
-Simplify rather than add controls.
-
-## POD A composition
+## Approved POD A concept
 
 ```text
-POD A                                      APACHE
+POD A                                                     APACHE        M  S
 
-    cyan       orange       acid/yellow
-      ╲          │             ╱
-▁▂▅▇▃▂▁▃▆▅▂▁▂▇▅▃▁▂▅▇▆▂▁▃▅▂▁
-────────────────────────────────────────
-         ↑ PLAYHEAD
-      [ ACTIVE REGION ]
+                  TRANSIENTS  ‹ MODE ›  BEAT
+                   baby blue          amber/red
 
-VOL        PAN        SPEED
+╭────────────────────────────────────────────────────────────────────╮
+│   │       │  │             │         │                            │
+│ ▁▃▆█▅▂▁▂▅▇▃▂▁▃▇█▅▂▁▃▆▅▂▁▂▅▇▃▁                          │
+│       ├──────────── ACTIVE REGION ─────────────┤                   │
+│                         ↑ PLAYHEAD                                  │
+│       START ●──────────────────────────● END                        │
+│             ↘ FADE                      FADE ↙                      │
+╰────────────────────────────────────────────────────────────────────╯
+ LOOP ●                  SENS 42% / DIV 1/16
 
-──●──      ─●──       ──●──
+ FILTER                                           EQ
+ ● ON                                       LOW   MID   HIGH
+ LP · HP · BP                                ●     ●     ●
+ FREQ ━━━━━●━━━━                           ╭──╯╲___╱╰──╮
+ RES  ━━●━━━━━━━━
 
-JUNG
-STABLE ─────────────●──────── RESTLESS
+ VOL             PAN             SPEED             FX AMOUNT
+ ━━●━━━━         ━━━●━━━         ━━━●━━━               ◯ 38%
 
-EQ
-LOW        MID        HIGH
-──●──      ─●──       ──●──
+ JUNG
+ STABLE ━━━━━━━━━━━━━━━━━●━━━━━━━━━━━━━━━━ RESTLESS
 ```
+
+ASCII is structural guidance, not a request for hard boxes around every region.
 
 ## Visual DNA
 
-- FORS-inspired restraint: dark matte field, thin geometry, strong negative space, no decorative chrome.
+- FORS-inspired restraint: dark matte field, thin precise geometry, strong negative space.
 - Modular rather than skeuomorphic.
-- Extremely crisp rendering and typography. Avoid unnecessary shadows, bevels, fake hardware and visual noise.
-- Waveform is the visual centre of gravity.
-- Multicolour waveform accents may move between cyan, orange and acid/yellow. Colour should communicate regions/activity rather than become decoration.
-- POD identity must remain readable at a glance: `POD A` + `APACHE`.
-- Controls should remain compact enough that the waveform has room to breathe.
+- Extremely crisp waveform, typography and alignment.
+- Avoid decorative chrome, fake hardware, unnecessary borders and visual noise.
+- Multicolour signal language uses restrained cyan/baby blue, orange and acid/yellow with complementary amber/red where specified.
+- Colour communicates mode, state, signal or interaction. It is not decoration.
+- `POD A` and `APACHE` remain immediately readable.
 
-## Waveform
+## Waveform / audio player
 
-The waveform must be a real first-class UI element, not a decorative placeholder in the eventual runtime implementation.
+The waveform is the dominant object and the main interaction surface, not a decorative preview.
 
-Design representation should support:
+It supports:
 
 - waveform overview;
 - visible playhead;
 - visible active region;
+- direct START and END/LENGTH handles;
+- loop region/state;
+- loop/sample fade handles;
 - clear selected/active state;
-- subtle region colouring;
-- smooth but restrained state transitions.
+- restrained multicolour signal information.
 
-Animation should be functional: playhead movement, active-region state and control response. Avoid gratuitous motion.
+Prefer direct manipulation inside the waveform over duplicating the same functions as rows of conventional sliders beneath it.
 
-## Primary controls
+### Slice analysis modes
 
-Only expose the currently useful musical surface:
+Use `< >` arrows to toggle between exactly these two analysis modes for this concept:
+
+**TRANSIENTS — baby blue**  
+Automatically detect audio peaks/transients and place slice markers. Expose a simple **Sensitivity %** control. Detected markers inherit the baby-blue mode language.
+
+**BEAT — complementary amber/red-orange**  
+Divide the sample evenly by musical time intervals. Expose only the required musical division such as `1/4`, `1/8`, `1/16`, `1/32`. Beat markers should look regular and mathematically spaced.
+
+Beat mode derives time from the single global Master Time/BPM. A POD never owns an independent BPM engine.
+
+Analysis mode does not authorize additional playback/random modes.
+
+### Loop
+
+`LOOP` is a clear playback **state**, not a third slice mode. When enabled, the selected valid region loops. When disabled, it does not become another analysis paradigm.
+
+## Filter
+
+Place a deliberately small filter section down-left of the waveform.
+
+Controls only:
+
+- ON/OFF
+- LP / HP / BP
+- FREQ / cutoff
+- RES / resonance
+
+Do not add drive, slope, envelopes, key tracking or additional filter architecture in this UI pass.
+
+The active filter region may gain a very subtle local tonal cue. When bypassed it should visually recede.
+
+## Three-band graphical EQ
+
+Place the EQ down-right of the waveform.
+
+Use a minimal graphical curve with exactly three draggable control points:
+
+- LOW
+- MID
+- HIGH
+
+Vertical movement represents gain. The curve interpolates smoothly between the three points.
+
+The EQ area should feel like a subtly different acoustic zone without becoming a card or panel. Use a faint differentiated tint that **softly fades/blur-dissolves toward the edges** back into the POD background. LOW/MID/HIGH may carry very restrained colour differences. Interaction may briefly increase the active point/curve visibility, then settle back.
+
+No spectrum analyser, Q handles or frequency editor in this pass.
+
+## Primary performance controls
+
+Keep these compact and immediately readable:
 
 - **VOL**
 - **PAN**
 - **SPEED**
-- **JUNG:** `STABLE ↔ RESTLESS`
-- **3-band EQ:** `LOW / MID / HIGH`
+- **FX AMOUNT — 0–100%**
 
-JUNG is one musically meaningful tension control. Do not expose underlying probabilities for reverse, repeat, slicing, offsets or other internal behaviours here.
+`FX AMOUNT` describes the musician-facing amount of the global Master FX treatment applied to this POD. It deliberately does **not** prescribe whether the eventual DSP implementation is send/return, wet/dry crossfade or another routing model. DSP routing remains a later technical architecture decision.
 
-## Three-band EQ treatment
+Do not label this control `MASTER FX SEND` unless the actual routing architecture later becomes an aux send/return model.
 
-EQ belongs on every POD, but should visually read as a quiet secondary zone rather than another panel competing with the waveform.
+## Mute / Solo
 
-Use three compact controls: LOW, MID, HIGH. Give the EQ region a very subtle local colour/illumination cue that fades softly at its edges into the surrounding dark surface. The fade should suggest entering a tonal-shaping zone without drawing a hard card or box around it.
+Small `M` and `S` controls belong in the POD header. They are fundamental with six PODs but should remain visually quiet until active.
 
-Keep it clean enough that bypass/neutral state feels almost invisible.
+## JUNG
 
-## Interaction principles
+Expose one primary behavioural continuum only:
 
-- Immediate feedback.
-- Small number of obvious targets.
-- Fine adjustment may use Shift-drag where appropriate.
-- Avoid parameter jumps on interaction.
-- Prefer direct manipulation over menus.
-- No deep probability editor.
-- No UI mode proliferation.
+**STABLE ↔ RESTLESS**
 
-## JUNG design invariant
+Do not expose probability matrices or individual reverse/repeat/slice/silence/jump/offset probabilities.
 
-The UI representation must remain compatible with the approved JUNG manifesto:
+The UI remains compatible with the JUNG invariant:
 
-> The master clock owns time. JUNG never does.
+> **The master clock owns time. JUNG never does.**
 
-JUNG should create controlled instability while remaining anchored to musical time. UI LAB 001 therefore represents JUNG as `STABLE ↔ RESTLESS`, not as a matrix of independent probability parameters.
+JUNG may change what happens, while the global timing authority determines when decisions occur. No JUNG engine implementation is authorized by this UI document.
 
-No JUNG DSP/engine implementation is authorized by this UI document.
+## Master-time boundary
+
+There is **one global Master BPM/Time only**. PODs A–F must not contain independent or duplicated BPM controls/displays. POD timing derives from the master clock.
+
+Negative and extremely small/near-zero Master BPM values are known Jungulator legacy behaviour that must be **documented and investigated/preserved**. Their exact semantics must be verified from the original Jungulator before implementation. Do not invent a meaning for negative BPM in this UI task.
+
+## Motion
+
+Motion communicates state only:
+
+- playhead movement;
+- active-region transitions;
+- subtle mode/state colour response;
+- smooth EQ curve response;
+- restrained control interpolation.
+
+No gratuitous bounce, glow spectacle or decorative pulsing.
 
 ## Engineering boundary
 
-This is an R&D/design specification. It must not be used to bypass Issue #5 or introduce production UI into the current Alpha milestone.
+This is an approved design/R&D specification, not permission to reorder Alpha development.
 
-Do not introduce as part of this lab:
+Do not introduce through this UI task:
 
-- PODs B–F runtime implementation;
+- POD B–F runtime implementation;
 - JUNG engine behaviour;
 - sequencer functionality;
 - production transport architecture;
-- effects or recording;
+- independent POD BPM clocks;
+- recording;
 - timestretch/pitch correction;
 - unrelated DSP changes.
 
-The existing `design/v8ui_mgraphics_ui.js` is a visual/prototyping reference. UI LAB 001 deliberately narrows the next exploration to **POD A only** before generalising a six-POD system.
+The original Jungulator artefacts remain untouched.
 
 ## Success criterion
 
-A successful first pass should make CJ immediately understand four things without explanation:
+Without explanation, CJ should be able to understand:
 
-1. what sample POD A contains;
+1. which sample the POD contains;
 2. where playback currently is;
-3. what region is active;
-4. how to shape level, stereo position, speed, JUNG tension and basic tone.
+3. which region is active and how its boundaries/fades behave;
+4. whether slicing is transient- or beat-derived;
+5. how to shape filter and three-band tone;
+6. level, pan, speed and FX amount;
+7. how JUNG moves from stable toward restless;
+8. mute/solo state.
 
-If additional UI makes any of those harder to read, simplify it.
+If an added element makes those relationships harder to read, remove or simplify it.
