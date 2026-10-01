@@ -19,7 +19,25 @@ function build(UI,gallery,fontData){
     const preview='<svg xmlns="http://www.w3.org/2000/svg" width="'+gallery.width+'" height="'+gallery.height+
         '" viewBox="0 0 '+gallery.width+' '+gallery.height+'" role="img"><title>flöde~ reference elements — visual study, no audio</title>'+
         fontStyle+'<rect width="'+gallery.width+'" height="'+gallery.height+'" fill="#0e1115"/>\n'+groups.join("\n")+'\n</svg>\n';
-    files.push({path:"graphics/reference-elements-preview.svg",content:preview});return files;
+    files.push({path:"graphics/reference-elements-preview.svg",content:preview});
+    // Static A–F address studies only; the interactive gallery stays POD A.
+    const identityAssets=[];
+    for(const pod of ["A","B","C","D","E","F"]){
+        const options={pod,id:"header",filename:"NO SAMPLE",width:180,height:64,accent:pod==="A"?"orange":"text"};
+        const content=UI.toSvg(UI.scene("pod",options),"POD "+pod+" identity study",fontData);
+        const asset={path:"graphics/pod-"+pod.toLowerCase()+".svg",content};
+        files.push(asset);identityAssets.push({pod,content});
+    }
+    const identityFonts=identityAssets[0].content.match(/<defs>[\s\S]*?<\/defs>/)?.[0]||"";
+    const identityGroups=identityAssets.map(({pod,content},i)=>{
+        const body=content.split("\n").slice(1,-2).join("\n").replaceAll('id="element-','id="pod-'+pod+'-element-');
+        return '<g id="pod-'+pod+'" transform="translate('+(20+i*192)+' 18)">'+body+'</g>';
+    });
+    files.push({path:"graphics/pod-identities.svg",content:
+        '<svg xmlns="http://www.w3.org/2000/svg" width="1180" height="100" viewBox="0 0 1180 100" role="img">'+
+        '<title>flöde~ A–F identity study — static labels, POD A emphasized</title>'+identityFonts+
+        '<rect width="1180" height="100" fill="#0e1115"/>\n'+identityGroups.join("\n")+'\n</svg>\n'});
+    return files;
 }
 if(typeof module!=="undefined"){
     module.exports={build};

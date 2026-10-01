@@ -1,6 +1,6 @@
 # flöde~ UI Component Atlas — v0.2
 
-**Status:** Isolated visual/UI research. Nine original pictures supplied; eight inspected and analysed individually. The new reusable library adds nineteen SVG assets and Max/p5 adapters. CJ chose Jersey 10 for labels/POD letters and IBM Plex Mono for numbers. The large all-POD picture and actual host appearance remain pending.
+**Status:** Isolated visual/UI research. Nine original pictures supplied; eight inspected and analysed individually. The reusable library provides twenty-six SVG assets and Max/p5 adapters. CJ chose Jersey 10 for labels/POD letters and IBM Plex Mono for numbers. The all-POD picture has a partial browser-screenshot review; its full-resolution details and actual host appearance remain pending.
 
 This atlas follows [CJ's approved brief](CODEX_BRIEF.md), the [JUNG Manifesto](../../../docs/JUNG_MANIFESTO.md) and the [JUNG Brain architecture](../../../docs/JUNG_BRAIN_ARCHITECTURE.md). It describes an implementation-neutral visual system. The [standalone Max 9 prototype](../../../prototype/max9-pod-a/) demonstrates the existing Pod A interaction contract separately.
 
@@ -39,7 +39,7 @@ Motion follows state and time supplied by a controller. It never supplies a new 
 
 ## Reference analysis
 
-Eight supplied references have now been [analysed individually](references/ANALYSIS.md): master controls, the POD A waveform layout, modular geometry, compact colour controls, minimalist data plots, spacing, technical typography and symbol language. The [register](references/README.md) records all nine originals, including the large all-POD PNG that remains uninspected.
+Eight supplied references have now been [analysed individually](references/ANALYSIS.md): master controls, the POD A waveform layout, modular geometry, compact colour controls, minimalist data plots, spacing, technical typography and symbol language. The [register](references/README.md) records all nine originals, including the all-POD PNG reviewed only through a cropped browser screenshot.
 
 The [reference-element prototype](../../../prototype/ui-reference-elements/) provides eight implemented geometric families for JavaScript, Max `v8ui`, p5.js and editable SVG. Its thirteen checks and the POD A lab’s ten checks passed with host calls recorded. [UI LAB 001](../../../prototype/ui-lab-001/) remains the focused real-waveform prototype. Both now use [CJ’s bundled font pairing](fonts/).
 
@@ -53,7 +53,7 @@ Available source and written references were examined:
 | [Design framework](../../fl%C3%B6de-design-framework.md) | Semantic tokens, stable geometry, pod identity and waveform hierarchy | Decorative hardware treatment; direct production decisions from illustrative studies |
 | [JUNG Manifesto](../../../docs/JUNG_MANIFESTO.md) | Stable/restless tension, one bounded intervention and return home | Independent clocks, recursive visual randomness, exposed probability programming |
 
-The original six v0.1 SVG studies remain available as earlier proposals. The new nineteen [reference-derived assets](../../../prototype/ui-reference-elements/graphics/README.md) and ten [POD A lab assets](../../../prototype/ui-lab-001/graphics/README.md) use the selected typography and embed font data.
+The original six v0.1 SVG studies remain available as earlier proposals. The twenty-six [reference-derived assets](../../../prototype/ui-reference-elements/graphics/README.md) and ten [POD A lab assets](../../../prototype/ui-lab-001/graphics/README.md) use the selected typography and embed font data.
 
 ## Prototype order and review
 
@@ -67,3 +67,7 @@ CJ review is needed for adaptation fidelity, actual font legibility, accent bala
 ## Files created
 
 `README.md`, `COMPONENTS.md`, `MOTION.md`, `JUNG_GLYPH.md`, `TOKENS.md`, `references/README.md`, and the six named SVGs under `prototypes/`.
+
+## Reference-to-component handoff
+
+[Direct artifact and stack mapping](../../../prototype/ui-reference-elements/SOURCE_MAP.md) covers all nine supplied references and their review basis. [A–F identity studies](../../../prototype/ui-reference-elements/graphics/pod-identities.svg) add a static address rhythm based on the visible console crop; the interactive runtime remains the approved POD A study. The first reusable component prototype is delivered, with actual-host validation and further full-resolution refinement openly tracked.

@@ -22,6 +22,15 @@ Each SVG is exported from [the shared JavaScript](../code/flode_reference_ui.js)
 | [jung-intervention.svg](jung-intervention.svg) | JUNG INTERVENTION static study |
 | [jung-resolving.svg](jung-resolving.svg) | JUNG RESOLVING static study |
 | [jung-return_home.svg](jung-return_home.svg) | JUNG RETURN HOME static study |
+| [pod-a.svg](pod-a.svg) | Static POD A address study |
+| [pod-b.svg](pod-b.svg) | Static POD B address study |
+| [pod-c.svg](pod-c.svg) | Static POD C address study |
+| [pod-d.svg](pod-d.svg) | Static POD D address study |
+| [pod-e.svg](pod-e.svg) | Static POD E address study |
+| [pod-f.svg](pod-f.svg) | Static POD F address study |
+| [pod-identities.svg](pod-identities.svg) | Six static addresses using one geometry; A emphasized, B–F neutral |
 | [reference-elements-preview.svg](reference-elements-preview.svg) | Full gallery with default demo state |
 
 Import SVGs into an editor or use the source drawing API for interactive controls. An editor that does not support embedded web fonts may require installing the bundled TTFs. This is geometric reconstruction of transferable principles, not a raster crop or wholesale reproduction of the supplied pictures.
+
+The A–F address assets are static design studies; they do not add B–F runtime behavior. The exporter now produces 26 library SVGs. See the [source map](../SOURCE_MAP.md) for reference provenance and stack entry points.

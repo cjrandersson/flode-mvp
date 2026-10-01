@@ -1,6 +1,6 @@
 # flöde~ reference elements
 
-Eight reusable families derived from [eight inspected pictures](../../design/ui/component-atlas/references/ANALYSIS.md): pod address, selection geometry, fader, compact knob, numeric readout, stereo meter, JUNG glyph and named symbols. Isolated UI research on `max-msp`; no audio, transport or JUNG engine implementation.
+Eight reusable families derived from [eight fully inspected pictures and one partial console screenshot](../../design/ui/component-atlas/references/ANALYSIS.md): pod address, selection geometry, fader, compact knob, numeric readout, stereo meter, JUNG glyph and named symbols. Isolated UI research on `max-msp`; no audio, transport or JUNG engine implementation.
 
 ![Element study](graphics/reference-elements-preview.svg)
 
@@ -73,7 +73,7 @@ JUNG state geometry is deterministic and bounded. Its cyan anchor stays fixed; R
 
 ## Assets and checks
 
-[Individual SVG catalog](graphics/README.md): nineteen editable assets, including six independent symbols and five JUNG state variants. Original reference pictures are preserved.
+[Individual SVG catalog](graphics/README.md): twenty-six editable assets, including six independent symbols and five JUNG state variants. Original reference pictures are preserved.
 
 ```sh
 node prototype/ui-reference-elements/tests/elements.test.cjs
@@ -82,8 +82,10 @@ node prototype/ui-lab-001/tests/lab.test.cjs
 node prototype/ui-lab-001/scripts/export-svg.cjs
 ```
 
-Thirteen element checks and ten POD A lab checks passed in a JavaScript isolate, with host calls recorded. The checks cover geometry parity, font choice/embedding, no-jump gestures, controller authority, canonical JUNG return and native patch wiring. The committed exporters generated all 29 updated SVG assets; SVG geometry and identifiers were checked.
+Thirteen element checks and ten POD A lab checks passed in a JavaScript isolate, with host calls recorded. The checks cover geometry parity, font choice/embedding, no-jump gestures, controller authority, canonical JUNG return and native patch wiring. The committed exporters produce 36 SVG assets across the library and POD A lab; SVG geometry and identifiers were checked.
 
 No real Max or browser runtime was available. Opening, font appearance, resizing, pointer behavior and actual audio loading need a host check. Jersey 10 is a display face; labels have a 14-unit minimum in these studies, while numeric text uses IBM Plex Mono at 12 or larger.
 
-The ninth reference, FLÖDE_ALL_PODS_VIEW.png, is present but its large binary could not be retrieved for inspection. Its six-POD visual analysis remains pending. This prototype does not advance the Alpha engine milestones.
+The ninth reference, FLÖDE_ALL_PODS_VIEW.png, is present. CJ’s browser screenshot permits a partial upper-layout review; the original pixels and lower layout remain uninspected. Seven new static SVGs show A–F addresses individually and together. The interactive gallery remains POD A. This prototype does not advance the Alpha engine milestones.
+
+[Reference-to-component map and direct reuse examples](SOURCE_MAP.md). The first component prototype is delivered; actual-host checks and further visual refinement remain open.

@@ -1,12 +1,22 @@
 # Supplied image analysis — 2026-10-01
 
-Eight individual references inspected. The [register](README.md) preserves filenames and Git blob identities. The [element library](../../../../prototype/ui-reference-elements/) converts transferable principles into geometric JavaScript, p5.js, Max `v8ui` and editable SVG studies. It does not reproduce a reference wholesale.
+Eight individual references inspected directly; one additional reference reviewed partially through CJ’s browser screenshot. The [register](README.md) preserves filenames and Git blob identities. The [element library](../../../../prototype/ui-reference-elements/) converts transferable principles into geometric JavaScript, p5.js, Max `v8ui` and editable SVG studies. It does not reproduce a reference wholesale.
 
 Motion and gestures described as proposals below are inferences from static pictures. They were not observed in a running reference product.
 
 ## FLÖDE_ALL_PODS_VIEW.png
 
-Present, 2,209,659 bytes. The connector's base64 file response contained no image data; the Git blob fetch also rejected binary content. **Not visually inspected.** Six-POD arrangement, exact accents and hierarchy cannot be concluded from the filename. Do not infer them from the single-POD image. A direct chat upload or smaller copy is required for this picture's analysis.
+**Review basis:** CJ's in-chat browser screenshot of [the uploaded file at commit 8da81ec](https://github.com/cjrandersson/flode-mvp/commit/8da81ec1a63de7c0324f9aa9be58966c42cfedca), supplied on 2026-10-01. Only the visible upper portion is reviewed. The repository original is present (2,209,659 bytes), but the connector returned no binary image data. This is a **partial screenshot review**, not inspection of the complete original.
+
+**Observed in that crop:** six adjacent columns with A–F identity labels, small waveform overviews at their tops, repeated compact controls and vertical faders below. A separate master column sits at the right, with a prominent tempo value and denser master controls. A common top bar spans the instrument. Dark surfaces and a recurring orange accent unify the visible area. Tiny labels, exact values and the lower crop are not reliable evidence.
+
+**Transfer:** repeated stable POD addresses and consistent top alignment, with a visually separate shared master area. The [static A–F identity sheet](../../../../prototype/ui-reference-elements/graphics/pod-identities.svg) explores that address rhythm using the same header geometry as the reusable library. A is emphasized; B–F keep neutral letters. This is a proposed simplification rather than a pixel trace.
+
+**Omit:** reproducing six full mixer strips, tiny labels or the dense master controls as the entire interaction model. The approved interactive prototype stays POD A. No B–F runtime, transport, effects or master engine is implemented.
+
+**Proposed interaction/motion:** addresses remain stationary while a controller supplies selection/activity state. No animation or gesture behavior can be established from the static crop.
+
+**Still unknown:** complete lower layout, detailed spacing/colours, exact typeface and behavior. A full-resolution review can refine those details later. The existing eight full-image studies plus this explicitly partial view support the delivered first component prototype.
 
 ## FLÖDE_MASTER_BPM_MASTER_FX_WINDOW.jpg
 
@@ -95,4 +105,4 @@ Present, 2,209,659 bytes. The connector's base64 file response contained no imag
 3. Review the compact knob only where its parameter/gesture warrants it; keep the approved lab's primary horizontal sliders.
 4. Review glyph semantics and read-only meters/symbols before any engine connection.
 
-CJ visual review remains open for typeface substitution, orange balance, legibility and glyph meaning. Max 9 and browser host behavior are unverified here. The all-POD picture still needs visual access. No Alpha implementation or JUNG behavior is changed.
+CJ visual review remains open for typeface substitution, orange balance, legibility and glyph meaning. Max 9 and browser host behavior are unverified here. The all-POD picture still needs full-resolution review; its visible screenshot crop is documented separately. No Alpha implementation or JUNG behavior is changed.
