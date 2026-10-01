@@ -12,7 +12,7 @@ flöde~ is a six-pod sampler, generative sequencer, audio mangler and looper bui
 
 ![flöde~ Development Cockpit](assets/graphics/development-cockpit.svg)
 
-**UI R&D prototype — 2026-09-30:** [Pod A in Max 9](prototype/max9-pod-a/) has seven reusable `v8ui` instances, a real-audio waveform preview and an [individual SVG graphics catalog](prototype/max9-pod-a/graphics/). The new [Component Atlas](design/ui/component-atlas/) includes six SVG studies, tokens, component/motion specifications and a five-state JUNG glyph. Thirteen JavaScript contract checks passed with mocked Max APIs. **Next owner: @cjrandersson** — review the visual studies and open the standalone project in Max 9. Reference-picture analysis and Max runtime verification are pending; Alpha engine checkpoints are tracked in [Issue #5](https://github.com/cjrandersson/flode-mvp/issues/5).
+**UI R&D prototype — 2026-10-01:** [Pod A in Max 9](prototype/max9-pod-a/) and its [p5.js companion](prototype/p5-pod-a/) share the component renderer, gesture logic and demo controller. The [individual SVG graphics](prototype/max9-pod-a/graphics/) and [Component Atlas](design/ui/component-atlas/) provide editable assets and visual studies. Thirteen Max-script contract checks and ten p5 adapter integration checks passed with host APIs mocked/recorded. **Next owner: @cjrandersson** — supply accessible reference pictures and review both prototypes in their hosts. Reference-picture analysis, browser rendering and Max runtime verification remain pending; Alpha engine checkpoints are tracked in [Issue #5](https://github.com/cjrandersson/flode-mvp/issues/5).
 
 ---
 

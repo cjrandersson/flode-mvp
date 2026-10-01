@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>flöde~ Pod A — p5.js UI preview</title>
+  <link rel="stylesheet" href="style.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/p5@1.11.8/lib/p5.min.js"></script>
+  <script defer src="max-p5-adapter.js"></script>
+  <script defer src="sketch.js"></script>
+</head>
+<body>
+  <main>
+    <div class="intro">
+      <h1>Pod A · UI preview</h1>
+      <button id="reset" type="button">Reset preview</button>
+    </div>
+    <p>Drag the loop handles and controls. Hold Shift for precision. Load audio to draw its waveform; this demo does not play sound.</p>
+    <div class="viewport">
+      <div id="canvas-host">
+        <label id="drop-audio" for="audio-file">DROP WAV / AIFF HERE OR CHOOSE A FILE
+          <input id="audio-file" type="file" accept="audio/*,.wav,.aif,.aiff">
+        </label>
+      </div>
+    </div>
+    <p id="status" role="status" aria-live="polite">Loading UI…</p>
+    <details>
+      <summary>UI events</summary>
+      <pre id="events">No gestures yet.</pre>
+    </details>
+  </main>
+</body>
+</html>

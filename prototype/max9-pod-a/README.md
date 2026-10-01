@@ -17,6 +17,10 @@ The Apache reference sample is in `patches/flode_alpha_01/media/`. This is a UI 
 
 The INPUT, LOAD and DISK header placeholders are dim and disabled. M/S and mode selections are confirmed by the demo controller. A–F component identity is reusable; this harness demonstrates A.
 
+## p5.js preview
+
+The [p5.js companion](../p5-pod-a/) runs this same component renderer and demo controller through a small host adapter. Geometry, gestures and display mapping are shared. Its README has local browser instructions and ten cross-host integration checks; browser/Max runtime verification is pending.
+
 ## Pictures and graphics
 
 The [component atlas](../../design/ui/component-atlas/README.md) adds six SVG studies, design tokens, motion notes and a JUNG behavior glyph proposal under CJ's new R&D brief.

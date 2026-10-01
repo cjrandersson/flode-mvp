@@ -6,6 +6,8 @@ This atlas follows [CJ's approved brief](CODEX_BRIEF.md), the [JUNG Manifesto](.
 
 ![JUNG glyph state study](prototypes/jung-glyph-states-v01.svg)
 
+The [p5.js companion](../../../prototype/p5-pod-a/) now runs the same Max renderer/controller for interactive cross-host review. Ten adapter integration checks passed with recorded p5 methods; browser and Max host verification remain pending.
+
 ## Contents
 
 - [Component families and specifications](COMPONENTS.md)

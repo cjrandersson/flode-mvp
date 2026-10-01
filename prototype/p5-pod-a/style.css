@@ -1,0 +1,17 @@
+:root { color-scheme: dark; font-family: Arial, Helvetica, sans-serif; background: #0e1115; color: #d4dee8; }
+body { margin: 0; }
+main { max-width: 960px; margin: 24px auto; padding: 0 16px; }
+.intro { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+h1 { font-size: 15px; font-weight: 400; letter-spacing: .06em; }
+p { color: #6e7d8c; font-size: 12px; line-height: 1.5; }
+button { padding: 8px 12px; border: 1px solid #303840; border-radius: 2px; background: #14171b; color: #d4dee8; cursor: pointer; }
+button:hover, button:focus-visible { border-color: #ffa800; }
+.viewport { overflow-x: auto; border: 1px solid #303840; }
+#canvas-host { position: relative; width: 960px; height: 600px; }
+canvas { display: block; touch-action: none; }
+#drop-audio { position: absolute; top: 544px; left: 20px; width: 920px; height: 34px; box-sizing: border-box; display: flex; align-items: center; padding: 0 15px; font-size: 11px; color: #6e7d8c; background: #14171b; cursor: pointer; }
+#drop-audio:hover, #drop-audio.dragover, #drop-audio:focus-within { outline: 1px solid #ffa800; color: #d4dee8; }
+#audio-file { position: absolute; inset: 0; opacity: 0; width: 100%; cursor: pointer; }
+details { color: #6e7d8c; font-size: 12px; margin-top: 16px; }
+summary { cursor: pointer; }
+pre { color: #d4dee8; overflow-x: auto; font-size: 11px; line-height: 1.5; }
