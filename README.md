@@ -12,7 +12,7 @@ flöde~ is a six-pod sampler, generative sequencer, audio mangler and looper bui
 
 ![flöde~ Development Cockpit](assets/graphics/development-cockpit.svg)
 
-**UI R&D prototype — 2026-10-01:** [Pod A in Max 9](prototype/max9-pod-a/) and its [p5.js companion](prototype/p5-pod-a/) share the component renderer, gesture logic and demo controller. The [individual SVG graphics](prototype/max9-pod-a/graphics/) and [Component Atlas](design/ui/component-atlas/) provide editable assets and visual studies. Thirteen Max-script contract checks and ten p5 adapter integration checks passed with host APIs mocked/recorded. **Next owner: @cjrandersson** — supply accessible reference pictures and review both prototypes in their hosts. Reference-picture analysis, browser rendering and Max runtime verification remain pending; Alpha engine checkpoints are tracked in [Issue #5](https://github.com/cjrandersson/flode-mvp/issues/5).
+**UI R&D prototype — 2026-10-01:** The new [UI LAB 001](prototype/ui-lab-001/) implements CJ's waveform-first direction as an isolated Max 9/p5.js study, with VOL/PAN/SPEED, STABLE ↔ RESTLESS JUNG and a quiet EQ zone. Its [editable SVG elements](prototype/ui-lab-001/graphics/) are exported from the shared renderer. Ten lab checks and the existing ten p5 integration checks passed with host calls recorded. **Next owner: @cjrandersson** — review the lab in Max/browser and provide accessible reference pictures. Image matching and real-host verification remain pending; Alpha engine checkpoints are tracked in [Issue #5](https://github.com/cjrandersson/flode-mvp/issues/5). Earlier [Max](prototype/max9-pod-a/), [p5](prototype/p5-pod-a/) and [Component Atlas](design/ui/component-atlas/) studies remain available.
 
 ---
 

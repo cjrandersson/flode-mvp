@@ -1,0 +1,91 @@
+{
+  "component": "../code/flode_ui_lab_component.js",
+  "controller": "../code/flode_ui_lab_controller.js",
+  "width": 960,
+  "height": 720,
+  "pod": "A",
+  "components": [
+    [
+      "header",
+      "header",
+      "",
+      20,
+      20,
+      920,
+      54
+    ],
+    [
+      "waveform",
+      "waveform",
+      "",
+      20,
+      84,
+      920,
+      300
+    ],
+    [
+      "vol",
+      "slider",
+      "vol",
+      20,
+      405,
+      294,
+      64
+    ],
+    [
+      "pan",
+      "slider",
+      "pan",
+      333,
+      405,
+      294,
+      64
+    ],
+    [
+      "speed",
+      "slider",
+      "speed",
+      646,
+      405,
+      294,
+      64
+    ],
+    [
+      "jung",
+      "slider",
+      "jung",
+      20,
+      482,
+      920,
+      64
+    ],
+    [
+      "eq_low",
+      "slider",
+      "eq_low",
+      20,
+      570,
+      294,
+      70
+    ],
+    [
+      "eq_mid",
+      "slider",
+      "eq_mid",
+      333,
+      570,
+      294,
+      70
+    ],
+    [
+      "eq_high",
+      "slider",
+      "eq_high",
+      646,
+      570,
+      294,
+      70
+    ]
+  ],
+  "accessibleLabel": "UI LAB 001 Pod A. Drag volume, pan, speed, Jung temperament, EQ and loop handles. Shift gives precision."
+}

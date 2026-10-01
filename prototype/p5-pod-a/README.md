@@ -2,6 +2,8 @@
 
 The browser uses the existing [Max component renderer](../max9-pod-a/code/flode_ui_component.js) and [demo controller](../max9-pod-a/code/flode_ui_demo_controller.js). Geometry, hit testing, gesture messages, peak-cache behavior and engineering-unit formatting have one source.
 
+The same adapter/harness also hosts [UI LAB 001](../ui-lab-001/), CJ's newer waveform-first study. A trusted local config can supply `components`, `width`, `height` and source paths; the existing page retains its original layout by default.
+
 ## Open the preview
 
 Download/extract the `max-msp` branch, then serve the repository root:
@@ -65,7 +67,7 @@ view.loadDecodedAudio(audioBuffer, "Break.wav");
 
 `graphics(p, invalidate)` is also exported as a small drawing adapter for the primitives used by this renderer. It is not a complete mgraphics emulation.
 
-The development adapter compiles only the two fixed local repository scripts using the JavaScript Function constructor. It requires a development page that allows that operation. Do not compile uploaded files or user text. A production bundle/CSP integration needs a separate reviewed packaging decision; this remains an isolated prototype.
+The development adapter compiles the two trusted local repository scripts selected by the preview page/config using the JavaScript Function constructor. It requires a development page that allows that operation. Do not compile uploaded files or user text. A production bundle/CSP integration needs a separate reviewed packaging decision; this remains an isolated prototype.
 
 ## Validation and remaining checks
 

@@ -60,9 +60,19 @@
         try {
             if (typeof p5 !== "function" || typeof FlodeP5Bridge === "undefined")
                 throw new Error("The p5.js dependency did not load.");
+            let config = {
+                component: "../max9-pod-a/code/flode_ui_component.js",
+                controller: "../max9-pod-a/code/flode_ui_demo_controller.js",
+                width: 960, height: 600
+            };
+            const configPath = document.body.dataset.previewConfig;
+            if (configPath) {
+                const response = await fetch(configPath, {cache: "no-store"});
+                if (!response.ok) throw new Error("Cannot load preview config");
+                config = await response.json();
+            }
             const sources = await Promise.all([
-                readSource("../max9-pod-a/code/flode_ui_component.js"),
-                readSource("../max9-pod-a/code/flode_ui_demo_controller.js")
+                readSource(config.component), readSource(config.controller)
             ]);
             new p5(function (p) {
                 let pending = false, pointer = null;
@@ -75,19 +85,20 @@
                     });
                 }
                 p.setup = function () {
-                    const canvas = p.createCanvas(960, 600);
+                    const canvas = p.createCanvas(config.width, config.height);
                     canvas.parent("canvas-host");
                     p.pixelDensity(Math.min(2, window.devicePixelRatio || 1));
                     p.noLoop();
                     view = FlodeP5Bridge.create(p, {component: sources[0], controller: sources[1]},
-                        {invalidate, onEvent: event, onError: notice});
+                        {components: config.components, width: config.width, height: config.height, pod: config.pod || "A",
+                            invalidate, onEvent: event, onError: notice});
                     const element = canvas.elt;
                     element.tabIndex = 0;
-                    element.setAttribute("aria-label", "Pod A UI preview. Drag Jung, Jitter and loop handles; click M, S and mode buttons.");
+                    element.setAttribute("aria-label", config.accessibleLabel || "Pod A UI preview. Drag Jung, Jitter and loop handles; click M, S and mode buttons.");
                     function position(event) {
                         const rect = element.getBoundingClientRect();
-                        return [(event.clientX - rect.left) * 960 / rect.width,
-                            (event.clientY - rect.top) * 600 / rect.height];
+                        return [(event.clientX - rect.left) * view.width / rect.width,
+                            (event.clientY - rect.top) * view.height / rect.height];
                     }
                     element.addEventListener("pointerdown", function (event) {
                         if (event.button !== 0 || pointer !== null) return;

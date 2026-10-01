@@ -108,11 +108,11 @@
         const componentFactory = new Function("mgraphics", "box", "jsarguments", "outlet", "arrayfromargs", "Dict", "post",
             prelude + sources.component + "\nreturn {paint,set,enable,hit,onclick,ondrag,onrelease,onidle,onidleout,ondblclick," +
             "geometry,getVisualState:()=>({value:shownValue(),loop:shownLoop(),display:shownDisplay(),mute:state.mute,solo:state.solo," +
-            "filename:state.filename,peaks:state.peaks.slice(),looper_mode:state.looper_mode,timing_mode:state.timing_mode})};");
+            "filename:state.filename,peaks:state.peaks.slice(),playhead:state.playhead,position_display:state.position_display,looper_mode:state.looper_mode,timing_mode:state.timing_mode})};");
         const controllerFactory = new Function("jsarguments", "Dict", "Buffer", "outlet", "arrayfromargs", "post",
             prelude + sources.controller + "\nreturn {reset,pod,filename,refresh,markers,playhead};");
         const components = new Map();
-        const specs = [
+        const specs = options.components || [
             ["header", "header", "", 20, 20, 920, 54],
             ["waveform", "waveform", "", 20, 84, 920, 254],
             ["modes", "modes", "", 20, 350, 920, 42],
@@ -121,6 +121,20 @@
             ["slice", "stepper", "slice", 620, 405, 320, 58],
             ["speed", "stepper", "speed", 620, 473, 320, 58]
         ];
+        const width = options.width === undefined ? 960 : options.width;
+        const height = options.height === undefined ? 600 : options.height;
+        if (!Number.isFinite(width) || !Number.isFinite(height) || width <= 0 || height <= 0)
+            throw new Error("Invalid preview dimensions");
+        if (!Array.isArray(specs) || !specs.length) throw new Error("Empty component layout");
+        const ids = new Set();
+        for (const row of specs) {
+            if (!Array.isArray(row) || row.length !== 7 || row.slice(0, 3).some(v => typeof v !== "string") ||
+                row.slice(3).some(v => !Number.isFinite(v)) || row[3] < 0 || row[4] < 0 ||
+                row[5] <= 0 || row[6] <= 0 || row[3] + row[5] > width || row[4] + row[6] > height)
+                throw new Error("Invalid component layout");
+            if (ids.has(row[0])) throw new Error("Duplicate component id: " + row[0]);
+            ids.add(row[0]);
+        }
         const pod = String(options.pod || "A");
         let controller;
         function post(message) { onError(String(message)); }
@@ -153,12 +167,13 @@
             if (active) { active.api.onrelease(); active = null; }
         }
         return {
-            width: 960, height: 600,
+            width, height,
             draw() {
-                p.background(14, 17, 21);
+                p.push(); p.colorMode(p.RGB, 255); p.background(14, 17, 21);
                 for (const component of components.values()) {
                     p.push(); p.translate(component.x, component.y); component.api.paint(); p.pop();
                 }
+                p.pop();
             },
             pointerDown(x, y, shift) {
                 release();
