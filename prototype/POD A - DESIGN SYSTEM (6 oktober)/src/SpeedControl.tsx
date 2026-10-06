@@ -1,0 +1,2 @@
+import React from "react"; import {HardwareButton,TechnicalLabel,ValueDisplay} from "./primitives";
+export function SpeedControl({valueText,onPrevious,onNext}:{valueText:string;onPrevious?:()=>void;onNext?:()=>void}){return <div style={{display:"flex",alignItems:"center",gap:8}}><TechnicalLabel>SPEED</TechnicalLabel><HardwareButton onPress={onPrevious}>−</HardwareButton><ValueDisplay value={valueText}/><HardwareButton onPress={onNext}>+</HardwareButton></div>}
