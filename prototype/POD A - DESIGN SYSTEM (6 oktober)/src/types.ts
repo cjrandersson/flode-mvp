@@ -7,7 +7,7 @@ export interface WaveformData { peaks:ReadonlyArray<number> }
 export interface PodState {
  id:PodId; sampleName:string|null; durationSeconds:number|null; bpm:number|null;
  isMuted:boolean; isSolo:boolean; volumeNorm:number; panNorm:number;
- loopRegion:LoopRegion; playbackPosNorm:number; genMode:GenMode;
+ loopRegion:LoopRegion; playbackPosNorm:number|null; genMode:GenMode;
  randomJungNorm:number; jitterNorm:number; eqLowNorm:number; eqMidNorm:number; eqHighNorm:number;
  speedMultiplier:number; isLoopActive:boolean; isSyncActive:boolean;
 }
