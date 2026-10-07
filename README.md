@@ -33,7 +33,7 @@ flöde~ is a six-pod sampler, generative sequencer, audio mangler and looper bui
 ## Locked MVP direction
 - Six independent sampler pods A–F in one window
 - Large Simpler-inspired waveform/slice view per pod
-- Drag/drop audio, loop start/end, speed, volume, pan
+- Drag/drop audio, loop start/end, speed, pitch ±500 cents, volume and pan
 - Original Jungulator controls retained and made clearly visible
 - RND: slice/sample-position probability amount
 - RND2: velocity/playback-speed variation
@@ -41,8 +41,30 @@ flöde~ is a six-pod sampler, generative sequencer, audio mangler and looper bui
 - Transient slicing and density control
 - Sync/free operation per pod; shared master clock and BPM
 - Mute, Solo, Record, Panic and choke groups
-- Per-pod FX and reorderable master FX chain
+- Per-pod FX send into one shared, reorderable master FX chain
 - Separate resizable flöde~ BPM/transport window
+
+### POD v0 signal and timing rules
+- The master clock owns musical time. A pod does not maintain a competing clock.
+- No per-sample BPM display or BPM detection.
+- No time-stretch / tempo-lock in POD v0.
+- Playback is intentionally direct: speed plus pitch (±500 cents), without automatic tempo preservation.
+- Each pod outputs a dry signal plus an adjustable FX-send level to the shared master FX chain.
+- JUNG may alter playback behavior inside master time, but an intervention must resolve and return home before another intervention begins.
+
+### Waveform interaction baseline
+The waveform is a first-class instrument surface, not a metadata display.
+
+- The sample waveform itself is visually stable.
+- **Cursor/playhead motion is the primary continuous animation.** It should be subtle, readable and physically weighted.
+- Active slice/state may change discretely, but the waveform should not wobble, pulse or animate decoratively.
+- Transient slicing is the default slice mode.
+- Grid slicing is the simple fallback mode.
+- Slice/transient markers are anchored to the waveform and can be dragged directly along it.
+- Start/end, loop and slice state all refer to the same waveform window.
+- JUNG operates only within the currently defined waveform/slice domain.
+
+**Interaction principle: everything has mass.** Movement must communicate playback or state, with inertia and restraint. The waveform carries the visual weight; the cursor reveals time.
 
 ## UI baseline
 The interface must feel like an audio instrument, not a web dashboard. Waveforms and primary gestures are large. Playback/random/volume use sliders. Rotary knobs are reserved mainly for pan and sound-shaping/FX. Matte charcoal/grey surfaces, restrained amber accents, neutral typography, minimal rounding, stable interaction states.
