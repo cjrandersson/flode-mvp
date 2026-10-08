@@ -4,6 +4,7 @@ project(flode_pod_v0 LANGUAGES CXX)
 
 add_library(flode_pod_v0
     src/Jung.cpp
+    src/JungRender.cpp
     src/Pod.cpp
     src/WavFileSource.cpp
     src/WavFileWriter.cpp
@@ -41,6 +42,14 @@ target_link_libraries(flode_jung_test PRIVATE flode_pod_v0)
 
 add_test(NAME flode_jung_test COMMAND flode_jung_test)
 
+add_executable(flode_jung_render_test
+    tests/jung_render_test.cpp
+)
+
+target_link_libraries(flode_jung_render_test PRIVATE flode_pod_v0)
+
+add_test(NAME flode_jung_render_test COMMAND flode_jung_render_test)
+
 add_executable(flode_pod_v0_render
     tools/render_pod.cpp
 )
@@ -55,3 +64,19 @@ add_test(
 )
 
 set_tests_properties(flode_apache_render_smoke PROPERTIES TIMEOUT 30)
+
+add_executable(flode_jung_v01_render
+    tools/render_jung_v01.cpp
+)
+
+target_link_libraries(flode_jung_v01_render PRIVATE flode_pod_v0)
+
+add_test(
+    NAME flode_jung_apache_render
+    COMMAND flode_jung_v01_render
+        "${CMAKE_CURRENT_SOURCE_DIR}/../../patches/flode_alpha_01/media/Apache Break ( Driven Silk Red ).wav"
+        "${CMAKE_CURRENT_BINARY_DIR}/apache-baseline-8-bars-smoke.wav"
+        "${CMAKE_CURRENT_BINARY_DIR}/apache-jung-v01-smoke.wav"
+)
+
+set_tests_properties(flode_jung_apache_render PROPERTIES TIMEOUT 30)
