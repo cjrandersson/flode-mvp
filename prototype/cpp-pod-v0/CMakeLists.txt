@@ -4,6 +4,7 @@ project(flode_pod_v0 LANGUAGES CXX)
 
 add_library(flode_pod_v0
     src/Pod.cpp
+    src/WavFileSource.cpp
 )
 
 target_include_directories(flode_pod_v0
@@ -21,3 +22,11 @@ target_link_libraries(flode_pod_v0_smoke PRIVATE flode_pod_v0)
 
 enable_testing()
 add_test(NAME flode_pod_v0_smoke COMMAND flode_pod_v0_smoke)
+
+add_executable(flode_wav_file_source_test
+    tests/wav_file_source_test.cpp
+)
+
+target_link_libraries(flode_wav_file_source_test PRIVATE flode_pod_v0)
+
+add_test(NAME flode_wav_file_source_test COMMAND flode_wav_file_source_test)
