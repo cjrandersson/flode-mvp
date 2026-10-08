@@ -35,7 +35,8 @@ draw a stable waveform with a moving cursor.
 - transient slicing is the default mode;
 - grid is the only fallback slice mode;
 - one dry stereo output plus one post-volume/post-pan FX send;
-- no JUNG engine.
+- `PodEngine` owns no autonomous clock or random process; the external JUNG
+  controller receives the one master tick stream.
 
 ## What the prototype now implements
 
@@ -54,6 +55,7 @@ draw a stable waveform with a moving cursor.
 - rendered-frame accounting with a silent output tail;
 - an offline one-POD renderer with input/output overwrite protection;
 - output reload, metadata and non-silence verification;
+- one seeded, bounded experimental JUNG v0.1 intervention;
 - standalone CMake smoke tests, including the real Apache Break asset.
 
 ## Deliberately not in this checkpoint
@@ -66,7 +68,7 @@ draw a stable waveform with a moving cursor.
 6. 3-band EQ;
 7. integration adapter for the eventual host (Max external / JUCE / iPlug2);
 8. waveform UI connection using the existing approved UI lab;
-9. JUNG, which remains gated on basic playback being audibly verified.
+9. additional JUNG decisions or modes beyond the single approved experiment.
 
 ## Build
 
@@ -124,6 +126,22 @@ changes playback duration; there is deliberately no tempo preservation.
 ## Verification status
 
 The automated Apache load/render/reload test passes in the cloud runner and is
-deterministic across repeated runs. The runner has no audio device, so this is
-not a claim that anyone listened there. The actual audible checkpoint remains a
-manual listen on CJ's machine before JUNG work begins.
+deterministic across repeated runs. CJ confirmed the one-pass baseline WAV is
+audible. The runner has no audio device, so every new musical result still needs
+CJ's listening evaluation.
+
+## JUNG v0.1 experimental comparison
+
+The first JUNG intervention and its exact listening procedure are documented in
+[`JUNG_V01_EXPERIMENT.md`](./JUNG_V01_EXPERIMENT.md). Generate the baseline and
+JUNG-enabled eight-bar pair with:
+
+```sh
+prototype/cpp-pod-v0/build/flode_jung_v01_render \
+  "patches/flode_alpha_01/media/Apache Break ( Driven Silk Red ).wav" \
+  prototype/cpp-pod-v0/build/apache-baseline-8-bars.wav \
+  prototype/cpp-pod-v0/build/apache-jung-v01.wav
+```
+
+These parameters are CJ-approved creative defaults. They are not claimed to
+reproduce the original Jungulator.
