@@ -86,8 +86,19 @@ void PodEngine::seekNormalized(double position) noexcept {
         return;
     }
 
-    const double maxFrame = static_cast<double>(source_->frameCount() - 1);
-    cursorFrame_ = p * maxFrame;
+    seekFrame(p * static_cast<double>(source_->frameCount()));
+}
+
+void PodEngine::seekFrame(double framePosition) noexcept {
+    if (!source_ || source_->frameCount() < 2) {
+        cursorFrame_ = 0.0;
+        return;
+    }
+
+    cursorFrame_ = clampFinite(framePosition,
+                               regionStartFrame(),
+                               regionEndFrame(),
+                               regionStartFrame());
     cursorFrame_ = std::clamp(cursorFrame_, regionStartFrame(), regionEndFrame());
 }
 

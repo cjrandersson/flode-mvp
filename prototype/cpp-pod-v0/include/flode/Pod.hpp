@@ -52,9 +52,11 @@ public:
     bool isPlaying() const noexcept { return playing_; }
 
     void seekNormalized(double position) noexcept;
+    void seekFrame(double framePosition) noexcept;
 
     // Cursor position across the complete source, normalized 0..1.
     double playheadNormalized() const noexcept;
+    double playheadFrame() const noexcept { return cursorFrame_; }
 
     // speed * pitch ratio. Pitch is deliberately NOT tempo-preserving.
     double effectivePlaybackRate() const noexcept;

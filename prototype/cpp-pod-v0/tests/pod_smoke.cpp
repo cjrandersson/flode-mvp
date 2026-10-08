@@ -83,6 +83,7 @@ int main() {
     assert(near(pod.effectivePlaybackRate(), expectedRate));
 
     pod.seekNormalized(0.10);
+    assert(near(pod.playheadFrame(), 102.4));
     pod.play();
     assert(pod.isPlaying());
 
@@ -100,6 +101,10 @@ int main() {
 
     pod.stop();
     assert(!pod.isPlaying());
+
+    pod.seekFrame(512.5);
+    assert(near(pod.playheadFrame(), 512.5));
+    assert(near(pod.playheadNormalized(), 512.5 / 1024.0));
 
     flode::PodEngine oneShot;
     oneShot.setSource(std::make_shared<TestSource>(8, 1, 48000.0));
