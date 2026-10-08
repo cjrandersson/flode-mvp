@@ -6,6 +6,7 @@ add_library(flode_pod_v0
     src/Jung.cpp
     src/Pod.cpp
     src/WavFileSource.cpp
+    src/WavFileWriter.cpp
 )
 
 target_include_directories(flode_pod_v0
