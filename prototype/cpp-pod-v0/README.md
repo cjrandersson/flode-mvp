@@ -37,9 +37,10 @@ draw a stable waveform with a moving cursor.
 - one dry stereo output plus one post-volume/post-pan FX send;
 - no JUNG engine.
 
-## What this first commit actually implements
+## What the prototype now implements
 
 - `AudioSource` interface;
+- dependency-free mono/stereo integer PCM WAV loading (8/16/24/32-bit);
 - `PodState`;
 - active region bounds;
 - play / stop / seek;
@@ -50,25 +51,79 @@ draw a stable waveform with a moving cursor.
 - dry + FX-send rendering;
 - loop / one-shot region behaviour;
 - normalized slice-marker storage and clamping;
-- standalone CMake smoke test.
+- rendered-frame accounting with a silent output tail;
+- an offline one-POD renderer with input/output overwrite protection;
+- output reload, metadata and non-silence verification;
+- standalone CMake smoke tests, including the real Apache Break asset.
 
-## Deliberately next, not hidden inside this commit
+## Deliberately not in this checkpoint
 
-1. real file-backed audio source;
-2. direct START / END manipulation plumbing;
-3. transient marker generation and GRID division generation;
-4. de-click at region boundaries;
-5. 3-band EQ;
-6. integration adapter for the eventual host (Max external / JUCE / iPlug2);
-7. waveform UI connection using the existing approved UI lab;
-8. JUNG only after the POD is musically solid.
+1. live audio-device streaming;
+2. a host/master-transport trigger adapter;
+3. direct START / END manipulation plumbing;
+4. transient marker generation and GRID division generation;
+5. de-click at region boundaries;
+6. 3-band EQ;
+7. integration adapter for the eventual host (Max external / JUCE / iPlug2);
+8. waveform UI connection using the existing approved UI lab;
+9. JUNG, which remains gated on basic playback being audibly verified.
 
 ## Build
 
 ```sh
-cmake -S prototype/cpp-pod-v0 -B build/cpp-pod-v0
-cmake --build build/cpp-pod-v0
-ctest --test-dir build/cpp-pod-v0 --output-on-failure
+cmake -S prototype/cpp-pod-v0 -B prototype/cpp-pod-v0/build
+cmake --build prototype/cpp-pod-v0/build
+ctest --test-dir prototype/cpp-pod-v0/build --output-on-failure
 ```
 
 No third-party libraries are required for this checkpoint.
+
+## Render and hear the first Apache POD
+
+Run from the repository root after building:
+
+```sh
+prototype/cpp-pod-v0/build/flode_pod_v0_render \
+  "patches/flode_alpha_01/media/Apache Break ( Driven Silk Red ).wav" \
+  prototype/cpp-pod-v0/build/apache-pod-v0.wav
+```
+
+The renderer loads the 24-bit Apache source, passes every frame through
+`PodEngine`, writes a 16-bit stereo WAV, reopens it and fails if the output is
+corrupt, has unexpected metadata or is silent. The expected default report is:
+
+```text
+source: 366863 frames, 2 channel(s), 44100.000000 Hz
+pod rate: 1.000000 (speed 1.000000, pitch 0.000000 cents)
+rendered: 366863 frames, 8.318889 seconds
+verification: PASS (decoded peak 0.707092)
+```
+
+Listen with any WAV player, or with FFplay when available:
+
+```sh
+ffplay -autoexit -nodisp prototype/cpp-pod-v0/build/apache-pod-v0.wav
+```
+
+Expected audible result: one recognizable Apache Break pass, centered with the
+POD's equal-power pan law. It is not tempo-stretched, clock-retriggered, looped
+or de-clicked in this checkpoint.
+
+Optional positional arguments exercise the locked rate/pitch coupling:
+
+```sh
+prototype/cpp-pod-v0/build/flode_pod_v0_render \
+  "patches/flode_alpha_01/media/Apache Break ( Driven Silk Red ).wav" \
+  prototype/cpp-pod-v0/build/apache-slow-low.wav \
+  0.75 -300
+```
+
+`SPEED` is a playback-rate multiplier, not another BPM. `PITCH_CENTS` also
+changes playback duration; there is deliberately no tempo preservation.
+
+## Verification status
+
+The automated Apache load/render/reload test passes in the cloud runner and is
+deterministic across repeated runs. The runner has no audio device, so this is
+not a claim that anyone listened there. The actual audible checkpoint remains a
+manual listen on CJ's machine before JUNG work begins.
