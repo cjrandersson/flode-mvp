@@ -39,7 +39,12 @@ void PodEngine::clampState() noexcept {
 
     // Never allow a mathematically zero-length region.
     if (state_.regionEnd - state_.regionStart < 1.0e-6) {
-        state_.regionEnd = std::min(1.0, state_.regionStart + 1.0e-6);
+        if (state_.regionStart >= 1.0 - 1.0e-6) {
+            state_.regionStart = 1.0 - 1.0e-6;
+            state_.regionEnd = 1.0;
+        } else {
+            state_.regionEnd = state_.regionStart + 1.0e-6;
+        }
     }
 
     state_.speed = clampFinite(state_.speed, 0.05, 4.0, 1.0);
@@ -91,8 +96,8 @@ double PodEngine::playheadNormalized() const noexcept {
         return 0.0;
     }
 
-    const double maxFrame = static_cast<double>(source_->frameCount() - 1);
-    return std::clamp(cursorFrame_ / maxFrame, 0.0, 1.0);
+    const double frameCount = static_cast<double>(source_->frameCount());
+    return std::clamp(cursorFrame_ / frameCount, 0.0, 1.0);
 }
 
 double PodEngine::effectivePlaybackRate() const noexcept {
@@ -104,14 +109,14 @@ double PodEngine::regionStartFrame() const noexcept {
     if (!source_ || source_->frameCount() < 2) {
         return 0.0;
     }
-    return state_.regionStart * static_cast<double>(source_->frameCount() - 1);
+    return state_.regionStart * static_cast<double>(source_->frameCount());
 }
 
 double PodEngine::regionEndFrame() const noexcept {
     if (!source_ || source_->frameCount() < 2) {
         return 0.0;
     }
-    return state_.regionEnd * static_cast<double>(source_->frameCount() - 1);
+    return state_.regionEnd * static_cast<double>(source_->frameCount());
 }
 
 void PodEngine::clearTargets(const RenderTargets& targets, std::size_t frames) const noexcept {

@@ -112,7 +112,7 @@ int main() {
         oneShotLeft.size(),
         48000.0);
 
-    assert(oneShotFrames == 7);
+    assert(oneShotFrames == 8);
     assert(!oneShot.isPlaying());
     assert(oneShotLeft[oneShotFrames] == 0.0f);
     assert(oneShotRight[oneShotFrames] == 0.0f);
