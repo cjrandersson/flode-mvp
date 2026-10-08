@@ -59,9 +59,11 @@ public:
     // speed * pitch ratio. Pitch is deliberately NOT tempo-preserving.
     double effectivePlaybackRate() const noexcept;
 
-    void process(const RenderTargets& targets,
-                 std::size_t frames,
-                 double outputSampleRate) noexcept;
+    // Returns the number of frames containing rendered source audio. Any
+    // unrendered tail in the supplied targets is cleared to silence.
+    std::size_t process(const RenderTargets& targets,
+                        std::size_t frames,
+                        double outputSampleRate) noexcept;
 
 private:
     void clampState() noexcept;

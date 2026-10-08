@@ -87,10 +87,12 @@ int main() {
     assert(pod.isPlaying());
 
     std::vector<float> dryL(64), dryR(64), fxL(64), fxR(64);
-    pod.process({dryL.data(), dryR.data(), fxL.data(), fxR.data()},
-                dryL.size(),
-                48000.0);
+    const auto rendered = pod.process(
+        {dryL.data(), dryR.data(), fxL.data(), fxR.data()},
+        dryL.size(),
+        48000.0);
 
+    assert(rendered == dryL.size());
     assert(pod.playheadNormalized() > 0.10);
     assert(std::abs(dryL[10]) > 0.0f);
     assert(near(fxL[10], dryL[10] * 0.5, 1.0e-5));
@@ -98,6 +100,22 @@ int main() {
 
     pod.stop();
     assert(!pod.isPlaying());
+
+    flode::PodEngine oneShot;
+    oneShot.setSource(std::make_shared<TestSource>(8, 1, 48000.0));
+    oneShot.play();
+
+    std::vector<float> oneShotLeft(16, 1.0f);
+    std::vector<float> oneShotRight(16, 1.0f);
+    const auto oneShotFrames = oneShot.process(
+        {oneShotLeft.data(), oneShotRight.data(), nullptr, nullptr},
+        oneShotLeft.size(),
+        48000.0);
+
+    assert(oneShotFrames == 7);
+    assert(!oneShot.isPlaying());
+    assert(oneShotLeft[oneShotFrames] == 0.0f);
+    assert(oneShotRight[oneShotFrames] == 0.0f);
 
     std::cout << "flode POD v0 smoke test: PASS\n";
     return 0;

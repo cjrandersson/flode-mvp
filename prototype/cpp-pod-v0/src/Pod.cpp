@@ -127,14 +127,14 @@ void PodEngine::clearTargets(const RenderTargets& targets, std::size_t frames) c
     clear(targets.fxRight);
 }
 
-void PodEngine::process(const RenderTargets& targets,
-                        std::size_t frames,
-                        double outputSampleRate) noexcept {
+std::size_t PodEngine::process(const RenderTargets& targets,
+                               std::size_t frames,
+                               double outputSampleRate) noexcept {
     clearTargets(targets, frames);
 
     if (!playing_ || !source_ || frames == 0 || outputSampleRate <= 0.0 ||
         source_->frameCount() < 2 || source_->sampleRate() <= 0.0) {
-        return;
+        return 0;
     }
 
     const double leftGain = state_.volume * std::cos((state_.pan + 1.0) * kPi * 0.25);
@@ -144,6 +144,7 @@ void PodEngine::process(const RenderTargets& targets,
 
     const double start = regionStartFrame();
     const double end = regionEndFrame();
+    std::size_t renderedFrames = 0;
 
     for (std::size_t i = 0; i < frames; ++i) {
         if (cursorFrame_ >= end) {
@@ -169,7 +170,10 @@ void PodEngine::process(const RenderTargets& targets,
         if (targets.fxRight) targets.fxRight[i] = static_cast<float>(dryR * state_.fxSend);
 
         cursorFrame_ += sourceFramesPerOutputFrame;
+        ++renderedFrames;
     }
+
+    return renderedFrames;
 }
 
 } // namespace flode
