@@ -30,3 +30,18 @@ add_executable(flode_wav_file_source_test
 target_link_libraries(flode_wav_file_source_test PRIVATE flode_pod_v0)
 
 add_test(NAME flode_wav_file_source_test COMMAND flode_wav_file_source_test)
+
+add_executable(flode_pod_v0_render
+    tools/render_pod.cpp
+)
+
+target_link_libraries(flode_pod_v0_render PRIVATE flode_pod_v0)
+
+add_test(
+    NAME flode_apache_render_smoke
+    COMMAND flode_pod_v0_render
+        "${CMAKE_CURRENT_SOURCE_DIR}/../../patches/flode_alpha_01/media/Apache Break ( Driven Silk Red ).wav"
+        "${CMAKE_CURRENT_BINARY_DIR}/apache-pod-v0-smoke.wav"
+)
+
+set_tests_properties(flode_apache_render_smoke PROPERTIES TIMEOUT 30)
