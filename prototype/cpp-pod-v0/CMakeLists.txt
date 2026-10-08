@@ -3,6 +3,7 @@ cmake_minimum_required(VERSION 3.20)
 project(flode_pod_v0 LANGUAGES CXX)
 
 add_library(flode_pod_v0
+    src/Jung.cpp
     src/Pod.cpp
     src/WavFileSource.cpp
 )
@@ -30,6 +31,14 @@ add_executable(flode_wav_file_source_test
 target_link_libraries(flode_wav_file_source_test PRIVATE flode_pod_v0)
 
 add_test(NAME flode_wav_file_source_test COMMAND flode_wav_file_source_test)
+
+add_executable(flode_jung_test
+    tests/jung_test.cpp
+)
+
+target_link_libraries(flode_jung_test PRIVATE flode_pod_v0)
+
+add_test(NAME flode_jung_test COMMAND flode_jung_test)
 
 add_executable(flode_pod_v0_render
     tools/render_pod.cpp
