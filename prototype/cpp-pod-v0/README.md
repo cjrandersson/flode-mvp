@@ -1,76 +1,38 @@
-# flöde~ POD v0 — C++ Step One
+# flöde~ — C++ POD v0
 
-This is the first dependency-free C++ sketch of the locked POD core.
+**Scope:** Dependency-free C++17 sample engine and offline JUNG v0.1 test renderer.  
+**Current state:** CMake build and offline Apache WAV playback/render verified; **no live audio device or connected GUI yet**. See [Issue #8](https://github.com/cjrandersson/flode-mvp/issues/8).
 
 ## Signal path
 
 ```text
-AudioSource
+WAV AudioSource
     ↓
-active region / slice domain
+active region / playback cursor
     ↓
-playback cursor
+rate = SPEED × 2^(PITCH_CENTS / 1200)
     ↓
-effective rate = SPEED × 2^(PITCH_CENTS / 1200)
-    ↓
-VOLUME
-    ↓
-PAN
-    ├── dry L/R
-    └── FX SEND L/R → shared master FX
+VOLUME → equal-power PAN
+    ├─ dry stereo L/R
+    └─ post-volume/post-pan FX-send L/R
 ```
 
-The waveform itself is intentionally not rendered here. The engine exposes
-`playheadNormalized()` and normalized active-region/slice state so the UI can
-draw a stable waveform with a moving cursor.
+`PodEngine` exposes normalized region bounds, slice-marker storage and `playheadNormalized()`. It processes audio buffers but does not own an audio device, waveform renderer or independent musical clock.
 
-## Locked behaviour represented here
+## Implemented
 
-- no sample BPM;
-- no per-sample BPM detection;
-- no time-stretch or tempo-lock;
-- no POD-owned clock;
-- pitch is clamped to ±500 cents;
-- pitch is deliberately rate-coupled, so changing pitch also changes duration;
-- transient slicing is the default mode;
-- grid is the only fallback slice mode;
-- one dry stereo output plus one post-volume/post-pan FX send;
-- `PodEngine` owns no autonomous clock or random process; the external JUNG
-  controller receives the one master tick stream.
+- WAV input: integer PCM 8/16/24/32-bit, mono/stereo, with sample-rate metadata.
+- State: PLAY/STOP, seek, region START/END, LOOP or one-shot, SPEED, PITCH_CENTS, VOLUME, PAN and FX send.
+- Processing: source-rate conversion through the playback cursor, rate/pitch coupling, equal-power pan, dry and send buffers.
+- Offline output: PCM16 WAV writer and CLI renderer, guarded against input-file overwrite.
+- JUNG v0.1: deterministic master-tick controller with one bounded slice-repeat intervention and exact return to baseline phase.
+- Tests: six CMake/CTest checks for POD, WAV, JUNG timing/rendering and Apache sample rendering.
 
-## What the prototype now implements
+Current engine limits include SPEED 0.05–4.0, pitch ±500 cents, normalized region/volume values 0–1 and PAN −1…+1. Pitch changes playback rate and duration; no automatic time-stretch or sample BPM detection.
 
-- `AudioSource` interface;
-- dependency-free mono/stereo integer PCM WAV loading (8/16/24/32-bit);
-- `PodState`;
-- active region bounds;
-- play / stop / seek;
-- normalized playhead state for waveform cursor motion;
-- speed + pitch-cents combined playback rate;
-- mono/stereo source handling;
-- equal-power pan;
-- dry + FX-send rendering;
-- loop / one-shot region behaviour;
-- normalized slice-marker storage and clamping;
-- rendered-frame accounting with a silent output tail;
-- an offline one-POD renderer with input/output overwrite protection;
-- output reload, metadata and non-silence verification;
-- one seeded, bounded experimental JUNG v0.1 intervention;
-- standalone CMake smoke tests, including the real Apache Break asset.
+## Build and test
 
-## Deliberately not in this checkpoint
-
-1. live audio-device streaming;
-2. a host/master-transport trigger adapter;
-3. direct START / END manipulation plumbing;
-4. transient marker generation and GRID division generation;
-5. de-click at region boundaries;
-6. 3-band EQ;
-7. integration adapter for the eventual host (Max external / JUCE / iPlug2);
-8. waveform UI connection using the existing approved UI lab;
-9. additional JUNG decisions or modes beyond the single approved experiment.
-
-## Build
+From the repository root:
 
 ```sh
 cmake -S prototype/cpp-pod-v0 -B prototype/cpp-pod-v0/build
@@ -78,63 +40,23 @@ cmake --build prototype/cpp-pod-v0/build
 ctest --test-dir prototype/cpp-pod-v0/build --output-on-failure
 ```
 
-No third-party libraries are required for this checkpoint.
+Requires CMake 3.20+ and a C++17 compiler. The current library/CLI has no third-party runtime dependencies.
 
-## Render and hear the first Apache POD
-
-Run from the repository root after building:
+## Render Apache Break through the POD
 
 ```sh
 prototype/cpp-pod-v0/build/flode_pod_v0_render \
   "patches/flode_alpha_01/media/Apache Break ( Driven Silk Red ).wav" \
   prototype/cpp-pod-v0/build/apache-pod-v0.wav
-```
 
-The renderer loads the 24-bit Apache source, passes every frame through
-`PodEngine`, writes a 16-bit stereo WAV, reopens it and fails if the output is
-corrupt, has unexpected metadata or is silent. The expected default report is:
-
-```text
-source: 366863 frames, 2 channel(s), 44100.000000 Hz
-pod rate: 1.000000 (speed 1.000000, pitch 0.000000 cents)
-rendered: 366863 frames, 8.318889 seconds
-verification: PASS (decoded peak 0.707092)
-```
-
-Listen with any WAV player, or with FFplay when available:
-
-```sh
 ffplay -autoexit -nodisp prototype/cpp-pod-v0/build/apache-pod-v0.wav
 ```
 
-Expected audible result: one recognizable Apache Break pass, centered with the
-POD's equal-power pan law. It is not tempo-stretched, clock-retriggered, looped
-or de-clicked in this checkpoint.
+Expected default: stereo 44.1 kHz PCM16, 366,863 frames / 8.318889 s, one pass. The renderer reloads its output and checks metadata and non-silence. This is **offline file generation**, not live playback.
 
-Optional positional arguments exercise the locked rate/pitch coupling:
+For a SPEED/PITCH test, add two numeric arguments after the output path, for example `0.75 -300`.
 
-```sh
-prototype/cpp-pod-v0/build/flode_pod_v0_render \
-  "patches/flode_alpha_01/media/Apache Break ( Driven Silk Red ).wav" \
-  prototype/cpp-pod-v0/build/apache-slow-low.wav \
-  0.75 -300
-```
-
-`SPEED` is a playback-rate multiplier, not another BPM. `PITCH_CENTS` also
-changes playback duration; there is deliberately no tempo preservation.
-
-## Verification status
-
-The automated Apache load/render/reload test passes in the cloud runner and is
-deterministic across repeated runs. CJ confirmed the one-pass baseline WAV is
-audible. The runner has no audio device, so every new musical result still needs
-CJ's listening evaluation.
-
-## JUNG v0.1 experimental comparison
-
-The first JUNG intervention and its exact listening procedure are documented in
-[`JUNG_V01_EXPERIMENT.md`](./JUNG_V01_EXPERIMENT.md). Generate the baseline and
-JUNG-enabled eight-bar pair with:
+## Render the JUNG v0.1 comparison
 
 ```sh
 prototype/cpp-pod-v0/build/flode_jung_v01_render \
@@ -143,5 +65,15 @@ prototype/cpp-pod-v0/build/flode_jung_v01_render \
   prototype/cpp-pod-v0/build/apache-jung-v01.wav
 ```
 
-These parameters are CJ-approved creative defaults. They are not claimed to
-reproduce the original Jungulator.
+Experiment settings, deterministic intervention timestamps and listening evidence are documented in [JUNG_V01_EXPERIMENT.md](./JUNG_V01_EXPERIMENT.md). These constants are experimental, not a claim of reproducing the historical algorithm.
+
+## Not implemented: next real-time milestone
+
+1. Connect `PodEngine::process()` to an actual audio-device callback.
+2. Support safe live changes to PLAY/STOP, VOL, PAN, SPEED and LOOP.
+3. Connect file LOAD, waveform/playhead and editable START/END controls to engine state.
+4. Add minimal loop-boundary de-click and verify the result by listening.
+
+No GUI, device-streaming backend, transient-analysis generator, three-band EQ or extra JUNG modes are included in this C++ checkpoint. **The immediate acceptance test is one sample playing continuously while its POD controls respond in real time.**
+
+> Audio tests are deterministic, but they do not prove audio-device performance. The existing Apache and JUNG v0.1 offline listening checkpoints were confirmed by CJ; a live POD still requires separate validation.
