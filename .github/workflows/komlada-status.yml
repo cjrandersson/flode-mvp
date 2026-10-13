@@ -1,0 +1,91 @@
+name: Komlada status
+
+on:
+  issue_comment:
+    types: [created]
+
+permissions:
+  contents: read
+  issues: write
+  pull-requests: write
+
+jobs:
+  status:
+    if: >-
+      github.event.comment.user.type != 'Bot' &&
+      startsWith(github.event.comment.body, '/status')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Reply with verified status
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const command = (context.payload.comment?.body || '').trim();
+            if (command !== '/status') return;
+
+            const { owner, repo } = context.repo;
+            const issue_number = context.issue.number;
+            const repoInfo = (await github.rest.repos.get({ owner, repo })).data;
+            const item = (await github.rest.issues.get({ owner, repo, issue_number })).data;
+            let config = {};
+            try {
+              const result = await github.rest.repos.getContent({
+                owner, repo, path: '.github/komlada.json', ref: repoInfo.default_branch
+              });
+              if (!Array.isArray(result.data) && result.data.content) {
+                config = JSON.parse(Buffer.from(result.data.content, 'base64').toString('utf8'));
+              }
+            } catch (error) {
+              if (error.status !== 404) throw error;
+            }
+
+            const project = config.project || (owner + '/' + repo);
+            const scope = config.issues?.[String(issue_number)] || {};
+            const label = scope.name || item.title;
+            const branch = scope.branch || repoInfo.default_branch;
+            const tick = String.fromCharCode(96);
+            let lastCommit = 'Kan inte verifieras';
+            try {
+              const b = (await github.rest.repos.getBranch({ owner, repo, branch })).data;
+              const commit = (await github.rest.repos.getCommit({
+                owner, repo, ref: b.commit.sha
+              })).data;
+              const stamp = commit.commit.committer?.date || commit.commit.author?.date;
+              lastCommit = tick + b.commit.sha.slice(0, 12) + tick +
+                (stamp ? ' · ' + new Date(stamp).toISOString().slice(0, 16).replace('T', ' ') + ' UTC' : '');
+            } catch (error) {
+              core.warning('Could not read configured branch: ' + String(error.message));
+            }
+
+            const comments = (await github.rest.issues.listComments({
+              owner, repo, issue_number, per_page: 100
+            })).data;
+            const checkpoint = [...comments].reverse().find(c =>
+              c.user?.login !== 'github-actions[bot]' &&
+              /(?:^|\n)\s*(?:\*\*)?(?:BASELINE|CODEX PENDING|CJ PENDING|BLOCKED BY)(?:\*\*)?\s*:/i.test(c.body || '')
+            );
+            function readField(name) {
+              if (!checkpoint) return null;
+              const line = (checkpoint.body || '').split(/\r?\n/).map(x =>
+                x.trim().replace(/^\s*[-*]\s+/, '').replace(/\*\*/g, '')
+              ).find(x => x.toUpperCase().startsWith(name + ':'));
+              return line ? line.slice(name.length + 1).trim().replace(/@/g, '＠').slice(0, 240) : null;
+            }
+            const unknown = 'Inte verifierat i någon checkpoint';
+            const output = [
+              '**KOMLÅDA · ' + project + ' · ' + label + '**',
+              '',
+              '**STATUS:** ' + item.state.toUpperCase() + ' · #' + issue_number,
+              '**BRANCH:** ' + tick + branch + tick,
+              '**LAST COMMIT:** ' + lastCommit,
+              '**CODEX NEXT:** ' + (readField('CODEX PENDING') || unknown),
+              '**CJ PENDING:** ' + (readField('CJ PENDING') || unknown),
+              '**BLOCKED BY:** ' + (readField('BLOCKED BY') || unknown),
+              '',
+              checkpoint ? 'Senaste checkpoint: ' + checkpoint.html_url : 'Ingen checkpoint har publicerats i tråden.',
+              '',
+              '_GitHub-status; startar eller väcker inte Codex._'
+            ].join('\n');
+            await github.rest.issues.createComment({
+              owner, repo, issue_number, body: output
+            });

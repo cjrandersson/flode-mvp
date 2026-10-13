@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "project": "flöde~",
+  "issues": {
+    "9": {
+      "name": "POD A · realtidsljud",
+      "branch": "cpp-pod-v0"
+    }
+  }
+}
