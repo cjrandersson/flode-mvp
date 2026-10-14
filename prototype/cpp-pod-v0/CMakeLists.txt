@@ -80,3 +80,21 @@ add_test(
 )
 
 set_tests_properties(flode_jung_apache_render PROPERTIES TIMEOUT 30)
+
+if(WIN32)
+    add_executable(flode_pod_v0_live
+        tools/play_pod_win.cpp
+    )
+
+    target_compile_definitions(flode_pod_v0_live PRIVATE
+        NOMINMAX
+        WIN32_LEAN_AND_MEAN
+    )
+
+    target_link_libraries(flode_pod_v0_live PRIVATE
+        flode_pod_v0
+        avrt
+        ole32
+        uuid
+    )
+endif()
