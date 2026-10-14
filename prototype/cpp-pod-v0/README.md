@@ -23,11 +23,11 @@ VOLUME → equal-power PAN
 
 - WAV input: integer PCM 8/16/24/32-bit, mono/stereo, with sample-rate metadata.
 - State: PLAY/STOP, seek, region START/END, LOOP or one-shot, SPEED, PITCH_CENTS, VOLUME, PAN and FX send.
-- Processing: source-rate conversion through the playback cursor, rate/pitch coupling, equal-power pan, dry and send buffers.
+- Processing: source-rate conversion through the playback cursor, rate/pitch coupling, smoothed real-time volume, equal-power pan, dry and send buffers.
 - Offline output: PCM16 WAV writer and CLI renderer, guarded against input-file overwrite.
-- Windows live output: dependency-free WASAPI shared-mode player with PLAY, STOP and RESTART commands.
+- Windows live output: dependency-free WASAPI shared-mode player with PLAY, STOP, RESTART, VOLUME and PAN commands.
 - JUNG v0.1: deterministic master-tick controller with one bounded slice-repeat intervention and exact return to baseline phase.
-- Tests: six CMake/CTest checks for POD, WAV, JUNG timing/rendering and Apache sample rendering.
+- Tests: seven CMake/CTest checks for POD, real-time volume/pan ramps, WAV, JUNG timing/rendering and Apache sample rendering.
 
 Current engine limits include SPEED 0.05–4.0, pitch ±500 cents, normalized region/volume values 0–1 and PAN −1…+1. Pitch changes playback rate and duration; no automatic time-stretch or sample BPM detection.
 
@@ -62,6 +62,8 @@ Playback starts immediately through the current Windows default output device an
 - `p` — play/resume
 - `s` — stop (silence without closing the device)
 - `r` — restart from the beginning and play
+- `vol 0.0..1.0` — set volume with a click-free ramp
+- `pan -1.0..1.0` — set equal-power pan with a click-free ramp
 - `q` — quit
 
 The program prints the WAV metadata and the WASAPI device mix format only after the default audio endpoint has opened and its stream has started. That proves device initialization, but hearing clean audio still requires a listening check on the selected speakers or headphones.
@@ -93,7 +95,7 @@ Experiment settings, deterministic intervention timestamps and listening evidenc
 
 ## Next real-time milestone
 
-1. Support safe live changes to VOL, PAN, SPEED and LOOP in addition to PLAY/STOP.
+1. Support safe live changes to SPEED and LOOP in addition to PLAY/STOP/VOL/PAN.
 2. Connect file LOAD, waveform/playhead and editable START/END controls to engine state.
 3. Add minimal loop-boundary de-click and verify the result by listening.
 

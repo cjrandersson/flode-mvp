@@ -45,6 +45,11 @@ public:
     void setSource(std::shared_ptr<const AudioSource> source);
     void setState(const PodState& state);
 
+    // Allocation-free real-time controls. Call these from the same thread as
+    // process(); publish cross-thread control values separately.
+    void setVolume(double volume) noexcept;
+    void setPan(double pan) noexcept;
+
     const PodState& state() const noexcept { return state_; }
 
     void play() noexcept;
@@ -76,6 +81,8 @@ private:
     std::shared_ptr<const AudioSource> source_;
     PodState state_;
     double cursorFrame_ = 0.0;
+    double smoothedVolume_ = 0.8;
+    double smoothedPan_ = 0.0;
     bool playing_ = false;
 };
 

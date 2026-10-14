@@ -26,6 +26,14 @@ target_link_libraries(flode_pod_v0_smoke PRIVATE flode_pod_v0)
 enable_testing()
 add_test(NAME flode_pod_v0_smoke COMMAND flode_pod_v0_smoke)
 
+add_executable(flode_pod_realtime_controls_test
+    tests/pod_realtime_controls_test.cpp
+)
+
+target_link_libraries(flode_pod_realtime_controls_test PRIVATE flode_pod_v0)
+
+add_test(NAME flode_pod_realtime_controls_test COMMAND flode_pod_realtime_controls_test)
+
 add_executable(flode_wav_file_source_test
     tests/wav_file_source_test.cpp
 )

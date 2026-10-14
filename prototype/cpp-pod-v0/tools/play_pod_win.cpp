@@ -20,6 +20,7 @@
 #include <iomanip>
 #include <iostream>
 #include <memory>
+#include <sstream>
 #include <stdexcept>
 #include <string>
 #include <thread>
@@ -29,6 +30,9 @@
 namespace {
 
 using Microsoft::WRL::ComPtr;
+
+static_assert(std::atomic<float>::is_always_lock_free,
+              "LIVE POD controls require lock-free float atomics");
 
 enum class Command {
     None,
@@ -199,8 +203,17 @@ void applyCommand(flode::PodEngine& pod, Command command) noexcept {
     }
 }
 
+void applyRealtimeControls(flode::PodEngine& pod,
+                           const std::atomic<float>& requestedVolume,
+                           const std::atomic<float>& requestedPan) noexcept {
+    pod.setVolume(requestedVolume.load(std::memory_order_relaxed));
+    pod.setPan(requestedPan.load(std::memory_order_relaxed));
+}
+
 void runAudio(std::shared_ptr<const flode::AudioSource> source,
               std::atomic<Command>& pendingCommand,
+              const std::atomic<float>& requestedVolume,
+              const std::atomic<float>& requestedPan,
               std::atomic<bool>& quit,
               std::promise<StartupResult> startup) noexcept {
     bool startupReported = false;
@@ -251,7 +264,8 @@ void runAudio(std::shared_ptr<const flode::AudioSource> source,
               "open WASAPI render client");
 
         flode::PodState state;
-        state.volume = 0.8;
+        state.volume = requestedVolume.load(std::memory_order_relaxed);
+        state.pan = requestedPan.load(std::memory_order_relaxed);
         state.loop = true;
 
         flode::PodEngine pod;
@@ -283,6 +297,7 @@ void runAudio(std::shared_ptr<const flode::AudioSource> source,
             const DWORD waitResult = WaitForSingleObject(audioReady.get(), 250);
             if (waitResult == WAIT_TIMEOUT) {
                 applyCommand(pod, pendingCommand.exchange(Command::None));
+                applyRealtimeControls(pod, requestedVolume, requestedPan);
                 continue;
             }
             if (waitResult != WAIT_OBJECT_0) {
@@ -290,6 +305,7 @@ void runAudio(std::shared_ptr<const flode::AudioSource> source,
             }
 
             applyCommand(pod, pendingCommand.exchange(Command::None));
+            applyRealtimeControls(pod, requestedVolume, requestedPan);
 
             UINT32 padding = 0;
             check(audioClient->GetCurrentPadding(&padding), "read WASAPI padding");
@@ -353,11 +369,14 @@ int main(int argc, char** argv) {
         }
 
         std::atomic<Command> pendingCommand{Command::None};
+        std::atomic<float> requestedVolume{0.8f};
+        std::atomic<float> requestedPan{0.0f};
         std::atomic<bool> quit{false};
         std::promise<StartupResult> startupPromise;
         auto startupFuture = startupPromise.get_future();
 
         std::thread audioThread(runAudio, source, std::ref(pendingCommand),
+                                std::cref(requestedVolume), std::cref(requestedPan),
                                 std::ref(quit), std::move(startupPromise));
 
         const StartupResult startup = startupFuture.get();
@@ -376,20 +395,42 @@ int main(int argc, char** argv) {
                   << " seconds\n"
                   << startup.message << '\n'
                   << "Playback started. Commands: [p]lay/resume, [s]top, "
-                     "[r]estart, [q]uit\n";
+                     "[r]estart, vol 0..1, pan -1..1, [q]uit\n";
 
         std::string line;
         while (!quit.load(std::memory_order_acquire) && std::getline(std::cin, line)) {
-            if (line == "p" || line == "play") {
+            std::istringstream input(line);
+            std::string command;
+            input >> command;
+
+            if (command == "p" || command == "play") {
                 pendingCommand.store(Command::Play, std::memory_order_release);
-            } else if (line == "s" || line == "stop") {
+            } else if (command == "s" || command == "stop") {
                 pendingCommand.store(Command::Stop, std::memory_order_release);
-            } else if (line == "r" || line == "restart") {
+            } else if (command == "r" || command == "restart") {
                 pendingCommand.store(Command::Restart, std::memory_order_release);
-            } else if (line == "q" || line == "quit") {
+            } else if (command == "vol" || command == "pan") {
+                double value = 0.0;
+                std::string extra;
+                if (!(input >> value) || !std::isfinite(value) || (input >> extra)) {
+                    std::cout << "Usage: " << command
+                              << (command == "vol" ? " 0.0..1.0\n" : " -1.0..1.0\n");
+                    continue;
+                }
+
+                if (command == "vol") {
+                    const float clamped = static_cast<float>(std::clamp(value, 0.0, 1.0));
+                    requestedVolume.store(clamped, std::memory_order_relaxed);
+                    std::cout << "Volume target: " << clamped << '\n';
+                } else {
+                    const float clamped = static_cast<float>(std::clamp(value, -1.0, 1.0));
+                    requestedPan.store(clamped, std::memory_order_relaxed);
+                    std::cout << "Pan target: " << clamped << '\n';
+                }
+            } else if (command == "q" || command == "quit") {
                 quit.store(true, std::memory_order_release);
-            } else if (!line.empty()) {
-                std::cout << "Unknown command. Use p, s, r, or q.\n";
+            } else if (!command.empty()) {
+                std::cout << "Unknown command. Use p, s, r, vol, pan, or q.\n";
             }
         }
 

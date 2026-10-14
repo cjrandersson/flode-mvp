@@ -6,12 +6,20 @@
 namespace flode {
 namespace {
 constexpr double kPi = 3.14159265358979323846;
+constexpr double kParameterRampSeconds = 0.010;
 
 double clampFinite(double value, double low, double high, double fallback) noexcept {
     if (!std::isfinite(value)) {
         return fallback;
     }
     return std::clamp(value, low, high);
+}
+
+double moveTowards(double current, double target, double maximumDelta) noexcept {
+    if (current < target) {
+        return std::min(current + maximumDelta, target);
+    }
+    return std::max(current - maximumDelta, target);
 }
 }
 
@@ -27,6 +35,25 @@ void PodEngine::setState(const PodState& state) {
 
     // Keep the cursor inside the currently valid active region.
     cursorFrame_ = std::clamp(cursorFrame_, regionStartFrame(), regionEndFrame());
+
+    if (!playing_) {
+        smoothedVolume_ = state_.volume;
+        smoothedPan_ = state_.pan;
+    }
+}
+
+void PodEngine::setVolume(double volume) noexcept {
+    state_.volume = clampFinite(volume, 0.0, 1.0, state_.volume);
+    if (!playing_) {
+        smoothedVolume_ = state_.volume;
+    }
+}
+
+void PodEngine::setPan(double pan) noexcept {
+    state_.pan = clampFinite(pan, -1.0, 1.0, state_.pan);
+    if (!playing_) {
+        smoothedPan_ = state_.pan;
+    }
 }
 
 void PodEngine::clampState() noexcept {
@@ -153,10 +180,10 @@ std::size_t PodEngine::process(const RenderTargets& targets,
         return 0;
     }
 
-    const double leftGain = state_.volume * std::cos((state_.pan + 1.0) * kPi * 0.25);
-    const double rightGain = state_.volume * std::sin((state_.pan + 1.0) * kPi * 0.25);
     const double sourceFramesPerOutputFrame =
         effectivePlaybackRate() * source_->sampleRate() / outputSampleRate;
+    const double parameterStep =
+        1.0 / std::max(1.0, kParameterRampSeconds * outputSampleRate);
 
     const double start = regionStartFrame();
     const double end = regionEndFrame();
@@ -176,6 +203,12 @@ std::size_t PodEngine::process(const RenderTargets& targets,
         const float sourceLeft = source_->sampleAt(0, cursorFrame_);
         const float sourceRight =
             source_->channelCount() > 1 ? source_->sampleAt(1, cursorFrame_) : sourceLeft;
+
+        smoothedVolume_ = moveTowards(smoothedVolume_, state_.volume, parameterStep);
+        smoothedPan_ = moveTowards(smoothedPan_, state_.pan, parameterStep);
+        const double panAngle = (smoothedPan_ + 1.0) * kPi * 0.25;
+        const double leftGain = smoothedVolume_ * std::cos(panAngle);
+        const double rightGain = smoothedVolume_ * std::sin(panAngle);
 
         const float dryL = static_cast<float>(sourceLeft * leftGain);
         const float dryR = static_cast<float>(sourceRight * rightGain);
